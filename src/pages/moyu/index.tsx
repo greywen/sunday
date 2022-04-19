@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { IMoYuRecord, IRankList } from '../../interfaces/index';
 import React from 'react';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import QueueAnim from 'rc-queue-anim';
 import { getRankList, getRecords } from '@apis/moyu';
 
 
@@ -24,19 +25,17 @@ const settings = {
   cssEase: "linear",
 };
 
-const http = 'https://moyuapi.codeplus.vip'
-
 const Rank = () => {
   const [rankList, setRankList] = useState<IRankList[]>([]);
   const [records, setRecords] = useState<IMoYuRecord[]>([]);
 
 
-useAsyncEffect(async ()=>{
-  const rankList = await getRankList();  
-  setRankList(rankList)
-  const records = await getRecords();
-  setRecords(records)
-}, [])
+  useAsyncEffect(async () => {
+    const rankList = await getRankList();
+    setRankList(rankList)
+    const records = await getRecords();
+    setRecords(records)
+  }, [])
 
 
   //前三名
@@ -121,21 +120,23 @@ useAsyncEffect(async ()=>{
   )
 
   return (
-    <div className={styles.container}>
-      <div className={styles.left}>
-        <div className={styles.head}>
-          <div className={styles.crown}>
-            <img src={img} alt="" style={{ width: '100%' }} />
+    <QueueAnim delay={300} className="queue-simple">
+      <div className={styles.container}  key="a">
+        <div className={styles.left}>
+          <div className={styles.head}>
+            <div className={styles.crown}>
+              <img src={img} alt="" style={{ width: '100%' }} />
+            </div>
+            {rankList && topThreeRank}
           </div>
-          {rankList && topThreeRank}
+          {rankList && afterSevenRank}
         </div>
-        {rankList && afterSevenRank}
-      </div>
 
-      <div className={styles.right}>
-        {records && recordsSlider}
+        <div className={styles.right}>
+          {records && recordsSlider}
+        </div>
       </div>
-    </div>
+    </QueueAnim>
   )
 }
 
