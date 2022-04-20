@@ -20,12 +20,14 @@ import { LogState } from "../../constants";
 import "./index.less";
 import * as htmlToImage from "html-to-image";
 import * as download from "downloadjs";
-import { createUser } from "@apis/user";
+import { createUser, deleteUser } from "@apis/user";
 const { Option } = Select;
+const { confirm } = Modal;
 
 const Attendance = () => {
   const [logs, setLogs] = useState<IUserLogs[]>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [submiting, setSubmiting] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [subscribeVisible, setSubscribeVisible] = useState<boolean>(false);
   const [addModelVisible, setAddModelVisible] = useState<boolean>(false);
@@ -171,13 +173,28 @@ const Attendance = () => {
   }
 
   async function addUser(value: any) {
+    setSubmiting(true);
     const result = await createUser(value);
     if (result === true) {
-    await initData();
-    setAddModelVisible(false);
+      await initData();
+      setAddModelVisible(false);
     } else {
       message.error(result);
     }
+    setSubmiting(false);
+  }
+
+  async function removeUser(userId: string) {
+    console.log(userId);
+    confirm({
+      title: "确定删除改用户?",
+      okText: "确定",
+      cancelText: "取消",
+      async onOk() {
+        const result = await deleteUser({ userId: userId });
+        message.success(result ? "删除成功!" : "删除失败!");
+      },
+    });
   }
 
   return (
@@ -267,7 +284,13 @@ const Attendance = () => {
             {logs?.map((ul) => {
               return (
                 <tr>
-                  <td>{ul.name}</td>
+                  <td
+                    onClick={() => {
+                      removeUser(ul.id);
+                    }}
+                  >
+                    {ul.name}
+                  </td>
                   {ul.logs.map((l, i) => {
                     return (
                       <td
@@ -529,7 +552,7 @@ const Attendance = () => {
             </Select>
           </Form.Item>
           <Form.Item style={{ textAlign: "right" }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={submiting}>
               添加
             </Button>
           </Form.Item>
