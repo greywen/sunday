@@ -24,8 +24,6 @@ const settings = {
   cssEase: "linear",
 };
 
-const http = 'https://moyuapi.codeplus.vip'
-
 const Rank = () => {
   const [rankList, setRankList] = useState<IRankList[]>([]);
   const [records, setRecords] = useState<IMoYuRecord[]>([]);
