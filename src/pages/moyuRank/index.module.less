@@ -1,0 +1,23 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background: #FFFFFF;
+
+  .left {
+    width: 30vw;
+    height: 100vh;
+    background: rgba(255, 231, 49, 0.39);
+  }
+
+  .right {
+    width: 70vw;
+    height: 100vh;
+    padding: 20px 10px;
+
+  }
+}
+
+:global(.slick-list) {
+  height: calc(100vh - 40px)  !important;
+}
