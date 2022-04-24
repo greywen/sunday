@@ -1,5 +1,6 @@
 import styles from './index.module.less';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import Rank from '@components/rank';
 import Records from '@components/records';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -30,13 +31,11 @@ const MoyuRank = () => {
     setRecords(records)
   }, [])
 
-
   return (
-
     <div className={styles.container}>
       <div className={styles.left}>
+        <Rank />
       </div>
-
       <div className={styles.right}>
         <Slider {...settings} >
           <Records records={records} />

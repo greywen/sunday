@@ -4,6 +4,7 @@ import ReactDom from "react-dom";
 import { ConfigProvider } from "antd";
 import Layout from "./layout/layout";
 import "antd/dist/antd.css";
+import './font/font.less'
 
 window.currentIndex = 0;
 window.interval = null;
