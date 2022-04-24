@@ -4,9 +4,6 @@ import styles from './index.module.less';
 import camera from '../../assets/icon/icon/icon_camera.svg'
 import foot from '../../assets/icon/icon/icon_foot.svg'
 import Macy from 'macy'
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 
 interface IProps {
@@ -15,7 +12,7 @@ interface IProps {
 
 const Records = (props: IProps) => {
   const [masonry, setMasonry] = useState<any>()
-  const cn = Math.floor(Math.random() * (100 - 0)) + 0
+  const randomNanme = Math.floor(Math.random() * (100000 - 0)) + 0
 
   const { records } = props
   useEffect(() => {  
@@ -23,9 +20,9 @@ const Records = (props: IProps) => {
       masonry.reInit()
     } else {
       let masonry = new Macy({
-        container: `.aa${cn}`, // 图像列表容器
+        container: `.macy${randomNanme}`, // 图像列表容器
         trueOrder: false,
-        waitForImages: false,
+        waitForImages: true,
         useOwnImageLoader: false,
         debug: true,
         margin: { x: 0, y: 20 },    // 设计列与列的间距
@@ -37,7 +34,7 @@ const Records = (props: IProps) => {
   },[records])
 
   return (
-      <div className={[styles.body, `aa${cn}`].join(' ')}>
+      <div className={[styles.body, `macy${randomNanme}`].join(' ')}>
         {records.map((item, index) => {
           return (
             <div key={index} className={styles.itemBox}>
