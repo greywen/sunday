@@ -2,6 +2,7 @@ import Attendance from "@pages/attendance";
 import AttendanceForShow from "@pages/attendance-for-show";
 import CleanOffice from "@pages/clean-office";
 import Rank from "@pages/moyu";
+import MoyuRank from "@pages/moyuRank";
 import React, { Suspense } from "react";
 import {
   Route,
@@ -34,6 +35,7 @@ const Routers = () => {
     { path: "/attendanceforshow", element: <AttendanceForShow /> },
     { path: "/clean", element: <CleanOffice /> },
     { path: "/moyu", element: <Rank /> },
+    { path: "/moyu2", element: <MoyuRank /> },
   ];
   
   // const navigate = useNavigate();

@@ -40,7 +40,7 @@ const Rank = () => {
 
   //前三名
   const topThreeRank = (
-    <div className={styles.topThree}>
+    <div className={styles.topThreeRank}>
       <div className={[styles.itemShadow, styles.notFirst].join(' ')}>
         <div className={styles.item}>
           <img src={rankList[2]?.wxUserAvatarUrl} alt="" />

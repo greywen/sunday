@@ -47,6 +47,7 @@
     "axios": "^0.26.1",
     "downloadjs": "^1.4.7",
     "html-to-image": "^1.9.0",
+    "macy": "^2.5.1",
     "moment": "^2.29.2",
     "rc-queue-anim": "^2.0.0",
     "rc-tween-one": "^3.0.6",
