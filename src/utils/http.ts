@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-const defaultHost = "http://192.168.3.110:3334";
+const defaultHost = "http://192.168.3.39:3334";
 
 interface IHttpConfig extends AxiosRequestConfig {
     host?: string,
-    parameters?: any,
+    body?: any,
 }
 
 axios.interceptors.request.use((req) => {
@@ -27,11 +27,11 @@ const http = {
         return <T>result.data;
     },
     post: async (url: string, config?: IHttpConfig) => {
-        const result = await axios.post(`${config?.host || defaultHost}${url}`, config?.parameters, config);
+        const result = await axios.post(`${config?.host || defaultHost}${url}`, config?.body, config);
         return result.data;
     },
     put: async (url: string, config?: IHttpConfig) => {
-        const result = await axios.put(`${config?.host || defaultHost}${url}`, config?.parameters, config);
+        const result = await axios.put(`${config?.host || defaultHost}${url}`, config?.body, config);
         return result.data;
     },
     delete: async (url: string, config?: IHttpConfig) => {

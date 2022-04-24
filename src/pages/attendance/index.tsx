@@ -1,4 +1,4 @@
-import { getLogs, updateLogs } from "@apis/logs";
+import { getLogs, updateCustomLogs, updateLogs } from "@apis/logs";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { ILogs, IModifyLogState, IUserLogs } from "@interfaces/logs";
 import {
@@ -20,27 +20,41 @@ import { LogState } from "../../constants";
 import "./index.less";
 import * as htmlToImage from "html-to-image";
 import * as download from "downloadjs";
-import { createUser, deleteUser } from "@apis/user";
+import {
+  createUser,
+  deleteUser,
+  getUserById,
+  getUserDept,
+  updateUser,
+} from "@apis/user";
+import { IDepartmentGroup, IDepartments, IUser } from "@interfaces/user";
 const { Option } = Select;
 const { confirm } = Modal;
 
 const Attendance = () => {
   const [logs, setLogs] = useState<IUserLogs[]>();
+  const [departments, setDepartments] = useState<IDepartments[]>();
+  const [groups, setGroups] = useState<IDepartmentGroup[]>([]);
+  const [userDetail, setUserDetail] = useState<IUser | null>();
   const [loading, setLoading] = useState<boolean>(false);
   const [submiting, setSubmiting] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [subscribeVisible, setSubscribeVisible] = useState<boolean>(false);
   const [addModelVisible, setAddModelVisible] = useState<boolean>(false);
+  const [userDetailVisible, setUserDetailVisible] = useState<boolean>(false);
   const dayInMonth = moment().daysInMonth();
   const weeks = ["日", "一", "二", "三", "四", "五", "六"];
   const leaveType = [LogState.C, LogState.P, LogState.S, LogState.V];
   const [modifyLog, setModifyLog] = useState<IModifyLogState>();
   const currentMonth = moment().format("YYYY-MM");
   const [form] = Form.useForm();
+  const [detailForm] = Form.useForm();
   const reportRef = useRef<any>();
 
   useAsyncEffect(async () => {
     await initData();
+    const depts = await getUserDept();
+    setDepartments(depts);
     const timer = setInterval(async () => {
       await initData();
     }, 1800000);
@@ -149,7 +163,7 @@ const Attendance = () => {
       return;
     }
 
-    const result = await updateLogs({
+    const result = await updateCustomLogs({
       index: modifyLog!.index,
       userId: modifyLog!.id,
       datas: modifyLog!.logs,
@@ -185,14 +199,54 @@ const Attendance = () => {
   }
 
   async function removeUser(userId: string) {
-    console.log(userId);
     confirm({
       title: "确定删除改用户?",
       okText: "确定",
       cancelText: "取消",
       async onOk() {
         const result = await deleteUser({ userId: userId });
+        await initData();
+        setUserDetailVisible(false);
         message.success(result ? "删除成功!" : "删除失败!");
+      },
+    });
+  }
+
+  async function getUserDetail(userId: string) {
+    const user = await getUserById(userId);
+    const groups = departments?.find((x) => x.code === user.dept_name)?.groups;
+    groups ? setGroups(groups) : setGroups([]);
+    detailForm.setFieldsValue({
+      english_name: null,
+      groupid: null,
+      phone: null,
+      ...user,
+    });
+    setUserDetail(user);
+    setUserDetailVisible(true);
+  }
+
+  async function updateUserDetail(value: any) {
+    const result = await updateUser(value);
+    console.log(result);
+    message.success(result ? "修改成功!" : "删除失败!");
+    setUserDetailVisible(false);
+  }
+
+  async function reloadLogs(day: number) {
+    const date = moment().format(`YYYY-MM-${day}`);
+    confirm({
+      title: `确定更新${date}日志?`,
+      content: "这可能要花费1分钟左右的时间,请耐心等候!",
+      okText: "确定",
+      cancelText: "取消",
+      async onOk() {
+        const result = await updateLogs({
+          date: date,
+          day: 1,
+        });
+        await initData();
+        message.success(result ? "更新成功!" : "更新失败!");
       },
     });
   }
@@ -244,15 +298,6 @@ const Attendance = () => {
               <span className="state state-7">J</span>加班
             </div>
           </div>
-          {/* <div
-            className="right"
-            onClick={() => {
-              // setSubscribeVisible(true);
-              message.info("😄被你发现了，功能正在开发中.");
-            }}
-          >
-            经常忘记提交日志?
-          </div> */}
         </div>
         <div className="table-header">
           <div className="left">{currentMonth}</div>
@@ -274,7 +319,13 @@ const Attendance = () => {
                 return (
                   <th key={"key-" + d.day}>
                     <p>{d.week}</p>
-                    <p>{d.day}</p>
+                    <p
+                      onClick={() => {
+                        reloadLogs(d.day);
+                      }}
+                    >
+                      {d.day}
+                    </p>
                   </th>
                 );
               })}
@@ -285,8 +336,8 @@ const Attendance = () => {
               return (
                 <tr>
                   <td
-                    onClick={() => {
-                      removeUser(ul.id);
+                    onClick={async () => {
+                      await getUserDetail(ul.id);
                     }}
                   >
                     {ul.name}
@@ -547,8 +598,9 @@ const Attendance = () => {
                 form.setFieldsValue({ dept_name: value });
               }}
             >
-              <Option value="yc">YC</Option>
-              <Option value="wh">WH</Option>
+              {departments?.map((x) => (
+                <Option value={x.code}>{x.code.toUpperCase()}</Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item style={{ textAlign: "right" }}>
@@ -556,6 +608,101 @@ const Attendance = () => {
               添加
             </Button>
           </Form.Item>
+        </Form>
+      </Modal>
+      <Modal
+        closeIcon={false}
+        visible={userDetailVisible}
+        title="用户详情"
+        onCancel={() => {
+          setUserDetailVisible(false);
+        }}
+        footer={null}
+      >
+        <Form
+          form={detailForm}
+          name="detail-form"
+          onFinish={async (value) => {
+            await updateUserDetail(value);
+          }}
+          initialValues={{ ...userDetail }}
+        >
+          <Form.Item hidden name="id" label="用户Id">
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="真实姓名"
+            rules={[{ required: true, message: "请输入正确的姓名!" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item name="english_name" label="* 英文名称">
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="dept_name"
+            label="所属部门"
+            rules={[{ required: true, message: "请选择所属部门!" }]}
+          >
+            <Select
+              onChange={(value) => {
+                form.setFieldsValue({ dept_name: value });
+                const groups = departments?.find(
+                  (x) => x.code === value
+                )?.groups;
+                groups ? setGroups(groups) : setGroups([]);
+              }}
+            >
+              {departments?.map((x) => (
+                <Option value={x.code}>{x.code.toUpperCase()}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            hidden={groups.length == 0}
+            name="groupid"
+            label="所属分组"
+            rules={[
+              { required: groups?.length > 0, message: "请选择部门分组!" },
+            ]}
+          >
+            <Select
+              onChange={(value) => {
+                form.setFieldsValue({ groupid: value });
+              }}
+            >
+              {groups?.map((x) => (
+                <Option value={x.id}>{x.name}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="phone" label="* 手机号码">
+            <Input />
+          </Form.Item>
+          <Row justify="end">
+            <Col span={4}>
+              <Form.Item style={{ textAlign: "right" }}>
+                <Button
+                  type="primary"
+                  danger
+                  loading={submiting}
+                  onClick={() => {
+                    removeUser(userDetail!.id);
+                  }}
+                >
+                  删除
+                </Button>
+              </Form.Item>
+            </Col>
+            <Col span={4}>
+              <Form.Item style={{ textAlign: "right" }}>
+                <Button type="primary" htmlType="submit" loading={submiting}>
+                  修改
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </>
