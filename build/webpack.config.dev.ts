@@ -29,6 +29,7 @@ const config: WebpackConfiguration = {
             "@servers": path.resolve(__dirname, "../src/servers"),
             "@interfaces": path.resolve(__dirname, "../src/interfaces"),
             "@common": path.resolve(__dirname, "../src/common"),
+            "@assets": path.resolve(__dirname, "../src/assets"),
         }
     },
     module: {

@@ -1,8 +1,121 @@
-
-
-.container {
-  width: 580px;
-  height: 1080px;
-  background: #FFE731;
-  opacity: 1;
+.main {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  .container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 580px;
+    height: 1080px;
+    background: #FFE731;
+    opacity: 1;
+    .header {
+      position: absolute;
+      top: 20px;
+      width: 304px;
+      height: 210px;
+      .logoWrapper {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        .logoImg {
+          display: block;
+          height: 126px;
+          width: 126px;
+        }
+        .rankImg {
+          width: 304px;
+          height: 54px;
+        }
+      }
+    }
+    .ranklist {
+      position: absolute;
+      top: 492px;
+      bottom: 0;
+      background: #fff;
+      width: 540px;
+      border-radius: 10px 10px 0px 0px;
+      .ranklistInner {
+        margin-left: 40px;
+        margin-right: 80px;
+        .header {
+          position: relative;
+          width: 420px;
+          height: 60px;
+          &> span {
+            width: 36px;
+            height: 25px;
+            font-size: 18px;
+            font-family: PingFang SC;
+            font-weight: 400;
+            line-height: 25px;
+            color: #808080;
+          }
+          .rank {
+            position: absolute;
+            left: 0;
+          }
+          .name {
+            margin-left: 82px;
+          }
+          .score {
+            position: absolute;
+            right: 0;
+          }
+        }
+        .item {
+          position: relative;
+          width: 420px;
+          height: 75px;
+          display: flex;
+          align-items: center;
+          .sequence {
+            width: 11px;
+            height: 24px;
+            font-size: 20px;
+            font-family: DIN;
+            font-weight: 500;
+            line-height: 24px;
+            color: #333333;
+            margin-right: 32px;
+          }
+          img {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0);
+            border: 1px solid #FFE731;
+            border-radius: 50%;
+          }
+          .nickname {
+            margin-left: 12px;
+            width: 150px;
+            height: 25px;
+            font-size: 18px;
+            font-family: PingFang SC;
+            font-weight: 400;
+            line-height: 25px;
+            color: #333333;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          .integral {
+            position: absolute;
+            right: 0;
+            width: 21px;
+            height: 25px;
+            font-size: 20px;
+            font-family: DIN;
+            font-weight: 400;
+            line-height: 25px;
+            color: #FF9300;
+          }
+        }
+      }
+    }
+  }
 }
