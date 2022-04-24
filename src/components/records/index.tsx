@@ -42,7 +42,7 @@ const Records = (props: IProps) => {
                 <div className={styles.con}>
                   <div className={styles.user}>
                     <div>
-                      <img src={item.imageUrl} alt="" />
+                      <img src={item.wxUserAvatarUrl} alt="" />
                       <div>{item.wxUserNickName}</div>
                     </div>
                     <div>
