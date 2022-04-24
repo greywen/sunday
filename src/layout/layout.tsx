@@ -3,6 +3,7 @@ import AttendanceForShow from "@pages/attendance-for-show";
 import CleanOffice from "@pages/clean-office";
 import Rank from "@pages/moyu";
 import MoyuRank from "@pages/moyuRank";
+import TimeSheet from "@pages/timesheet";
 import React, { Suspense } from "react";
 import {
   Route,
@@ -31,13 +32,14 @@ const Layout = () => {
 
 const Routers = () => {
   const routers: IRouters[] = [
-    { path: "/", element: <Attendance /> },
-    { path: "/attendanceforshow", element: <AttendanceForShow /> },
+    { path: "/", element: <AttendanceForShow /> },
+    { path: "/attendance", element: <Attendance /> },
     { path: "/clean", element: <CleanOffice /> },
     { path: "/moyu", element: <Rank /> },
     { path: "/moyu2", element: <MoyuRank /> },
+    { path: "/timesheet", element: <TimeSheet /> },
   ];
-  
+
   // const navigate = useNavigate();
 
   // clearInterval(window.interval);
@@ -54,7 +56,7 @@ const Routers = () => {
   return (
     <Routes>
       {routers.map((x) => (
-        <Route path={x.path} element={x.element} />
+        <Route key={x.path} path={x.path} element={x.element} />
       ))}
     </Routes>
   );
