@@ -17,18 +17,30 @@ const settings = {
   slidesToShow: 1,
   slidesToScroll: 1,
   autoplay: true,
-  speed: 100000,
+  speed: 180000,
   autoplaySpeed: -100,
   cssEase: "linear",
 };
 
 const MoyuRank = () => {
   const [records, setRecords] = useState<IMoYuRecord[]>([]);
-  const [time, setTime] = useState(false);
+  const [itemHieght, setItemHieght] = useState(0);
+
+  const bodyItemEle = document.getElementsByClassName('bodyItem')[0];
+  if (bodyItemEle) {
+    setTimeout(() => { setItemHieght(bodyItemEle.clientHeight) }, 100)
+  }
 
   useAsyncEffect(async () => {
     const records = await getRecords();
     setRecords(records)
+    let timer = setInterval(async () => {
+      const records = await getRecords();
+      setRecords(records)
+    }, 300000)
+    return () => {
+      clearInterval(timer)
+    }
   }, [])
 
   return (
@@ -39,7 +51,7 @@ const MoyuRank = () => {
       <div className={styles.right}>
         <Slider {...settings} >
           <Records records={records} />
-          <Records records={records} />
+          {itemHieght > 1040 && <Records records={records} />}
         </Slider>
       </div>
     </div>

@@ -34,7 +34,7 @@ const Records = (props: IProps) => {
   },[records])
 
   return (
-      <div className={[styles.body, `macy${randomNanme}`].join(' ')}>
+      <div className={[styles.body, `macy${randomNanme}`, 'bodyItem'].join(' ')}>
         {records.map((item, index) => {
           return (
             <div key={index} className={styles.itemBox}>
