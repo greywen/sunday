@@ -14,17 +14,20 @@
     }
     .championBg {
       position: absolute;
+      z-index: 2;
     }
     .leftPathBg {
       position: absolute;
-      left: 140px;
+      left: 152px;
       top: 52px;
+      opacity: 0.6;
     }
     .rightPathBg {
       position: absolute;
-      right: 140px;
+      right: 152px;
       top: 52px;
       transform: rotateY(180deg);
+      opacity: 0.5;
     }
   }
 
@@ -61,6 +64,7 @@
     &> :nth-child(2) {
       position: relative;
       bottom: 25px;
+      z-index: 2;
 
       .avatar {
         width: 100%;
@@ -92,6 +96,8 @@
           width: 64px;
           height: 64px;
           border-radius: 50%;
+          padding: 1px;
+          background-color: #fff;
         }
       }
       .nickname {
