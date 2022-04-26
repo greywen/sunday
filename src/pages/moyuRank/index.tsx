@@ -2,6 +2,7 @@ import styles from './index.module.less';
 import React, { useState } from 'react';
 import Rank from '@components/rank';
 import Records from '@components/records';
+import { Carousel } from 'antd';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,22 +15,21 @@ const settings = {
   verticalSwiping: true,
   arrows: false,
   infinite: true,
-  slidesToShow: 1,
-  slidesToScroll: 1,
   autoplay: true,
   speed: 180000,
-  autoplaySpeed: -100,
+  autoplaySpeed: 100,
   cssEase: "linear",
 };
 
 const MoyuRank = () => {
   const [records, setRecords] = useState<IMoYuRecord[]>([]);
   const [itemHieght, setItemHieght] = useState(0);
-
-  const bodyItemEle = document.getElementsByClassName('bodyItem')[0];
-  if (bodyItemEle) {
-    setTimeout(() => { setItemHieght(bodyItemEle.clientHeight) }, 100)
-  }
+  setTimeout(() => {
+    const bodyItemEle = document.getElementsByClassName('bodyItem')[0];
+    if (bodyItemEle) {
+      setItemHieght(bodyItemEle?.clientHeight)
+    }
+  }, 100)
 
   useAsyncEffect(async () => {
     const records = await getRecords();
@@ -37,7 +37,7 @@ const MoyuRank = () => {
     let timer = setInterval(async () => {
       const records = await getRecords();
       setRecords(records)
-    }, 300000)
+    }, 600000)
     return () => {
       clearInterval(timer)
     }
@@ -49,10 +49,27 @@ const MoyuRank = () => {
         <Rank />
       </div>
       <div className={styles.right}>
-        <Slider {...settings} >
-          <Records records={records} />
-          {itemHieght > 1040 && <Records records={records} />}
-        </Slider>
+        {records.length !== 0 && (
+            <Slider {...settings}>
+              <Records records={records} />
+              {itemHieght > 1040 && <Records records={records} />}
+              <Records records={records} />
+            </Slider>
+        )}
+        {/* {records.length !== 0 && (
+          itemHieght > 1040 ?
+            <Carousel
+              autoplay
+              dotPosition={'left'}
+              arrows={false}
+              speed={180000}
+              dots={false}
+            >
+              <Records records={records} />
+              <Records records={records} />
+            </Carousel> :
+            <Records records={records} />
+        )} */}
       </div>
     </div>
   )
