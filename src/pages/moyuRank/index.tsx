@@ -16,9 +16,10 @@ const settings = {
   arrows: false,
   infinite: true,
   autoplay: true,
-  speed: 180000,
-  autoplaySpeed: 100,
+  speed: 250000,
+  autoplaySpeed: -100,
   cssEase: "linear",
+  pauseOnHover: false,
 };
 
 const MoyuRank = () => {
