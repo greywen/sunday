@@ -251,6 +251,28 @@ const Attendance = () => {
     });
   }
 
+  async function reloadUserLogs(name: string) {
+    const currentDate = moment();
+    if (currentDate.date() !== 1) {
+      currentDate.add(-1, "days");
+    }
+    confirm({
+      title: `确定更新本月${name}日志?`,
+      content: "这可能要花费1分钟左右的时间,请耐心等候!",
+      okText: "确定",
+      cancelText: "取消",
+      async onOk() {
+        const result = await updateLogs({
+          name: name,
+          date: currentDate.format(`YYYY-MM-DD`),
+          day: currentDate.date(),
+        });
+        await initData();
+        message.success(result ? "更新成功!" : "更新失败!");
+      },
+    });
+  }
+
   return (
     <>
       <div className="attendance-page" ref={reportRef}>
@@ -599,7 +621,7 @@ const Attendance = () => {
               }}
             >
               {departments?.map((x) => (
-                <Option value={x.code}>{x.code.toUpperCase()}</Option>
+                <Option value={x.code}>{x.name}</Option>
               ))}
             </Select>
           </Form.Item>
@@ -680,14 +702,14 @@ const Attendance = () => {
           <Form.Item name="phone" label="* 手机号码">
             <Input />
           </Form.Item>
-          <Row justify="end">
+          <Row justify="end" gutter={[32, 16]}>
             <Col span={4}>
-              <Form.Item style={{ textAlign: "right" }}>
+              <Form.Item>
                 <Button
                   type="primary"
                   danger
                   loading={submiting}
-                  onClick={() => {
+                  onClick={async () => {
                     removeUser(userDetail!.id);
                   }}
                 >
@@ -695,8 +717,21 @@ const Attendance = () => {
                 </Button>
               </Form.Item>
             </Col>
+            <Col span={5}>
+              <Form.Item>
+                <Button
+                  type="default"
+                  loading={submiting}
+                  onClick={async () => {
+                    reloadUserLogs(userDetail!.name);
+                  }}
+                >
+                  更新考勤
+                </Button>
+              </Form.Item>
+            </Col>
             <Col span={4}>
-              <Form.Item style={{ textAlign: "right" }}>
+              <Form.Item>
                 <Button type="primary" htmlType="submit" loading={submiting}>
                   修改
                 </Button>
