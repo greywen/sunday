@@ -23,7 +23,7 @@ const Records = (props: IProps) => {
     } else {
       let masonry = new Macy({
         container: `.macy${randomNanme}`, // 图像列表容器
-        trueOrder: false,
+        trueOrder: true,
         waitForImages: false,
         useOwnImageLoader: false,
         debug: true,
