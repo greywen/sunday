@@ -1,5 +1,13 @@
 import { io } from "socket.io-client";
+import { useAccount } from "./utils";
+const account = useAccount();
 
-const socket = io("http://192.168.3.39:3334/timesheet");
+const socket = io(`http://${location.hostname}:8090/timesheet`, {
+    extraHeaders: {
+        authorization: `Bearer ${account.token}`
+    }
+});
+
+socket.on("connect", function () { });
 
 export default socket;

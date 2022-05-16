@@ -1,40 +1,112 @@
 import "./index.less";
-import React, { useState } from "react";
-import { Col, Row, Select } from "antd";
+import React, { useEffect, useState } from "react";
+import { Col, Row, Tooltip } from "antd";
 import TextArea from "@components/textarea";
 import moment from "moment";
 import socket from "@utils/socket";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { getTimeSheetData, updateTemplate } from "@apis/user";
 import { ISheetTemplate, ITimeSheetData } from "@interfaces/timesheet";
-const { Option } = Select;
+import { GroupType } from "../../constants";
+import { useLocation } from "react-router-dom";
+import BackHome from "@components/backhome";
 
-socket.on("connect", function () {});
 let globalMembers: ITimeSheetData[] = [];
+let globalTemplate: ISheetTemplate = {};
+let groups = [GroupType["back-end"], GroupType["frond-end"], GroupType.test];
+
 const TimeSheet = () => {
   const [template, setTemplate] = useState<ISheetTemplate>();
   const [members, setMembers] = useState<ITimeSheetData[]>();
   const [enabledTemplate, setEnabledTemplate] = useState<boolean>(false);
+  const [summary, setSummary] = useState<string>();
+  const location = useLocation();
+  const [showAll] = useState<boolean>(location.pathname.includes("all"));
 
   useAsyncEffect(async () => {
     const timeSheetData = await getTimeSheetData();
     setTemplate(timeSheetData.template);
     globalMembers = timeSheetData.data;
+    globalTemplate = timeSheetData.template;
     setMembers(timeSheetData.data);
+    calcSummary(timeSheetData.data);
 
     socket.on("receiveMessage", (data: ITimeSheetData) => {
-      console.log("receiveMessage", data);
       const _members = globalMembers?.map((x) => {
         if (x.name === data.name) {
           x.value = data.value;
         }
         return x;
       });
+      calcSummary(_members);
       setMembers(_members);
     });
 
     document.getElementsByTagName;
   }, []);
+
+  useEffect(() => {
+    if (template) {
+      globalTemplate = template;
+    }
+  }, [template]);
+
+  function prepareTicketRegExp(start: string, end = "###") {
+    var reg = new RegExp(`(?=${start})[\\s\\S]*?((?=${end})|(?=$))`, "g");
+    return reg;
+  }
+  function clearEmptyLine(searchValue: string, replaceValue = "") {
+    return searchValue.replaceAll(/^\s*\n/gm, replaceValue);
+  }
+
+  function clearTickets(value: string, reg: RegExp) {
+    const result = value.replaceAll(reg, "");
+    return clearEmptyLine(result);
+  }
+
+  function getTickets(value: string, reg: RegExp) {
+    const result = value.match(reg);
+    return result;
+  }
+
+  function calcSummary(datas: ITimeSheetData[]) {
+    let backend = "",
+      frontend = "",
+      test = "";
+
+    datas.forEach((x) => {
+      if (!x.value) return;
+      if (x.groupid === 1) {
+        backend += "\n" + x.value;
+      } else if (x.groupid === 2) {
+        frontend += "\n" + x.value;
+      } else {
+        test += "\n" + x.value;
+      }
+    });
+
+    let backendTicketReg = prepareTicketRegExp("\\* HSENG-", "\n");
+    let frontendTicketReg = prepareTicketRegExp("\\* SAENG-", "\n");
+
+    let backendTickets = getTickets(backend, backendTicketReg);
+    let backendOther = clearTickets(backend, backendTicketReg);
+
+    let frontendTickets = getTickets(frontend, frontendTicketReg);
+    let frontendOther = clearTickets(frontend, frontendTicketReg);
+    const backendSummary = `${
+      globalTemplate?.backend
+    }\nDimSum:\n${backendOther}\nSupport:\n${backendTickets?.join("\n") || ""}`;
+    const frontendSummary = `${
+      globalTemplate?.frontend
+    }\n${frontendOther}\nTickets:\n${frontendTickets?.join("\n") || ""}`;
+    const testSummary = `${globalTemplate?.test}\n${test}`;
+
+    setSummary(
+      `#${moment().format(
+        "YYYY-MM-DD"
+      )}\n\n${backendSummary}\n\n${frontendSummary}\n\n${testSummary}`
+    );
+  }
 
   async function changeTimeSheet(name: string, value?: string) {
     const _member = members?.map((x) => {
@@ -55,11 +127,14 @@ const TimeSheet = () => {
 
   async function updateTimeSheetTemplate() {
     await updateTemplate(template!);
+    calcSummary(members!);
   }
+
   return (
     <div className="timesheet-page">
+      <BackHome />
       <Row gutter={16}>
-        <Col span={20}>
+        <Col span={20} hidden={showAll}>
           <h1
             onDoubleClick={() => {
               setEnabledTemplate(true);
@@ -68,150 +143,108 @@ const TimeSheet = () => {
             Time Sheet {`(${moment().format("YYYY-MM-DD")})`}
           </h1>
         </Col>
-        <Col span={4}>
-          {/* <Select
-            defaultValue="lucy"
-            style={{ width: 120 }}
-            onChange={handleChange}
-          >
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-            <Option value="disabled" disabled>
-              Disabled
-            </Option>
-            <Option value="Yiminghe">yiminghe</Option>
-          </Select> */}
-        </Col>
       </Row>
-      <Row>
+      <Row hidden={showAll}>
         <Col span={24}>
           <Row>
-            {/* <Col className="timesheet-bar" lg={2} md={0} xs={0}>
-              <div className="items">
-                {members?.map((x) => {
-                  return (
-                    <div className="item">
-                      <div
-                        className={`${x.value ? "success-dot" : "default-dot"}`}
-                      ></div>
-                      {x.name}
-                    </div>
-                  );
-                })}
-              </div>
-            </Col> */}
-            <Col className="timesheet-box" lg={8} md={24} xs={24}>
-              <Row>
-                <Col span={24}>
-                  <TextArea
-                    onChange={async (value) => {
-                      setTemplate({ ...template, backend: value });
-                    }}
-                    onBlur={async () => {
-                      await updateTimeSheetTemplate();
-                    }}
-                    disabled={!enabledTemplate}
-                    value={template?.backend}
-                  ></TextArea>
-                </Col>
-                <Col span={24}>
-                  {members
-                    ?.filter((x) => x.groupid === 1)
-                    ?.map((x) => {
-                      return (
+            {groups.map((type) => {
+              return (
+                <Col
+                  key={`key-type-${type}`}
+                  className="timesheet-box"
+                  lg={8}
+                  md={24}
+                  xs={24}
+                >
+                  <Row>
+                    {type === GroupType["back-end"] && (
+                      <Col span={24}>
                         <TextArea
-                          onChange={(value) => {
-                            changeTimeSheet(x.name, value);
-                            sendMessage(x.name);
+                          onChange={async (value) => {
+                            setTemplate({ ...template, backend: value });
                           }}
-                          value={x.value}
-                          key={x.name}
-                          placeholder={x.name}
+                          onBlur={async () => {
+                            await updateTimeSheetTemplate();
+                          }}
+                          disabled={!enabledTemplate}
+                          value={template?.backend}
                         ></TextArea>
-                      );
-                    })}
-                </Col>
-              </Row>
-            </Col>
-            <Col className="timesheet-box" lg={8} md={24} xs={24}>
-              <Row>
-                <Col span={24}>
-                  <TextArea
-                    onChange={async (value) => {
-                      setTemplate({ ...template, frontend: value });
-                    }}
-                    onBlur={async () => {
-                      await updateTimeSheetTemplate();
-                    }}
-                    disabled={!enabledTemplate}
-                    value={template?.frontend}
-                  ></TextArea>
-                </Col>
-                <Col span={24}>
-                  {members
-                    ?.filter((x) => x.groupid === 2)
-                    ?.map((x) => {
-                      return (
+                      </Col>
+                    )}
+
+                    {type === GroupType["frond-end"] && (
+                      <Col span={24}>
                         <TextArea
-                          onChange={(value) => {
-                            changeTimeSheet(x.name, value);
-                            sendMessage(x.name);
+                          onChange={async (value) => {
+                            setTemplate({ ...template, frontend: value });
                           }}
-                          value={x.value}
-                          key={x.name}
-                          placeholder={x.name}
+                          onBlur={async () => {
+                            await updateTimeSheetTemplate();
+                          }}
+                          disabled={!enabledTemplate}
+                          value={template?.frontend}
                         ></TextArea>
-                      );
-                    })}
-                </Col>
-              </Row>
-            </Col>
-            <Col className="timesheet-box" lg={8} md={24} xs={24}>
-              <Row>
-                <Col span={24}>
-                  <TextArea
-                    onChange={(value) => {
-                      setTemplate({ ...template, test: value });
-                    }}
-                    onBlur={async () => {
-                      await updateTimeSheetTemplate();
-                    }}
-                    disabled={!enabledTemplate}
-                    value={template?.test}
-                  ></TextArea>
-                </Col>
-                <Col span={24}>
-                  {members
-                    ?.filter((x) => x.groupid === 3)
-                    ?.map((x) => {
-                      return (
+                      </Col>
+                    )}
+
+                    {type === GroupType["test"] && (
+                      <Col span={24}>
                         <TextArea
-                          onChange={(value) => {
-                            changeTimeSheet(x.name, value);
-                            sendMessage(x.name);
+                          onChange={async (value) => {
+                            setTemplate({ ...template, test: value });
                           }}
-                          value={x.value}
-                          key={x.name}
-                          placeholder={x.name}
+                          onBlur={async () => {
+                            await updateTimeSheetTemplate();
+                          }}
+                          disabled={!enabledTemplate}
+                          value={template?.test}
                         ></TextArea>
-                      );
-                    })}
+                      </Col>
+                    )}
+
+                    <Col span={24}>
+                      {members
+                        ?.filter((x) => x.groupid === type)
+                        ?.map((x) => {
+                          return (
+                            <Tooltip
+                              key={`key-tooltip-${x.name}`}
+                              trigger="focus"
+                              placement="topLeft"
+                              title={x.name}
+                            >
+                              <div>
+                                <TextArea
+                                  onChange={(value) => {
+                                    changeTimeSheet(x.name, value);
+                                    sendMessage(x.name);
+                                  }}
+                                  value={x.value}
+                                  key={x.name}
+                                  placeholder={x.name}
+                                ></TextArea>
+                              </div>
+                            </Tooltip>
+                          );
+                        })}
+                    </Col>
+                  </Row>
                 </Col>
-              </Row>
-            </Col>
+              );
+            })}
           </Row>
         </Col>
-        {/* <Col span={24}>
-          <Row justify="center" className="timesheet-input-container">
-            <Col span={12}>
-              <TextArea
-                className="timesheet-input"
-                placeholder="Please enter the content."
-              />
-            </Col>
-          </Row>
-        </Col> */}
       </Row>
+      {showAll && (
+        <Row>
+          <TextArea
+            onChange={(value) => {
+              setSummary(value);
+            }}
+            value={summary}
+          ></TextArea>
+        </Row>
+      )}
     </div>
   );
 };

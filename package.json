@@ -43,6 +43,7 @@
     "webpack-dev-server": "^4.7.4"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "animate.css": "^4.1.1",
     "antd": "^4.19.5",
     "antd-mobile": "^5.1.0",

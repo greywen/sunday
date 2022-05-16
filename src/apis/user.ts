@@ -1,35 +1,40 @@
 import { ISheetResult, ISheetTemplate } from "@interfaces/timesheet";
-import { IDepartments, IUser } from "@interfaces/user";
+import { IDepartments, IUser, IUserToday } from "@interfaces/user";
 import http from "@utils/http";
 
 export async function createUser(data: any) {
-    return await http.post("/api/user/add", { body: data });
+    return await http.post("/v1/dingtalk/user", { body: data });
 }
 
-export async function deleteUser(data: any) {
-    return await http.delete("/api/user/delete", { params: data });
+export async function deleteUser(userId: string) {
+    return await http.delete("/v1/dingtalk/user/" + userId);
 }
 
 export async function getUserById(userId: string) {
-    return await http.get<IUser>("/api/user/get?userId=" + userId);
+    return await http.get<IUser>("/v1/dingtalk/user/" + userId);
 }
 
 export async function getUserDept() {
-    return await http.get<IDepartments[]>("/api/user/dept");
+    return await http.get<IDepartments[]>("/v1/dingtalk/departments");
 }
 
 export async function updateUser(data: any) {
-    return await http.put("/api/user/update", { body: data });
+    return await http.put("/v1/dingtalk/user", { body: data });
 }
 
 export async function getUsers() {
-    return await http.get<IUser[]>("/api/user/get");
+    return await http.get<IUser[]>("/v1/dingtalk/user");
 }
 
 export async function updateTemplate(data: any) {
-    return await http.put("/api/timesheet/update", { body: { template: data } });
+    return await http.put("/v1/timesheet/update/template", { body: { template: data } });
 }
 
 export async function getTimeSheetData() {
-    return await http.get<ISheetResult>("/api/timesheet/get?dept_name=yc");
+    return await http.get<ISheetResult>("/v1/timesheet/get/yc");
+}
+
+
+export async function getUserToday() {
+    return await http.get<IUserToday>("/v1/user/today");
 }

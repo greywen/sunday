@@ -1,6 +1,14 @@
-import { getLogs, updateCustomLogs, updateLogs } from "@apis/logs";
+import {
+  getAttendances,
+  updateCustomAttendances,
+  updateAttendances,
+} from "@apis/attendance";
 import useAsyncEffect from "@hooks/useAsyncEffect";
-import { ILogs, IModifyLogState, IUserLogs } from "@interfaces/logs";
+import {
+  IAttendances,
+  IModifyAttendanceState,
+  IUserAttendances,
+} from "@interfaces/attendance";
 import {
   Checkbox,
   Col,
@@ -11,12 +19,11 @@ import {
   Input,
   Form,
   Button,
-  Alert,
   Select,
 } from "antd";
 import moment from "moment";
 import React, { useRef, useState } from "react";
-import { LogState } from "../../constants";
+import { AttendanceState } from "../../constants";
 import "./index.less";
 import * as htmlToImage from "html-to-image";
 import * as download from "downloadjs";
@@ -28,24 +35,30 @@ import {
   updateUser,
 } from "@apis/user";
 import { IDepartmentGroup, IDepartments, IUser } from "@interfaces/user";
+import BackHome from "@components/backhome";
 const { Option } = Select;
 const { confirm } = Modal;
 
 const Attendance = () => {
-  const [logs, setLogs] = useState<IUserLogs[]>();
+  const [attendances, setAttendances] = useState<IUserAttendances[]>();
   const [departments, setDepartments] = useState<IDepartments[]>();
   const [groups, setGroups] = useState<IDepartmentGroup[]>([]);
   const [userDetail, setUserDetail] = useState<IUser | null>();
   const [loading, setLoading] = useState<boolean>(false);
   const [submiting, setSubmiting] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [subscribeVisible, setSubscribeVisible] = useState<boolean>(false);
   const [addModelVisible, setAddModelVisible] = useState<boolean>(false);
   const [userDetailVisible, setUserDetailVisible] = useState<boolean>(false);
   const dayInMonth = moment().daysInMonth();
   const weeks = ["日", "一", "二", "三", "四", "五", "六"];
-  const leaveType = [LogState.C, LogState.P, LogState.S, LogState.V];
-  const [modifyLog, setModifyLog] = useState<IModifyLogState>();
+  const leaveType = [
+    AttendanceState.C,
+    AttendanceState.P,
+    AttendanceState.S,
+    AttendanceState.V,
+  ];
+  const [modifyAttendance, setModifyAttendance] =
+    useState<IModifyAttendanceState>();
   const currentMonth = moment().format("YYYY-MM");
   const [form] = Form.useForm();
   const [detailForm] = Form.useForm();
@@ -66,8 +79,8 @@ const Attendance = () => {
 
   async function initData() {
     setLoading(true);
-    const data = await getLogs();
-    setLogs(data);
+    const data = await getAttendances();
+    setAttendances(data);
     setLoading(false);
   }
 
@@ -78,42 +91,44 @@ const Attendance = () => {
     };
   });
 
-  function getStateKey(state: LogState) {
-    return LogState[state];
+  function getStateKey(state: AttendanceState) {
+    return AttendanceState[state];
   }
 
-  function calcStateBlock(logs: ILogs[]) {
-    if (logs.length == 0) return " ";
-    if (logs.length > 1) {
+  function calcStateBlock(attendanceList: IAttendances[]) {
+    if (attendanceList.length == 0) return " ";
+    if (attendanceList.length > 1) {
       // 迟到
-      let statel = logs.find((x) => x.state === LogState.L);
+      let statel = attendanceList.find((x) => x.state === AttendanceState.L);
       // 未提交日志
-      let stateX = logs.find((x) => x.state === LogState.X);
+      let stateX = attendanceList.find((x) => x.state === AttendanceState.X);
       // 请假
-      let stateP = logs.find((x) => leaveType.includes(x.state));
+      let stateP = attendanceList.find((x) => leaveType.includes(x.state));
 
       if (statel) {
         return (
           <div className={`state-${statel.state}`}>{statel.value + "分钟"}</div>
         );
       } else if (stateX) {
-        // const value = logs.map((x) => getStateKey(x.state)).join("/");
         return <div className={`state-${stateX.state}`}>X</div>;
       } else if (stateP) {
-        const value = logs.map((x) => getStateKey(x.state)).join("/");
+        const value = attendanceList.map((x) => getStateKey(x.state)).join("/");
         return <div className={`state-${stateP.state}`}>{value}</div>;
       }
       return (
-        <div className={`state-${logs[0].state}`}>
-          {getStateKey(logs[0].state)}
+        <div className={`state-${attendanceList[0].state}`}>
+          {getStateKey(attendanceList[0].state)}
         </div>
       );
     } else {
-      let { state, value } = logs[0];
+      let { state, value } = attendanceList[0];
       switch (state) {
-        case LogState.L:
+        case AttendanceState.L:
           return <div className={`state-${state}`}>{value + "分钟"}</div>;
-        case (LogState.P, LogState.C, LogState.S, LogState.V):
+        case (AttendanceState.P,
+        AttendanceState.C,
+        AttendanceState.S,
+        AttendanceState.V):
           return <div className={`state-${state}`}>{getStateKey(state)}</div>;
         default:
           return <div className={`state-${state}`}>{getStateKey(state)}</div>;
@@ -121,52 +136,60 @@ const Attendance = () => {
     }
   }
 
-  function changeState(state: LogState) {
-    let _modifyLog = { ...modifyLog! };
-    let logs = _modifyLog?.logs.filter((x) => x.state !== state);
-    const notRightStates = [LogState.X, LogState.L];
-    if (logs?.length === _modifyLog?.logs.length) {
-      _modifyLog?.logs.push({ state: state, value: null });
+  function changeState(state: AttendanceState) {
+    let _modifyAttendance = { ...modifyAttendance! };
+    let _attendances = _modifyAttendance?.attendances.filter(
+      (x) => x.state !== state
+    );
+    const notRightStates = [AttendanceState.X, AttendanceState.L];
+    if (_attendances?.length === _modifyAttendance?.attendances.length) {
+      _modifyAttendance?.attendances.push({ state: state, value: null });
       if (notRightStates.includes(state)) {
-        logs = _modifyLog?.logs.filter((x) => x.state !== LogState.O);
-        _modifyLog.logs = [...logs];
-      } else if (state === LogState.O) {
-        logs = _modifyLog?.logs.filter(
+        _attendances = _modifyAttendance?.attendances.filter(
+          (x) => x.state !== AttendanceState.O
+        );
+        _modifyAttendance.attendances = [..._attendances];
+      } else if (state === AttendanceState.O) {
+        _attendances = _modifyAttendance?.attendances.filter(
           (x) => !notRightStates.includes(x.state)
         );
-        _modifyLog.logs = [...logs];
+        _modifyAttendance.attendances = [..._attendances];
       }
     } else {
-      _modifyLog.logs = [...logs];
+      _modifyAttendance.attendances = [..._attendances];
     }
 
-    setModifyLog(_modifyLog);
+    setModifyAttendance(_modifyAttendance);
   }
 
-  function changeStateValue(state: LogState, value: string) {
-    let _modifyLog = { ...modifyLog! };
-    let logs = _modifyLog?.logs.find((x) => x.state === state);
-    logs!.value = parseFloat(value);
-    setModifyLog(_modifyLog);
+  function changeStateValue(state: AttendanceState, value: string) {
+    let _modifyAttendance = { ...modifyAttendance! };
+    let _attendances = _modifyAttendance?.attendances.find(
+      (x) => x.state === state
+    );
+    _attendances!.value = parseFloat(value);
+    setModifyAttendance(_modifyAttendance);
   }
 
-  function getStateValue(state: LogState) {
-    return modifyLog?.logs.find((x) => x.state === state)?.value || 0;
+  function getStateValue(state: AttendanceState) {
+    return (
+      modifyAttendance?.attendances.find((x) => x.state === state)?.value || 0
+    );
   }
 
-  function isCheckState(state: LogState) {
-    return !!modifyLog?.logs.find((x) => x.state === state);
+  function isCheckState(state: AttendanceState) {
+    return !!modifyAttendance?.attendances.find((x) => x.state === state);
   }
 
   async function save() {
-    if (!modifyLog) {
+    if (!modifyAttendance) {
       return;
     }
 
-    const result = await updateCustomLogs({
-      index: modifyLog!.index,
-      userId: modifyLog!.id,
-      datas: modifyLog!.logs,
+    const result = await updateCustomAttendances({
+      index: modifyAttendance!.index,
+      userId: modifyAttendance!.id,
+      datas: modifyAttendance!.attendances,
     });
 
     if (result) {
@@ -177,8 +200,6 @@ const Attendance = () => {
     }
     setVisible(false);
   }
-
-  async function subscribeSMS() {}
 
   function exportToImg() {
     htmlToImage.toPng(reportRef.current).then(function (dataUrl) {
@@ -193,7 +214,7 @@ const Attendance = () => {
       await initData();
       setAddModelVisible(false);
     } else {
-      message.error(result);
+      message.error(result as any);
     }
     setSubmiting(false);
   }
@@ -204,7 +225,7 @@ const Attendance = () => {
       okText: "确定",
       cancelText: "取消",
       async onOk() {
-        const result = await deleteUser({ userId: userId });
+        const result = await deleteUser(userId);
         await initData();
         setUserDetailVisible(false);
         message.success(result ? "删除成功!" : "删除失败!");
@@ -233,15 +254,15 @@ const Attendance = () => {
     setUserDetailVisible(false);
   }
 
-  async function reloadLogs(day: number) {
-    const date = moment().format(`YYYY-MM-${day}`);
+  async function reloadAttendances(day: number) {
+    const date = moment().format(`YYYY-MM-${day.toString().padStart(2, "0")}`);
     confirm({
       title: `确定更新${date}日志?`,
       content: "这可能要花费1分钟左右的时间,请耐心等候!",
       okText: "确定",
       cancelText: "取消",
       async onOk() {
-        const result = await updateLogs({
+        const result = await updateAttendances({
           date: date,
           day: 1,
         });
@@ -251,7 +272,7 @@ const Attendance = () => {
     });
   }
 
-  async function reloadUserLogs(name: string) {
+  async function reloadUserAttendances(name: string) {
     const currentDate = moment();
     if (currentDate.date() !== 1) {
       currentDate.add(-1, "days");
@@ -262,7 +283,7 @@ const Attendance = () => {
       okText: "确定",
       cancelText: "取消",
       async onOk() {
-        const result = await updateLogs({
+        const result = await updateAttendances({
           name: name,
           date: currentDate.format(`YYYY-MM-DD`),
           day: currentDate.date(),
@@ -275,6 +296,7 @@ const Attendance = () => {
 
   return (
     <>
+      <BackHome />
       <div className="attendance-page" ref={reportRef}>
         <div className="header">
           <div
@@ -343,7 +365,7 @@ const Attendance = () => {
                     <p>{d.week}</p>
                     <p
                       onClick={() => {
-                        reloadLogs(d.day);
+                        reloadAttendances(d.day);
                       }}
                     >
                       {d.day}
@@ -354,9 +376,9 @@ const Attendance = () => {
             </tr>
           </thead>
           <tbody>
-            {logs?.map((ul) => {
+            {attendances?.map((ul) => {
               return (
-                <tr>
+                <tr key={"key-tr-" + ul.id}>
                   <td
                     onClick={async () => {
                       await getUserDetail(ul.id);
@@ -364,15 +386,16 @@ const Attendance = () => {
                   >
                     {ul.name}
                   </td>
-                  {ul.logs.map((l, i) => {
+                  {ul.attendances.map((l, i) => {
                     return (
                       <td
+                        key={"key-td-" + i + ul.id}
                         onClick={() => {
-                          setModifyLog({
+                          setModifyAttendance({
                             id: ul.id,
                             name: ul.name,
                             index: i,
-                            logs: [...l],
+                            attendances: [...l],
                           });
                           setVisible(true);
                         }}
@@ -388,8 +411,8 @@ const Attendance = () => {
         </table>
       </div>
       <Modal
-        title={`${modifyLog?.name} - ${moment(
-          `${currentMonth}-${modifyLog?.index || 0 + 1}`
+        title={`${modifyAttendance?.name} - ${moment(
+          `${currentMonth}-${modifyAttendance?.index || 0 + 1}`
         ).format("YYYY-MM-DD")}`}
         visible={visible}
         onOk={() => {
@@ -404,186 +427,125 @@ const Attendance = () => {
         <Row gutter={[48, 12]}>
           <Col span={12}>
             <Checkbox
-              value={LogState.O}
-              checked={isCheckState(LogState.O)}
-              onChange={() => changeState(LogState.O)}
+              value={AttendanceState.O}
+              checked={isCheckState(AttendanceState.O)}
+              onChange={() => changeState(AttendanceState.O)}
             >
               正常(O)
             </Checkbox>
           </Col>
           <Col span={12}>
             <Checkbox
-              value={LogState.X}
-              checked={isCheckState(LogState.X)}
-              onChange={() => changeState(LogState.X)}
+              value={AttendanceState.X}
+              checked={isCheckState(AttendanceState.X)}
+              onChange={() => changeState(AttendanceState.X)}
             >
               未提交日志(X)
             </Checkbox>
           </Col>
           <Col span={12}>
             <Checkbox
-              value={LogState.C}
-              checked={isCheckState(LogState.C)}
-              onChange={() => changeState(LogState.C)}
+              value={AttendanceState.C}
+              checked={isCheckState(AttendanceState.C)}
+              onChange={() => changeState(AttendanceState.C)}
             >
               调休(C)
             </Checkbox>
             <InputNumber
-              disabled={!isCheckState(LogState.C)}
+              disabled={!isCheckState(AttendanceState.C)}
               size="small"
               step="0.5"
               min="0"
               max="7.5"
               addonAfter="小时"
               onChange={(value) => {
-                changeStateValue(LogState.C, value);
+                changeStateValue(AttendanceState.C, value);
               }}
-              value={getStateValue(LogState.C)}
+              value={getStateValue(AttendanceState.C)}
             />
           </Col>
           <Col span={12}>
             <Checkbox
-              value={LogState.P}
-              checked={isCheckState(LogState.P)}
-              onChange={() => changeState(LogState.P)}
+              value={AttendanceState.P}
+              checked={isCheckState(AttendanceState.P)}
+              onChange={() => changeState(AttendanceState.P)}
             >
               事假(P)
             </Checkbox>
             <InputNumber
-              disabled={!isCheckState(LogState.P)}
+              disabled={!isCheckState(AttendanceState.P)}
               size="small"
               step="0.5"
               min="0"
               max="7.5"
               addonAfter="小时"
               onChange={(value) => {
-                changeStateValue(LogState.P, value);
+                changeStateValue(AttendanceState.P, value);
               }}
-              value={getStateValue(LogState.P)}
+              value={getStateValue(AttendanceState.P)}
             />
           </Col>
           <Col span={12}>
             <Checkbox
-              value={LogState.O}
-              checked={isCheckState(LogState.L)}
-              onChange={() => changeState(LogState.L)}
+              value={AttendanceState.O}
+              checked={isCheckState(AttendanceState.L)}
+              onChange={() => changeState(AttendanceState.L)}
             >
               迟到(L)
             </Checkbox>
             <InputNumber
-              disabled={!isCheckState(LogState.L)}
+              disabled={!isCheckState(AttendanceState.L)}
               size="small"
               step="1"
               min="0"
               max="540"
               addonAfter="分钟"
-              value={getStateValue(LogState.L)}
+              value={getStateValue(AttendanceState.L)}
             />
           </Col>
           <Col span={12}>
             <Checkbox
-              value={LogState.S}
-              checked={isCheckState(LogState.S)}
-              onChange={() => changeState(LogState.S)}
+              value={AttendanceState.S}
+              checked={isCheckState(AttendanceState.S)}
+              onChange={() => changeState(AttendanceState.S)}
             >
               病假(S)
             </Checkbox>
             <InputNumber
-              disabled={!isCheckState(LogState.S)}
+              disabled={!isCheckState(AttendanceState.S)}
               size="small"
               step="0.5"
               min="0"
               max="7.5"
               addonAfter="小时"
               onChange={(value) => {
-                changeStateValue(LogState.S, value);
+                changeStateValue(AttendanceState.S, value);
               }}
-              value={getStateValue(LogState.S)}
+              value={getStateValue(AttendanceState.S)}
             />
           </Col>
           <Col span={12}>
             <Checkbox
-              value={LogState.V}
-              checked={isCheckState(LogState.V)}
-              onChange={() => changeState(LogState.V)}
+              value={AttendanceState.V}
+              checked={isCheckState(AttendanceState.V)}
+              onChange={() => changeState(AttendanceState.V)}
             >
               休假(V)
             </Checkbox>
             <InputNumber
-              disabled={!isCheckState(LogState.V)}
+              disabled={!isCheckState(AttendanceState.V)}
               size="small"
               step="0.5"
               min="0"
               max="7.5"
               addonAfter="小时"
               onChange={(value) => {
-                changeStateValue(LogState.V, value);
+                changeStateValue(AttendanceState.V, value);
               }}
-              value={getStateValue(LogState.V)}
+              value={getStateValue(AttendanceState.V)}
             />
           </Col>
         </Row>
-      </Modal>
-      <Modal
-        closeIcon={false}
-        visible={subscribeVisible}
-        title="订阅日志短信提醒"
-        onCancel={() => {
-          setSubscribeVisible(false);
-        }}
-        footer={null}
-      >
-        <Row style={{ margin: "0 0 12px 0" }}>
-          <Col>
-            <Alert
-              message="Tips: 如果你订阅了我们提醒服务,工作日忘记提交日志,我们将在晚上8点以短信的方式提醒你。"
-              type="info"
-              showIcon
-            />
-          </Col>
-        </Row>
-
-        <Form
-          form={form}
-          name="subscribe-form"
-          onFinish={() => {
-            subscribeSMS();
-          }}
-        >
-          <Form.Item
-            name="name"
-            label="真实姓名"
-            rules={[{ required: true, message: "请输入正确的姓名!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="phone"
-            label="手机号码"
-            rules={[{ required: true, message: "请输入正确的电话号码!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="code"
-            label="验证号码"
-            rules={[{ required: true, message: "请输入正确的验证码!" }]}
-          >
-            <Row>
-              <Col span={18}>
-                <Input />
-              </Col>
-              <Col span={6}>
-                <Button>发送</Button>
-              </Col>
-            </Row>
-          </Form.Item>
-          <Form.Item style={{ textAlign: "right" }}>
-            <Button type="primary" htmlType="submit">
-              订阅
-            </Button>
-          </Form.Item>
-        </Form>
       </Modal>
       <Modal
         closeIcon={false}
@@ -621,7 +583,9 @@ const Attendance = () => {
               }}
             >
               {departments?.map((x) => (
-                <Option value={x.code}>{x.name}</Option>
+                <Option key={x.code} value={x.code}>
+                  {x.name}
+                </Option>
               ))}
             </Select>
           </Form.Item>
@@ -677,7 +641,9 @@ const Attendance = () => {
               }}
             >
               {departments?.map((x) => (
-                <Option value={x.code}>{x.code.toUpperCase()}</Option>
+                <Option key={x.code} value={x.code}>
+                  {x.name}
+                </Option>
               ))}
             </Select>
           </Form.Item>
@@ -723,7 +689,7 @@ const Attendance = () => {
                   type="default"
                   loading={submiting}
                   onClick={async () => {
-                    reloadUserLogs(userDetail!.name);
+                    reloadUserAttendances(userDetail!.name);
                   }}
                 >
                   更新考勤
