@@ -1,4 +1,5 @@
 export interface IRankList {
+  index?: number,
   count: number,
   integral: number,
   nickName: string,

@@ -9,7 +9,7 @@
  * 加班 J 7
  * 迟到 L 8
  */
-export enum LogState {
+export enum AttendanceState {
     "O" = 1,
     "C" = 2,
     "V" = 3,
@@ -19,3 +19,11 @@ export enum LogState {
     "J" = 7,
     "L" = 8
 }
+
+export enum GroupType {
+    "back-end" = 1,
+    "frond-end" = 2,
+    "test" = 3
+}
+
+export const ACCOUNT_INFO = "ACCOUNT_INFO";

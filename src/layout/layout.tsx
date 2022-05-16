@@ -1,64 +1,59 @@
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import Attendance from "@pages/attendance";
-import AttendanceForShow from "@pages/attendance-for-show";
-import CleanOffice from "@pages/clean-office";
-import Rank from "@pages/moyu";
+import AttendanceReadonly from "@pages/attendance/attendance-readonly";
+import Dashboard from "@pages/dashboard";
 import MoyuRank from "@pages/moyuRank";
 import TimeSheet from "@pages/timesheet";
-import React, { Suspense } from "react";
+import { Content } from "antd/lib/layout/layout";
+import React, { Suspense, useContext } from "react";
 import {
   Route,
   Routes,
   BrowserRouter as Router,
   useNavigate,
 } from "react-router-dom";
+import { AuthContext } from "../providers/AuthProvider";
 import "./index.less";
 
-interface IRouters {
-  path: string;
-  element: JSX.Element;
-}
-
-const Layout = () => {
+const Layout: React.FC = () => {
+  const authContext = useContext(AuthContext);
   return (
-    <Router>
-      <div className="container">
-        <Suspense fallback={<h3>Loading...</h3>}>
-          <Routers />
-        </Suspense>
-      </div>
-    </Router>
-  );
-};
-
-const Routers = () => {
-  const routers: IRouters[] = [
-    { path: "/", element: <AttendanceForShow /> },
-    { path: "/attendance", element: <Attendance /> },
-    { path: "/clean", element: <CleanOffice /> },
-    { path: "/moyu", element: <Rank /> },
-    { path: "/moyu2", element: <MoyuRank /> },
-    { path: "/timesheet", element: <TimeSheet /> },
-  ];
-
-  // const navigate = useNavigate();
-
-  // clearInterval(window.interval);
-  // window.interval = setInterval(() => {
-  //   if (window.currentIndex === routers.length - 1) {
-  //     window.currentIndex = 0;
-  //   } else {
-  //     ++window.currentIndex;
-  //   }
-  //   console.log(window.currentIndex);
-  //   navigate(routers[window.currentIndex].path);
-  // }, 3000);
-
-  return (
-    <Routes>
-      {routers.map((x) => (
-        <Route key={x.path} path={x.path} element={x.element} />
-      ))}
-    </Routes>
+    <>
+      {authContext.isAuthenticated ? (
+        <Router>
+          <Content className="container">
+            <Suspense fallback={<h3>Loading...</h3>}>
+              <Routes>
+                <Route key="dashboard" path="/" element={<Dashboard />} />
+                <Route
+                  key="attendances"
+                  path="/attendances"
+                  element={<Attendance />}
+                />
+                <Route
+                  key="attendance"
+                  path="/attendance"
+                  element={<AttendanceReadonly />}
+                ></Route>
+                <Route key="moyu" path="/moyu" element={<MoyuRank />} />
+                <Route
+                  key="timesheet"
+                  path="/timesheet"
+                  element={<TimeSheet />}
+                />
+                <Route
+                  key="timesheet-all"
+                  path="/timesheet/all"
+                  element={<TimeSheet />}
+                />
+              </Routes>
+            </Suspense>
+          </Content>
+        </Router>
+      ) : (
+        <h4>Loading...</h4>
+      )}
+    </>
   );
 };
 
