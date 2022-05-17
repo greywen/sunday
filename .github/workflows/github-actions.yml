@@ -5,15 +5,16 @@ on:
     branches: [main]
 jobs:
   build:
-  runs-on: ubuntu-latest
-  steps:
-    -name: Deployment
-    with:
-      host: ${{ secrets.SSH_HOST }}
-      username: ${{ secrets.SSH_USERNAME }}
-      pass: ${{ secrets.SSH_PASSWORD }}
-      srcipt: |
-        cd /root/dingding2
-        sudo -u root git pull --ff-only
-        sudo -u root npm i
-        sudo -u root npm run build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: root
+      - name: Deployment
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          pass: ${{ secrets.SSH_PASSWORD }}
+          srcipt: |
+            cd /root/sunday
+            sudo -u root git pull --ff-only
+            sudo -u root npm i
+            sudo -u root npm run build
