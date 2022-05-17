@@ -13,7 +13,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           pass: ${{ secrets.SSH_PASSWORD }}
-          srcipt: |
+          run: |
             cd /root/sunday
             sudo -u root git pull --ff-only
             sudo -u root npm i
