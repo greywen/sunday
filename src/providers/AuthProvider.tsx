@@ -1,7 +1,7 @@
 import { signin, getAuthUrl, signout } from "@apis/auth";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { useAccount } from "@utils/utils";
-import React, { createContext, useState } from "react";
+import React, { createContext } from "react";
 
 interface IAuthContext {
   isAuthenticated: boolean;
@@ -17,18 +17,18 @@ export let AuthContext: React.Context<IAuthContext>;
 export const AuthProvider: React.FC = ({ children }) => {
   const account = useAccount();
   const initialState = {
-    isAuthenticated: true, //account.checkWhetherExpire(),
+    isAuthenticated: account.checkWhetherExpire(),
     userName: account?.username,
     userId: account?.id,
     roles: account?.roles,
   };
 
-  const [auth, setAuth] = useState({
+  const auth = {
     ...initialState,
     doAuthRedirect: doAuthRedirect,
     extractToken: extractToken,
     logout: logout,
-  });
+  };
 
   AuthContext = createContext(auth);
 
@@ -48,11 +48,9 @@ export const AuthProvider: React.FC = ({ children }) => {
     const _urlParams = new URLSearchParams(location.search);
     const session_state = _urlParams.get("session_state");
     const code = _urlParams.get("code");
-
     const _account = await signin({ code, session_state });
-
     account.set(_account);
-    location.assign(location.origin);
+    window.location.assign(window.location.origin);
   }
 
   async function doAuthRedirect() {
@@ -66,9 +64,5 @@ export const AuthProvider: React.FC = ({ children }) => {
     location.assign(url);
   }
 
-  return (
-    <>
-      <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
-    </>
-  );
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
