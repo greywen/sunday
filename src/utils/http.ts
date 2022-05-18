@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { ACCOUNT_INFO } from "../constants";
 import { useAccount } from "./utils";
 
-const defaultHost = `http://${location.hostname}:8090`;
+const defaultHost = process.env.API_URL;
 const account = useAccount();
 
 interface IHttpConfig extends AxiosRequestConfig {
