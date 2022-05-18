@@ -26,19 +26,19 @@ jobs:
     steps:
       # 下载源码
       - name: Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
       # 打包构建
       - name: Build
         uses: actions/setup-node@master
-      - run: npm install
+      # - run: npm install
       - run: npm run build
       - run: zip -q -r release.zip dist
 
       # 发布 Release
       - name: Create Release
         id: create_release
-        uses: actions/create-release@master
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }} # GitHub添加的Token
         with:
@@ -50,7 +50,7 @@ jobs:
       # 上传构建结果到Release
       - name: Upload Release Asset
         id: upload_release_asset
-        uses: actions/upload-release-asset@master
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
