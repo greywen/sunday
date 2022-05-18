@@ -2,6 +2,7 @@ import path from "path";
 import webpack from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { WebpackConfiguration } from "./webpack.config";
+const Dotenv = require('dotenv-webpack')
 
 const config: WebpackConfiguration = {
     mode: "development",
@@ -86,6 +87,7 @@ const config: WebpackConfiguration = {
         ]
     },
     plugins: [
+        new Dotenv(),
         new HtmlWebpackPlugin({
             template: "./src/index.html",
         }),

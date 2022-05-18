@@ -108,9 +108,9 @@ const TimeSheet = () => {
     );
   }
 
-  async function changeTimeSheet(name: string, value?: string) {
+  async function changeTimeSheet(userid: string, value?: string) {
     const _member = members?.map((x) => {
-      if (x.name === name) {
+      if (x.userid === userid) {
         x.value = value;
       }
       return x;
@@ -118,10 +118,10 @@ const TimeSheet = () => {
     setMembers(_member);
   }
 
-  async function sendMessage(name: string) {
+  async function sendMessage(userid: string) {
     socket.emit(
       "sendMessage",
-      members?.find((x) => x.name === name)
+      members?.find((x) => x.userid === userid)
     );
   }
 
@@ -133,29 +133,23 @@ const TimeSheet = () => {
   return (
     <div className="timesheet-page">
       <BackHome />
-      <Row gutter={16}>
-        <Col span={20} hidden={showAll}>
-          <h1
+      <Row>
+        <Col span={24} hidden={showAll}>
+          <h2
             onDoubleClick={() => {
               setEnabledTemplate(true);
             }}
           >
             Time Sheet {`(${moment().format("YYYY-MM-DD")})`}
-          </h1>
+          </h2>
         </Col>
       </Row>
       <Row hidden={showAll}>
-        <Col span={24}>
+        <Col span={24} className="timesheet-card">
           <Row>
             {groups.map((type) => {
               return (
-                <Col
-                  key={`key-type-${type}`}
-                  className="timesheet-box"
-                  lg={8}
-                  md={24}
-                  xs={24}
-                >
+                <Col key={`key-type-${type}`} lg={8} md={24} xs={24}>
                   <Row>
                     {type === GroupType["back-end"] && (
                       <Col span={24}>
@@ -208,7 +202,7 @@ const TimeSheet = () => {
                         ?.map((x) => {
                           return (
                             <Tooltip
-                              key={`key-tooltip-${x.name}`}
+                              key={`key-tooltip-${x.userid}`}
                               trigger="focus"
                               placement="topLeft"
                               title={x.name}
@@ -216,11 +210,11 @@ const TimeSheet = () => {
                               <div>
                                 <TextArea
                                   onChange={(value) => {
-                                    changeTimeSheet(x.name, value);
-                                    sendMessage(x.name);
+                                    changeTimeSheet(x.userid, value);
+                                    sendMessage(x.userid);
                                   }}
                                   value={x.value}
-                                  key={x.name}
+                                  key={x.userid}
                                   placeholder={x.name}
                                 ></TextArea>
                               </div>

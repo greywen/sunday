@@ -4,6 +4,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { WebpackConfiguration } from "./webpack.config";
+const Dotenv = require('dotenv-webpack');
 
 const config: WebpackConfiguration = {
     mode: "production",
@@ -83,6 +84,7 @@ const config: WebpackConfiguration = {
         ]
     },
     plugins: [
+        new Dotenv(),
         new HtmlWebpackPlugin({
             template: "./src/index.html",
         }),

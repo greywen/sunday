@@ -1,4 +1,3 @@
-import { ArrowLeftOutlined } from "@ant-design/icons";
 import Attendance from "@pages/attendance";
 import AttendanceReadonly from "@pages/attendance/attendance-readonly";
 import Dashboard from "@pages/dashboard";

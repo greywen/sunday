@@ -36,7 +36,7 @@ const Dashboard = () => {
       </Row>
       <Row justify="end">
         <Col xxl={24} lg={24} md={24} sm={24} xs={24} style={{ padding: 12 }}>
-          {`© ${new Date().getFullYear()} Baibaomen. All Rights Reserved.`}
+          {`© ${new Date().getFullYear()} 猿媛乐园. All Rights Reserved.`}
         </Col>
       </Row>
     </Content>
