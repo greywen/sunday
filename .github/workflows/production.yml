@@ -20,11 +20,11 @@ jobs:
         uses: actions/checkout@v2
 
       # 打包构建
-      - name: Build
-        uses: actions/setup-node@master
-      - run: npm install
-      - run: npm run build
-      - run: tar -zcvf ${{github.ref_name}}.tgz dist
+      # - name: Build
+      #  uses: actions/setup-node@master
+      # - run: npm install
+      # - run: npm run build
+      # - run: tar -czvf ${{github.ref_name}}.tgz .
 
       # 发布 Release
       - name: Create Release
@@ -39,16 +39,16 @@ jobs:
           prerelease: false # 是否是预发布
 
       # 上传构建结果到Release
-      - name: Upload Release Asset
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: ./${{github.ref_name}}.tgz # 要上传文件
-          asset_name: ${{github.ref_name}}.tgz # 上传后的文件名
-          asset_content_type: application/zip
+      # - name: Upload Release Asset
+      #  id: upload_release_asset
+      #  uses: actions/upload-release-asset@v1
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      #  with:
+      #    upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+      #    asset_path: ./${{github.ref_name}}.tgz # 要上传文件
+      #    asset_name: ${{github.ref_name}}.tgz # 上传后的文件名
+      #    asset_content_type: application/x-tar
 
       # 部署到服务器
       - name: Deploy
@@ -59,7 +59,10 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }} #配置的密码
           port: ${{ secrets.SSH_PORT }}
           script:
-            | # 执行命令（运行到服务器）cd：要确保服务器有这个目录； wget：下载上一步的build文件到服务器； tar：解压； 安装依赖；启动服务
+            | # 执行命令（运行到服务器）cd：要确保服务器有这个目录； wget：下载上一步的build文件到服务器； tar：解压； 安装依赖；启动服务 # sudo chmod 777 ${{github.ref_name}}.tgz
             cd /root/sunday
             wget https://github.com/graywenn/sunday/releases/latest/download/${{github.ref_name}}.tgz -O ${{github.ref_name}}.tgz
-            tar zxvf ${{github.ref_name}}.tgz --strip-components 1
+            tar xzvf ${{github.ref_name}}.tgz
+            cp ../configs/.env ./
+            npm i
+            npm run build
