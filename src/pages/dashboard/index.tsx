@@ -5,7 +5,7 @@ import { Col, Row } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import React, { useState } from "react";
 import AttendanceCard from "./attendance.card";
-import "./index.less";
+import styles from "./index.module.less";
 import NoticeCard from "./notice.card";
 import RankCard from "./rank.card";
 import ReportCard from "./report.card";
@@ -19,7 +19,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Content className="dashboard-page">
+    <Content className={styles.dashboardPage}>
       {/* <Row justify="end">
         <Col>
           <SettingFilled

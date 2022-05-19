@@ -2,22 +2,23 @@ import { IUserToday } from "@interfaces/user";
 import { Button, Col, Result, Row } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./index.module.less";
 
 const ReportCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
   const navigate = useNavigate();
   return (
     <Col xxl={8} lg={12} md={24} sm={24} xs={24}>
       <div
-        className="card"
+        className={styles.card}
         onClick={() => {
           navigate("/timesheet");
         }}
       >
-        <div className="card-content">
-          <div className="card-header">
+        <div className={styles.cardContent}>
+          <div className={styles.cardHeader}>
             <Row>日志</Row>
           </div>
-          <Row justify="center" className="card-body">
+          <Row justify="center" className={styles.cardBody}>
             {today?.timesheet?.value ? (
               <Result status="success" title="今日已成功提交日志!" />
             ) : (
