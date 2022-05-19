@@ -29,13 +29,20 @@ jobs:
         uses: actions/checkout@v2
         id: vars
       - run: echo ::set-output name=tag::${GITHUB_REF#refs/*/} 
+      
+      - name: Check output
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
 
       # 打包构建
       - name: Build
         uses: actions/setup-node@master
       - run: npm install
       - run: npm run build
-      - run: tar -zcvf ${{ steps.vars.outputs.tag }}.tgz dist
+      - run: tar -zcvf ${{github.ref_name}}.tgz dist
 
       # 发布 Release
       - name: Create Release
@@ -44,8 +51,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }} # GitHub添加的Token
         with:
-          tag_name: ${{ steps.vars.outputs.tag }} # (tag)标签名称
-          release_name: ${{ steps.vars.outputs.tag }}
+          tag_name: ${{github.ref_name}} # (tag)标签名称
+          release_name: ${{github.ref_name}}
           draft: false # 是否是草稿
           prerelease: false # 是否是预发布
       
@@ -57,8 +64,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: ./${{ steps.vars.outputs.tag }}.tgz # 要上传文件
-          asset_name: $${{ steps.vars.outputs.tag }}.tgz # 上传后的文件名
+          asset_path: ./${{github.ref_name}}.tgz # 要上传文件
+          asset_name: ${{github.ref_name}}.tgz # 上传后的文件名
           asset_content_type: application/zip
       
       # 部署到服务器
@@ -71,8 +78,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: | # 执行命令（运行到服务器）cd：要确保服务器有这个目录； wget：下载上一步的release到服务器； tar：解压； 安装依赖；启动服务
             cd /root/sunday
-            wget https://github.com/graywenn/sunday/releases/latest/download/${{ steps.vars.outputs.tag }}.tgz -O ${{ steps.vars.outputs.tag }}.tgz
-            tar zxvf ${{ steps.vars.outputs.tag }}.tgz
+            wget https://github.com/graywenn/sunday/releases/latest/download/${{github.ref_name}}.tgz -O ${{github.ref_name}}.tgz
+            tar zxvf ${{github.ref_name}}.tgz
             yes | cp -r -f dist/* ./
 
         
