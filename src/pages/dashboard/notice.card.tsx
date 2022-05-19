@@ -14,7 +14,7 @@ const NoticeCard = () => {
           </div>
           <Row className="card-carousel">
             <Col span={24}>
-              <Carousel autoplay dots={false} dotPosition="bottom">
+              <Carousel autoplay dotPosition="bottom">
                 <div className="card-carousel-content">
                   五月鱼王争霸赛，让我们一起动起来吧！
                   <br />

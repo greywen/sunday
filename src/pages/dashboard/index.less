@@ -14,6 +14,7 @@
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
+
   .hello-text {
     height: 100%;
     display: flex;
@@ -22,6 +23,7 @@
     font-size: 32px;
     font-weight: bold;
   }
+
   .tiem-text {
     display: flex;
     align-items: flex-end;
@@ -39,6 +41,7 @@
   color: #252422;
   position: relative;
   height: 360px;
+
   .card-content {
     padding: 16px 32px 16px 32px;
     position: relative;
@@ -53,13 +56,14 @@
       height: 300px;
     }
   }
-  .card-footer {
-  }
+
+  .card-footer {}
 }
 
 .card-sm {
   margin-top: 12px;
   height: 174px;
+
   .card-body {
     display: flex;
     height: auto !important;
@@ -79,14 +83,17 @@
   border-radius: 50%;
   text-align: center;
 }
+
 .rank-1 {
   background-color: #f56a00;
   font-weight: 500;
 }
+
 .rank-2 {
   background-color: #85ce67;
   font-weight: 500;
 }
+
 .rank-3 {
   background-color: #1890ff;
   font-weight: 500;
@@ -96,6 +103,18 @@
   padding: 12px;
   height: 280px;
   overflow: hidden;
+
+  .ant-carousel .slick-dots li.slick-active button {
+    background: blue;
+  }
+
+  .ant-carousel .slick-dots li button {
+    background: red;
+  }
+
+  .ant-carousel .slick-dots-bottom {
+    bottom: -12px;
+  }
 }
 
 .card-carousel-content {
