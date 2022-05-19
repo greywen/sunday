@@ -4,8 +4,6 @@ import Rank from "@components/rank";
 import Records from "@components/records";
 import { Carousel, Spin } from "antd";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { getRecords } from "@apis/moyu";
 import { IMoYuRecord } from "@interfaces/moyu";
