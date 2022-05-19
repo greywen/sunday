@@ -4,6 +4,7 @@ import { Button, Col, Result, Row, Typography } from "antd";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
+import styles from "./index.module.less";
 const { Text } = Typography;
 
 const AttendanceCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
@@ -12,7 +13,7 @@ const AttendanceCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
   return (
     <Col xxl={8} lg={12} md={24} sm={24} xs={24}>
       <div
-        className="card"
+        className={styles.card}
         onClick={() => {
           const usernames = ["王中伟", "文旺", "周杰"];
           usernames.includes(authContext.userName)
@@ -20,15 +21,15 @@ const AttendanceCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
             : navigate("/attendance");
         }}
       >
-        <div className="card-content">
-          <div className="card-header">
+        <div className={styles.cardContent}>
+          <div className={styles.cardHeader}>
             <div className="row">
               <div className="col-7">考勤</div>
               <div className="col-5"></div>
             </div>
           </div>
           <div className="row">
-            <Row justify="center" className="card-body">
+            <Row justify="center" className={styles.cardBody}>
               {today && today?.attendance.tomorrowIsHoliday ? (
                 <Result
                   icon={<SmileOutlined />}

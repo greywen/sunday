@@ -3,6 +3,7 @@ import { useAccount } from "@utils/utils";
 import { Col, Row } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
+import styles from "./index.module.less";
 
 const UserCard = () => {
   const account = useAccount();
@@ -28,24 +29,24 @@ const UserCard = () => {
 
   return (
     <Col xxl={8} lg={12} md={24} sm={24} xs={24}>
-      <div className="card card-sm">
-        <div className="card-content">
-          <div className="card-header">
+      <div className={`${styles.card} ${styles.cardSm}`}>
+        <div className={styles.cardContent}>
+          <div className={styles.cardHeader}>
             <Row justify="end">
               <EllipsisOutlined />
             </Row>
           </div>
-          <div className="card-body">
-            <div className="user-card">
+          <div className={styles.cardBody}>
+            <div className={styles.userCard}>
               <div className="left">
-                <div className="hello-text">
+                <div className={styles.helloText}>
                   {account.username}，
                   <br />
                   {welcomeText}
                 </div>
               </div>
               <div className="right">
-                <div className="tiem-text">
+                <div className={styles.tiemText}>
                   {account.hiredDate > 0
                     ? `你已经来公司 ${calcHiredDay()} 天了！`
                     : "度过愉快的一天！"}
@@ -55,16 +56,11 @@ const UserCard = () => {
           </div>
         </div>
       </div>
-      <div className="card card-sm">
-        <div className="card-content">
-          <div className="card-header">
-            <div className="row">
-              <div className="col-7"></div>
-              <div className="col-5"></div>
-            </div>
+      <div className={`${styles.card} ${styles.cardSm}`}>
+        <div className={styles.cardContent}>
+          <div className={styles.cardHeader}>
           </div>
-          <div className="row card-body">
-            <div className="col-12"></div>
+          <div className={styles.cardBody}>
           </div>
         </div>
       </div>

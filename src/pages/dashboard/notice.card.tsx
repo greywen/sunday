@@ -1,21 +1,22 @@
 import { Carousel, Col, Row } from "antd";
 import React from "react";
+import styles from "./index.module.less";
 
 const NoticeCard = () => {
   return (
     <Col xxl={16} lg={24} md={24} sm={24} xs={24}>
-      <div className="card">
-        <div className="card-content">
-          <div className="card-header">
+      <div className={styles.card}>
+        <div className={styles.cardContent}>
+          <div className={styles.cardHeader}>
             <Row justify="space-between">
               <Col span={20}>通知</Col>
               <Col span={4}></Col>
             </Row>
           </div>
-          <Row className="card-carousel">
+          <Row className={styles.cardCarousel}>
             <Col span={24}>
               <Carousel autoplay dotPosition="bottom">
-                <div className="card-carousel-content">
+                <div className={styles.cardCarouselContent}>
                   五月鱼王争霸赛，让我们一起动起来吧！
                   <br />
                   第一名🥇获得BOSS二百元奖励， <br />
@@ -33,12 +34,12 @@ const NoticeCard = () => {
                   4.阳光普照就BOSS群里发群手气红包，它的发放条件是：有合格的前三名产生。鼓励大家怂恿其他童鞋运动打卡哦～
                   最终解释权归公司行政部所有，如有变动会另行通知哦
                 </div>
-                <div className="card-carousel-content">
+                <div className={styles.cardCarouselContent}>
                   新书订阅开始了～小伙伴们有想看的技术书籍，可以跟我反馈，公司统一采购。
                   大家借阅书籍，请记得在登记册上做好登记。书籍借阅时间单次请勿超过30天，便于其他同事借阅。
                   也请小伙伴们爱护书籍，丢失毁损需照价赔偿哦！
                 </div>
-                <div className="card-carousel-content">
+                <div className={styles.cardCarouselContent}>
                   1.本周搞卫生的需要在周五搞完最后一天卫生后在下周一下班前群里艾特下一个搞卫生的童鞋否则下周还是该童鞋搞卫生哦！
                   <br />
                   2.当天卫生需要在当天下班搞好，范围：办公公共区域、其中：茶水间——需把桶里的废水倒掉、桌上保持清洁无垃圾；会议室桌面保持清洁；保持办公区域地面清洁（有垃圾一定要打扫🧹干净‼️）；所有垃圾桶已经满了的倒掉换好新的垃圾袋；老板办公室日常打理保持干净整洁。

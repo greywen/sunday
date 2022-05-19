@@ -1,21 +1,21 @@
-.dashboard-page {
+.dashboardPage {
   padding: 128px 128px 0 128px;
 }
 
 @media screen and (min-width: 360px) and (max-width: 1180px) {
-  .dashboard-page {
+  .dashboardPage {
     padding: 0 2px 0 2px;
   }
 }
 
-.user-card {
+.userCard {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
 
-  .hello-text {
+  .helloText {
     height: 100%;
     display: flex;
     align-items: center;
@@ -24,7 +24,7 @@
     font-weight: bold;
   }
 
-  .tiem-text {
+  .tiemText {
     display: flex;
     align-items: flex-end;
     height: 100%;
@@ -42,35 +42,50 @@
   position: relative;
   height: 360px;
 
-  .card-content {
+  .cardContent {
     padding: 16px 32px 16px 32px;
     position: relative;
 
-    .card-header {
+    .cardHeader {
       text-align: left;
       font-size: 1.8em;
     }
 
-    .card-body {
+    .cardBody {
       display: flex;
       height: 300px;
+      tbody {
+        & tr:nth-child(1) {
+          div {
+            background-color: #f56a00;
+          }
+        }
+        & tr:nth-child(2) {
+          div {
+            background-color: #85ce67;
+          }
+        }
+        & tr:nth-child(3) {
+          div {
+            background-color: #1890ff;
+          }
+        }
+      }
     }
   }
-
-  .card-footer {}
 }
 
-.card-sm {
+.cardSm {
   margin-top: 12px;
   height: 174px;
 
-  .card-body {
+  .cardBody {
     display: flex;
     height: auto !important;
   }
 }
 
-.seemore-text {
+.seemoreText {
   font-size: 14px;
   margin-top: 8;
   font-weight: bold;
@@ -84,40 +99,25 @@
   text-align: center;
 }
 
-.rank-1 {
-  background-color: #f56a00;
-  font-weight: 500;
-}
-
-.rank-2 {
-  background-color: #85ce67;
-  font-weight: 500;
-}
-
-.rank-3 {
-  background-color: #1890ff;
-  font-weight: 500;
-}
-
-.card-carousel {
+.cardCarousel {
   padding: 12px;
   height: 280px;
   overflow: hidden;
 
-  .ant-carousel .slick-dots li.slick-active button {
+  :global(.ant-carousel .slick-dots li.slick-active button) {
     background: blue;
   }
 
-  .ant-carousel .slick-dots li button {
+  :global(.ant-carousel .slick-dots li button) {
     background: red;
   }
 
-  .ant-carousel .slick-dots-bottom {
+  :global(.ant-carousel .slick-dots-bottom) {
     bottom: -12px;
   }
 }
 
-.card-carousel-content {
+.cardCarouselContent {
   letter-spacing: 1.2px;
   font-size: 16px;
   overflow: scroll;

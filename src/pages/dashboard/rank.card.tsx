@@ -4,6 +4,7 @@ import { IRankList } from "@interfaces/moyu";
 import { Col, Row, Table } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./index.module.less";
 
 const RankCard = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const RankCard = () => {
       width: "30%",
       key: "index",
       render: (_: IRankList) => {
-        return <div className={`rank rank-${_.index}`}>{_.index}</div>;
+        return <div className={`${styles.rank}`}>{_.index}</div>;
       },
     },
     {
@@ -44,14 +45,14 @@ const RankCard = () => {
   ];
   return (
     <Col xxl={8} lg={12} md={24} sm={24} xs={24}>
-      <div className="card">
-        <div className="card-content">
-          <div className="card-header">
+      <div className={styles.card}>
+        <div className={styles.cardContent}>
+          <div className={styles.cardHeader}>
             <Row justify="space-between">
               <Col span={20}>摸鱼排行榜</Col>
               <Col span={4}>
                 <span
-                  className="seemore-text"
+                  className={styles.seemoreText}
                   onClick={() => {
                     navigate("/moyu");
                   }}
@@ -61,7 +62,7 @@ const RankCard = () => {
               </Col>
             </Row>
           </div>
-          <Row className="card-body" style={{ overflow: "scroll" }}>
+          <Row className={styles.cardBody} style={{ overflow: "scroll" }}>
             <Table
               showHeader={false}
               style={{ width: "100%" }}
