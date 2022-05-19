@@ -18,13 +18,14 @@ jobs:
       # 下载源码
       - name: Checkout
         uses: actions/checkout@v2
+      - run: tar -czvf ${{github.ref_name}}.tgz .
 
       # 打包构建
-      - name: Build
-        uses: actions/setup-node@master
+      #- name: Build
+      #  uses: actions/setup-node@master
       #- run: npm install
       #- run: npm run build
-      - run: tar -czvf ${{github.ref_name}}.tgz .
+      #- run: tar -czvf ${{github.ref_name}}.tgz .
 
       # 发布 Release
       - name: Create Release
