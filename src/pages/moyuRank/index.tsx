@@ -18,20 +18,21 @@ const settings = {
   infinite: true,
   autoplay: true,
   speed: 250000,
-  autoplaySpeed: -100,
+  autoplaySpeed: 10,
   cssEase: "linear",
   pauseOnHover: false,
+  adaptiveHeight: true,
 };
 
 const MoyuRank = () => {
   const [records, setRecords] = useState<IMoYuRecord[]>([]);
-  const [itemHieght, setItemHieght] = useState(0);
-  setTimeout(() => {
-    const bodyItemEle = document.getElementsByClassName("bodyItem")[0];
-    if (bodyItemEle) {
-      setItemHieght(bodyItemEle?.clientHeight);
-    }
-  }, 100);
+  // const [itemHieght, setItemHieght] = useState(0);
+  // setTimeout(() => {
+  //   const bodyItemEle = document.getElementsByClassName("bodyItem")[0];
+  //   if (bodyItemEle) {
+  //     setItemHieght(bodyItemEle?.clientHeight);
+  //   }
+  // }, 100);
 
   useAsyncEffect(async () => {
     const records = await getRecords();
@@ -52,13 +53,23 @@ const MoyuRank = () => {
         <Rank />
       </div>
       <div className={styles.right}>
-        {records.length !== 0 && (
-          <Slider {...settings}>
-            <Records records={records} />
-            {itemHieght > 1040 && <Records records={records} />}
-            <Records records={records} />
-          </Slider>
+        {records.length !== 0 || (
+          <div>loading</div>
         )}
+
+        <Slider {...settings}>
+          <Records records={records} />
+          <Records records={records} />
+        </Slider>
+
+        {/* {records.length !== 0 && (
+          itemHieght > 1040 ? (
+            <Slider {...settings}>
+              <Records records={records} />
+              <Records records={records} />
+            </Slider>
+          ) : <Records records={records} />
+        )} */}
         {/* {records.length !== 0 && (
           itemHieght > 1040 ?
             <Carousel
@@ -67,6 +78,7 @@ const MoyuRank = () => {
               arrows={false}
               speed={180000}
               dots={false}
+              autoplaySpeed={-100}
             >
               <Records records={records} />
               <Records records={records} />
