@@ -63,7 +63,3 @@ jobs:
             | # 执行命令（运行到服务器）cd：要确保服务器有这个目录； wget：下载上一步的build文件到服务器； tar：解压； 安装依赖；启动服务 # sudo chmod 777 ${{github.ref_name}}.tgz
             cd /root/sunday
             wget https://github.com/graywenn/sunday/releases/latest/download/${{github.ref_name}}.tgz -O ${{github.ref_name}}.tgz
-            tar xzvf ${{github.ref_name}}.tgz
-            cp ../configs/.env ./
-            npm i
-            npm run build
