@@ -12,15 +12,6 @@ ReactDom.render(
     <AuthProvider>
       <Layout />
     </AuthProvider>
-
-    {/* <ReactKeycloakProvider
-      authClient={keycloak}
-      initOptions={{
-        onLoad: "login-required",
-      }}
-    >
-      <Layout />
-    </ReactKeycloakProvider> */}
   </ConfigProvider>,
   document.getElementById("root")
 );
