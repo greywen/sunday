@@ -8,8 +8,7 @@ import React, { Suspense, useContext } from "react";
 import {
   Route,
   Routes,
-  BrowserRouter as Router,
-  useNavigate,
+  BrowserRouter as Router
 } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import "./index.less";
