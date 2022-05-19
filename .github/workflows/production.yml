@@ -18,14 +18,13 @@ jobs:
       # 下载源码
       - name: Checkout
         uses: actions/checkout@v2
-      - run: tar -czvf ${{github.ref_name}}.tgz .
 
       # 打包构建
-      # - name: Build
-      #  uses: actions/setup-node@master
-      # - run: npm install
-      # - run: npm run build
-      # - run: tar -czvf ${{github.ref_name}}.tgz .
+      - name: Build
+        uses: actions/setup-node@master
+      #- run: npm install
+      #- run: npm run build
+      - run: tar -czvf ${{github.ref_name}}.tgz .
 
       # 发布 Release
       - name: Create Release
@@ -39,7 +38,7 @@ jobs:
           draft: false # 是否是草稿
           prerelease: false # 是否是预发布
 
-      # 上传构建结果到Release
+      # 上传构建结果到 Release
       - name: Upload Release Asset
         id: upload_release_asset
         uses: actions/upload-release-asset@v1
