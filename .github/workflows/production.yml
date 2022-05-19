@@ -1,39 +1,23 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Auto publish website
-
-# Controls when the workflow will run
+name: Production
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # 在推送或拉送请求事件上触发工作流
   push:
     tags:
-      - 'v*'
+      - "v*"
   # branches: [ main ]
   # pull_request:
-    # branches: [ main ]
+  # branches: [ main ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  # workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# jobs 运行由一个或多个可以顺序或并行运行的作业组成
 jobs:
-  # This workflow contains a single job called "build"
   build-and-deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Steps 表示将作为作业一部分执行的任务序列
     steps:
       # 下载源码
       - name: Checkout
         uses: actions/checkout@v2
-        id: vars
-      - run: echo ::set-output name=tag::${GITHUB_REF#refs/*/} 
-      
-      - name: Check output
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
 
       # 打包构建
       - name: Build
@@ -53,7 +37,7 @@ jobs:
           release_name: ${{github.ref_name}}
           draft: false # 是否是草稿
           prerelease: false # 是否是预发布
-      
+
       # 上传构建结果到Release
       - name: Upload Release Asset
         id: upload_release_asset
@@ -65,7 +49,7 @@ jobs:
           asset_path: ./${{github.ref_name}}.tgz # 要上传文件
           asset_name: ${{github.ref_name}}.tgz # 上传后的文件名
           asset_content_type: application/zip
-      
+
       # 部署到服务器
       - name: Deploy
         uses: appleboy/ssh-action@master # 使用ssh链接服务器
@@ -74,9 +58,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }} #配置的服务器用户名
           password: ${{ secrets.SSH_PASSWORD }} #配置的密码
           port: ${{ secrets.SSH_PORT }}
-          script: | # 执行命令（运行到服务器）cd：要确保服务器有这个目录； wget：下载上一步的release到服务器； tar：解压； 安装依赖；启动服务
+          script:
+            | # 执行命令（运行到服务器）cd：要确保服务器有这个目录； wget：下载上一步的build文件到服务器； tar：解压； 安装依赖；启动服务
             cd /root/sunday
             wget https://github.com/graywenn/sunday/releases/latest/download/${{github.ref_name}}.tgz -O ${{github.ref_name}}.tgz
             tar zxvf ${{github.ref_name}}.tgz --strip-components 1
-
-        

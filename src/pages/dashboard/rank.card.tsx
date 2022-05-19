@@ -69,12 +69,6 @@ const RankCard = () => {
               columns={columns}
               dataSource={rankList}
             />
-            {/* <div className="col-12">
-          <img
-            className="moyu-cover"
-            src={require("../../assets/cover.png").default}
-          ></img>
-        </div> */}
           </Row>
         </div>
         <div className="card-footer"></div>
