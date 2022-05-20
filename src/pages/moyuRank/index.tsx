@@ -2,7 +2,7 @@ import styles from "./index.module.less";
 import React, { useState } from "react";
 import Rank from "@components/rank";
 import Records from "@components/records";
-import { Carousel, Spin } from "antd";
+import { Spin } from "antd";
 import Slider from "react-slick";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { getRecords } from "@apis/moyu";
@@ -53,7 +53,7 @@ const MoyuRank = () => {
       <div className={styles.right}>
         {records.length !== 0 || (
           <div className={styles.loading}>
-            <Spin size={'large'} />
+            <Spin size={"large"} />
           </div>
         )}
 

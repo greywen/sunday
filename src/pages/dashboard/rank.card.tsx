@@ -27,7 +27,7 @@ const RankCard = () => {
       width: "30%",
       key: "index",
       render: (_: IRankList) => {
-        return <div className={`${styles.rank}`}>{_.index}</div>;
+        return <span className={`${styles.rank}`}>{_.index}</span>;
       },
     },
     {

@@ -14,7 +14,6 @@ const config: WebpackConfiguration = {
         path: path.join(__dirname, "../dist"),
         filename: "[name].[contenthash].js"
     },
-    devtool: "source-map",
     resolve: {
         extensions: [".tsx", ".ts", ".jsx", ".js"],
         alias: {
