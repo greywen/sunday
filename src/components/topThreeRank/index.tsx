@@ -2,12 +2,12 @@ import { IRankList } from "@interfaces/moyu";
 import React, { FC, useState, useEffect } from "react";
 import styles from './index.module.less';
 
-import championBgImg from '@assets/冠军背景.svg';
-import firstImg from '@assets/第一名.svg';
-import secondImg from '@assets/第二名.svg';
-import thirdImg from '@assets/第三名.svg';
-import rectangleBgImg from '@assets/矩形 40.svg';
-import pathBgImg from '@assets/路径 27.svg';
+import championBgImg from '@assets/champion.svg';
+import firstImg from '@assets/first.svg';
+import secondImg from '@assets/second.svg';
+import thirdImg from '@assets/third.svg';
+import rectangleBgImg from '@assets/rectangle.svg';
+import pathBgImg from '@assets/path.svg';
 
 interface IRankThreeList {
   rankThreeList: IRankList[];
