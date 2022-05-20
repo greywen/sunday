@@ -32,7 +32,7 @@ const Rank = () => {
     return (
       <div className={styles.ranklist}>
         <div className={styles.ranklistInner}>
-          <div className={styles.header}>
+          <div className={styles.ranklistHeader}>
             <span className={styles.rank}>排名</span>
             <span className={styles.name}>姓名</span>
             <span className={styles.score}>积分</span>
