@@ -34,6 +34,7 @@ const TimeSheet = () => {
     socket.on("receiveMessage", (data: ITimeSheetData) => {
       const _members = globalMembers?.map((x) => {
         if (x.name === data.name) {
+          x.userid = data.userid;
           x.value = data.value;
         }
         return x;
