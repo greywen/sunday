@@ -62,7 +62,7 @@ const RankCard = () => {
               </Col>
             </Row>
           </div>
-          <Row className={styles.cardBody} style={{ overflow: "scroll" }}>
+          <Row className={styles.cardBody} style={{ overflow: "auto" }}>
             <Table
               showHeader={false}
               style={{ width: "100%" }}

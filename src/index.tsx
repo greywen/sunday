@@ -8,9 +8,6 @@ import "./font/font.less";
 import { AuthProvider } from "./providers/AuthProvider";
 
 import zhCN from "antd/lib/locale/zh_CN";
-ConfigProvider.config({
-  theme: {},
-});
 
 ReactDom.render(
   <ConfigProvider locale={zhCN}>

@@ -1,5 +1,9 @@
+@import '../theme/index.less';
+
 body {
-  background: #d8dad9 !important;
+  background: @primary !important;
+  transition: background 2s linear 0s;
+  color: @primaryText !important;
 }
 
 .back-dashboard {
@@ -37,4 +41,22 @@ body {
 .back-dashboard:hover {
   background-color: #fff;
   color: rgb(16, 136, 233);
+}
+
+
+.ant-result-title {
+  color: @primaryText !important;
+}
+
+.ant-typography {
+  color: @primaryText !important;
+}
+
+.ant-table-container {
+  background: @primaryBlock;
+  color: @primaryText;
+}
+
+.ant-empty-normal {
+  color: @primaryPlaceholder !important;
 }

@@ -6,6 +6,7 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
+import { dark, light } from "../theme/config";
 import "./index.less";
 
 const Attendance =   React.lazy(()=> import('@pages/attendance'))
@@ -16,6 +17,9 @@ const TimeSheet =   React.lazy(()=> import('@pages/timesheet'))
 
 const Layout: React.FC = () => {
   const authContext = useContext(AuthContext);
+  const theme = useTheme();
+  renderTheme(theme.get() === 'light')
+
   return (
     <>
       {authContext.isAuthenticated ? (

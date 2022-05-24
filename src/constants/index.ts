@@ -26,4 +26,6 @@ export enum GroupType {
     "test" = 3
 }
 
+export type THEMETYPE = "dark" | "light";
 export const ACCOUNT_INFO = "ACCOUNT_INFO";
+export const THEME = "THEME";

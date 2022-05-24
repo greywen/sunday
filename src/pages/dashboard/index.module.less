@@ -1,3 +1,5 @@
+@import '../../theme/index.less';
+
 .dashboardPage {
   padding: 128px 128px 0 128px;
 }
@@ -37,8 +39,8 @@
   margin: 12px;
   border-radius: 10px;
   box-shadow: 0 0 1rem 0 rgba(136, 152, 170, 0.15);
-  background: #fff;
-  color: #252422;
+  background: @primaryBlock;
+  // transition: background 1s linear 0s;
   position: relative;
   height: 360px;
 
@@ -110,16 +112,17 @@
   }
 
   :global(.ant-carousel .slick-dots li button) {
-    background: #252422;
+    background: #999;
   }
 
   :global(.ant-carousel .slick-dots-bottom) {
-    bottom: -12px;
+    bottom: -50px;
   }
 }
 
 .cardCarouselContent {
   letter-spacing: 1.2px;
   font-size: 16px;
-  overflow: scroll;
+  overflow: auto;
+  color: @primaryText;
 }

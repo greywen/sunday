@@ -1,5 +1,6 @@
 import { IAccountInfo } from "@interfaces/user";
-import { ACCOUNT_INFO } from "../constants"
+import { ACCOUNT_INFO, THEME, THEMETYPE } from "../constants"
+import { dark, light } from "../theme/config";
 
 export const useAccount = () => {
     function get(): IAccountInfo {
@@ -23,4 +24,17 @@ export const useAccount = () => {
         remove,
         checkWhetherExpire
     }
+}
+
+export const useTheme = () => {
+    return {
+        get: () => (localStorage.getItem(THEME) === null || localStorage.getItem(THEME) === 'light') ? "light" : "dark",
+        set: (data: THEMETYPE) => localStorage.setItem(THEME, data)
+    }
+}
+
+export const renderTheme = (isLight: boolean) => {
+    (isLight ? light : dark).forEach((item) => {
+        document.body.style?.setProperty(item.name, item.color);
+    })
 }
