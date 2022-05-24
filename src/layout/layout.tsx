@@ -12,7 +12,6 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
-import { dark, light } from "../theme/config";
 import "./index.less";
 
 const Layout: React.FC = () => {
