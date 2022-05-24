@@ -3,6 +3,7 @@ import AttendanceReadonly from "@pages/attendance/attendance-readonly";
 import Dashboard from "@pages/dashboard";
 import MoyuRank from "@pages/moyuRank";
 import TimeSheet from "@pages/timesheet";
+import { renderTheme, useTheme } from "@utils/utils";
 import { Content } from "antd/lib/layout/layout";
 import React, { Suspense, useContext } from "react";
 import {
@@ -11,10 +12,14 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
+import { dark, light } from "../theme/config";
 import "./index.less";
 
 const Layout: React.FC = () => {
   const authContext = useContext(AuthContext);
+  const theme = useTheme();
+  renderTheme(theme.get() === 'light')
+
   return (
     <>
       {authContext.isAuthenticated ? (
