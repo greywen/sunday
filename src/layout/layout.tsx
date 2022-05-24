@@ -1,9 +1,3 @@
-import Attendance from "@pages/attendance";
-import AttendanceReadonly from "@pages/attendance/attendance-readonly";
-import Dashboard from "@pages/dashboard";
-import MoyuRank from "@pages/moyuRank";
-import TimeSheet from "@pages/timesheet";
-import { renderTheme, useTheme } from "@utils/utils";
 import { Content } from "antd/lib/layout/layout";
 import React, { Suspense, useContext } from "react";
 import {
@@ -14,6 +8,12 @@ import {
 import { AuthContext } from "../providers/AuthProvider";
 import { dark, light } from "../theme/config";
 import "./index.less";
+
+const Attendance =   React.lazy(()=> import('@pages/attendance'))
+const AttendanceReadonly =   React.lazy(()=> import('@pages/attendance/attendance-readonly'))
+const Dashboard =   React.lazy(()=> import('@pages/dashboard'))
+const MoyuRank =   React.lazy(()=> import('@pages/moyuRank'))
+const TimeSheet =   React.lazy(()=> import('@pages/timesheet'))
 
 const Layout: React.FC = () => {
   const authContext = useContext(AuthContext);

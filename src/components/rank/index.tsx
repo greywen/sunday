@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import styles from './index.module.less';
 import { getRankList } from "@apis/moyu";
-import logoImg from '@assets/logo-黄.svg';
+import logoImg from '@assets/logo-yellow.svg';
 import TopThreeRank from "@components/topThreeRank";
 import { IRankList } from "@interfaces/moyu";
 
@@ -21,7 +21,7 @@ const Rank = () => {
     <div className={styles.header}>
       <div className={styles.logoWrapper}>
         <img className={styles.logoImg} src={logoImg} alt="摸鱼logo" />
-        <img className={styles.rankImg} src={require('../../assets/鱼太闲排行榜@2x.png').default} />
+        <img className={styles.rankImg} src={require('../../assets/ranklogo.png').default} />
       </div>
     </div>
   );

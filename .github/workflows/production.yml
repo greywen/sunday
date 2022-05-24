@@ -21,3 +21,4 @@ jobs:
             cp ../configs/.env ./
             npm i
             npm run build
+            nginx -s reload
