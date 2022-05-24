@@ -1,3 +1,4 @@
+import { renderTheme, useTheme } from "@utils/utils";
 import { Content } from "antd/lib/layout/layout";
 import React, { Suspense, useContext } from "react";
 import {
@@ -6,7 +7,6 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
-import { dark, light } from "../theme/config";
 import "./index.less";
 
 const Attendance =   React.lazy(()=> import('@pages/attendance'))
