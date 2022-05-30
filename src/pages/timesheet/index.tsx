@@ -1,6 +1,6 @@
-import "./index.less";
+import styles from "./index.module.less";
 import React, { useEffect, useState } from "react";
-import { Col, Row, Tooltip } from "antd";
+import { Col, DatePicker, Row, Tooltip } from "antd";
 import TextArea from "@components/textarea";
 import moment from "moment";
 import socket from "@utils/socket";
@@ -10,6 +10,7 @@ import { ISheetTemplate, ITimeSheetData } from "@interfaces/timesheet";
 import { GroupType } from "../../constants";
 import { useLocation } from "react-router-dom";
 import BackHome from "@components/backhome";
+import { RangePickerProps } from "antd/lib/date-picker";
 
 let globalMembers: ITimeSheetData[] = [];
 let globalTemplate: ISheetTemplate = {};
@@ -19,12 +20,14 @@ const TimeSheet = () => {
   const [template, setTemplate] = useState<ISheetTemplate>();
   const [members, setMembers] = useState<ITimeSheetData[]>();
   const [enabledTemplate, setEnabledTemplate] = useState<boolean>(false);
+  const [enabledMembers, setEnabledMembers] = useState<boolean>(false);
   const [summary, setSummary] = useState<string>();
   const location = useLocation();
   const [showAll] = useState<boolean>(location.pathname.includes("all"));
+  const today = moment().format("YYYY-MM-DD");
 
   useAsyncEffect(async () => {
-    const timeSheetData = await getTimeSheetData();
+    const timeSheetData = await getTimeSheetData(today);
     setTemplate(timeSheetData.template);
     globalMembers = timeSheetData.data;
     globalTemplate = timeSheetData.template;
@@ -94,12 +97,10 @@ const TimeSheet = () => {
 
     let frontendTickets = getTickets(frontend, frontendTicketReg);
     let frontendOther = clearTickets(frontend, frontendTicketReg);
-    const backendSummary = `${
-      globalTemplate?.backend
-    }\nDimSum:\n${backendOther}\nSupport:\n${backendTickets?.join("\n") || ""}`;
-    const frontendSummary = `${
-      globalTemplate?.frontend
-    }\n${frontendOther}\nTickets:\n${frontendTickets?.join("\n") || ""}`;
+    const backendSummary = `${globalTemplate?.backend
+      }\nDimSum:\n${backendOther}\nSupport:\n${backendTickets?.join("\n") || ""}`;
+    const frontendSummary = `${globalTemplate?.frontend
+      }\n${frontendOther}\nTickets:\n${frontendTickets?.join("\n") || ""}`;
     const testSummary = `${globalTemplate?.test}\n${test}`;
 
     setSummary(
@@ -131,8 +132,22 @@ const TimeSheet = () => {
     calcSummary(members!);
   }
 
+  const disabledDate: RangePickerProps['disabledDate'] = current => {
+    return current > moment().endOf('day') || current < moment().add(-7, "days");
+  };
+
+  const switchDate = async (dateString: string) => {
+    if (dateString === today) {
+      setEnabledMembers(false);
+    } else {
+      setEnabledMembers(true);
+    }
+    const timeSheetData = await getTimeSheetData(dateString);
+    setMembers(timeSheetData.data);
+  }
+
   return (
-    <div className="timesheet-page">
+    <div className={styles.timesheetPage}>
       <BackHome />
       <Row>
         <Col span={24} hidden={showAll}>
@@ -141,12 +156,19 @@ const TimeSheet = () => {
               setEnabledTemplate(true);
             }}
           >
-            Time Sheet {`(${moment().format("YYYY-MM-DD")})`}
+            Time Sheet -
+            <DatePicker
+              disabledDate={disabledDate}
+              defaultValue={moment()}
+              allowClear={false}
+              onChange={(date: any, dateString: string) => { switchDate(dateString) }}
+              suffixIcon={null}
+            />
           </h2>
         </Col>
       </Row>
       <Row hidden={showAll}>
-        <Col span={24} className="timesheet-card">
+        <Col span={24} className={styles.timesheetCard}>
           <Row>
             {groups.map((type) => {
               return (
@@ -217,6 +239,7 @@ const TimeSheet = () => {
                                   value={x.value}
                                   key={x.userid}
                                   placeholder={x.name}
+                                  disabled={enabledMembers}
                                 ></TextArea>
                               </div>
                             </Tooltip>
