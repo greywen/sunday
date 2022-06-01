@@ -1,13 +1,13 @@
-import styles from "./index.module.less";
-import React, { useState } from "react";
-import Rank from "@components/rank";
-import Records from "@components/records";
-import { Spin } from "antd";
-import Slider from "react-slick";
-import useAsyncEffect from "@hooks/useAsyncEffect";
-import { getRecords } from "@apis/moyu";
-import { IMoYuRecord } from "@interfaces/moyu";
-import BackHome from "@components/backhome";
+import styles from './index.module.less';
+import React, { useState } from 'react';
+import Rank from '@components/rank';
+import Records from '@components/records';
+import { Spin } from 'antd';
+import Slider from 'react-slick';
+import useAsyncEffect from '@hooks/useAsyncEffect';
+import { getRecords } from '@apis/moyu';
+import { IMoYuRecord } from '@interfaces/moyu';
+import BackHome from '@components/backhome';
 
 const settings = {
   vertical: true,
@@ -17,7 +17,7 @@ const settings = {
   autoplay: true,
   speed: 250000,
   autoplaySpeed: 10,
-  cssEase: "linear",
+  cssEase: 'linear',
   pauseOnHover: false,
   adaptiveHeight: true,
 };
@@ -53,7 +53,7 @@ const MoyuRank = () => {
       <div className={styles.right}>
         {records.length !== 0 || (
           <div className={styles.loading}>
-            <Spin size={"large"} />
+            <Spin size={'large'} />
           </div>
         )}
 

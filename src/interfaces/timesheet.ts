@@ -1,19 +1,19 @@
-import { IUser } from "./user";
+import { IUser } from './user';
 
 export interface ISheetTemplate {
-    frontend?: string;
-    backend?: string;
-    test?: string;
+  frontend?: string;
+  backend?: string;
+  test?: string;
 }
 
 export interface ISheetResult {
-    template: ISheetTemplate;
-    data: ITimeSheetData[];
+  template: ISheetTemplate;
+  data: ITimeSheetData[];
 }
 
 export interface ITimeSheetData {
-    userid: string;
-    name: string;
-    value?: string;
-    groupid?: number;
+  userid: string;
+  name: string;
+  value?: string;
+  groupid?: number;
 }

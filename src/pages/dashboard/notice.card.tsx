@@ -1,6 +1,6 @@
-import { Carousel, Col, Row } from "antd";
-import React from "react";
-import styles from "./index.module.less";
+import { Carousel, Col, Row } from 'antd';
+import React from 'react';
+import styles from './index.module.less';
 
 const NoticeCard = () => {
   return (
@@ -8,14 +8,14 @@ const NoticeCard = () => {
       <div className={styles.card}>
         <div className={styles.cardContent}>
           <div className={styles.cardHeader}>
-            <Row justify="space-between">
+            <Row justify='space-between'>
               <Col span={20}>通知</Col>
               <Col span={4}></Col>
             </Row>
           </div>
           <Row className={styles.cardCarousel}>
             <Col span={24}>
-              <Carousel autoplay dotPosition="bottom">
+              <Carousel autoplay dotPosition='bottom'>
                 <div className={styles.cardCarouselContent}>
                   五月鱼王争霸赛，让我们一起动起来吧！
                   <br />
@@ -53,7 +53,7 @@ const NoticeCard = () => {
             </Col>
           </Row>
         </div>
-        <div className="card-footer"></div>
+        <div className='card-footer'></div>
       </div>
     </Col>
   );
