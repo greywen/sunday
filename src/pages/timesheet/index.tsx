@@ -15,12 +15,12 @@ import { RangePickerProps } from 'antd/lib/date-picker';
 let globalMembers: ITimeSheetData[] = [];
 let globalTemplate: ISheetTemplate = {};
 let groups = [GroupType['back-end'], GroupType['frond-end'], GroupType.test];
+let enabledMembers = false;
 
 const TimeSheet = () => {
   const [template, setTemplate] = useState<ISheetTemplate>();
   const [members, setMembers] = useState<ITimeSheetData[]>();
   const [enabledTemplate, setEnabledTemplate] = useState<boolean>(false);
-  const [enabledMembers, setEnabledMembers] = useState<boolean>(false);
   const [summary, setSummary] = useState<string>();
   const location = useLocation();
   const [showAll] = useState<boolean>(location.pathname.includes('all'));
@@ -35,6 +35,7 @@ const TimeSheet = () => {
     calcSummary(timeSheetData.data);
 
     socket.on('receiveMessage', (data: ITimeSheetData) => {
+      if (enabledMembers) return;
       const _members = globalMembers?.map((x) => {
         if (x.name === data.name) {
           x.userid = data.userid;
@@ -142,9 +143,9 @@ const TimeSheet = () => {
 
   const switchDate = async (dateString: string) => {
     if (dateString === today) {
-      setEnabledMembers(false);
+      enabledMembers = false;
     } else {
-      setEnabledMembers(true);
+      enabledMembers = true;
     }
     const timeSheetData = await getTimeSheetData(dateString);
     setMembers(timeSheetData.data);
