@@ -2,13 +2,13 @@ import {
   getAttendances,
   updateCustomAttendances,
   updateAttendances,
-} from "@apis/attendance";
-import useAsyncEffect from "@hooks/useAsyncEffect";
+} from '@apis/attendance';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 import {
   IAttendances,
   IModifyAttendanceState,
   IUserAttendances,
-} from "@interfaces/attendance";
+} from '@interfaces/attendance';
 import {
   Checkbox,
   Col,
@@ -20,24 +20,26 @@ import {
   Form,
   Button,
   Select,
-} from "antd";
-import moment from "moment";
-import React, { useRef, useState } from "react";
-import { AttendanceState } from "../../constants";
-import "./index.less";
-import * as htmlToImage from "html-to-image";
-import * as download from "downloadjs";
+  DatePicker,
+} from 'antd';
+import moment from 'moment';
+import React, { useRef, useState } from 'react';
+import { AttendanceState } from '../../constants';
+import './index.less';
+import * as htmlToImage from 'html-to-image';
+import * as download from 'downloadjs';
 import {
   createUser,
   deleteUser,
   getUserById,
   getUserDept,
   updateUser,
-} from "@apis/user";
-import { IDepartmentGroup, IDepartments, IUser } from "@interfaces/user";
-import BackHome from "@components/backhome";
+} from '@apis/user';
+import { IDepartmentGroup, IDepartments, IUser } from '@interfaces/user';
+import BackHome from '@components/backhome';
 const { Option } = Select;
 const { confirm } = Modal;
+import type { RangePickerProps } from 'antd/es/date-picker';
 
 const Attendance = () => {
   const [attendances, setAttendances] = useState<IUserAttendances[]>();
@@ -49,8 +51,8 @@ const Attendance = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [addModelVisible, setAddModelVisible] = useState<boolean>(false);
   const [userDetailVisible, setUserDetailVisible] = useState<boolean>(false);
-  const dayInMonth = moment().daysInMonth();
-  const weeks = ["日", "一", "二", "三", "四", "五", "六"];
+  const [dates, setDates] = useState<any[]>([]);
+  const weeks = ['日', '一', '二', '三', '四', '五', '六'];
   const leaveType = [
     AttendanceState.C,
     AttendanceState.P,
@@ -59,44 +61,42 @@ const Attendance = () => {
   ];
   const [modifyAttendance, setModifyAttendance] =
     useState<IModifyAttendanceState>();
-  const currentMonth = moment().format("YYYY-MM");
   const [form] = Form.useForm();
   const [detailForm] = Form.useForm();
   const reportRef = useRef<any>();
+  const [currentDate, setCurrentDate] = useState(moment().format('YYYY-MM-DD'));
 
   useAsyncEffect(async () => {
     await initData();
     const depts = await getUserDept();
     setDepartments(depts);
-    const timer = setInterval(async () => {
-      await initData();
-    }, 1800000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  }, [currentDate]);
 
   async function initData() {
+    const _dates = Array.from(
+      { length: moment(currentDate).daysInMonth() },
+      (v, i) => {
+        return {
+          day: i + 1,
+          week: weeks[
+            moment(currentDate).startOf('month').add(i, 'days').day()
+          ],
+        };
+      }
+    );
+    setDates(_dates);
     setLoading(true);
-    const data = await getAttendances();
+    const data = await getAttendances(moment(currentDate).format('YYYY-MM'));
     setAttendances(data);
     setLoading(false);
   }
-
-  const dates = Array.from({ length: dayInMonth }, (v, i) => {
-    return {
-      day: i + 1,
-      week: weeks[moment().startOf("month").add(i, "days").day()],
-    };
-  });
 
   function getStateKey(state: AttendanceState) {
     return AttendanceState[state];
   }
 
   function calcStateBlock(attendanceList: IAttendances[]) {
-    if (attendanceList.length == 0) return " ";
+    if (attendanceList.length == 0) return ' ';
     if (attendanceList.length > 1) {
       // 迟到
       let statel = attendanceList.find((x) => x.state === AttendanceState.L);
@@ -107,12 +107,12 @@ const Attendance = () => {
 
       if (statel) {
         return (
-          <div className={`state-${statel.state}`}>{statel.value + "分钟"}</div>
+          <div className={`state-${statel.state}`}>{statel.value + '分钟'}</div>
         );
       } else if (stateX) {
         return <div className={`state-${stateX.state}`}>X</div>;
       } else if (stateP) {
-        const value = attendanceList.map((x) => getStateKey(x.state)).join("/");
+        const value = attendanceList.map((x) => getStateKey(x.state)).join('/');
         return <div className={`state-${stateP.state}`}>{value}</div>;
       }
       return (
@@ -124,7 +124,7 @@ const Attendance = () => {
       let { state, value } = attendanceList[0];
       switch (state) {
         case AttendanceState.L:
-          return <div className={`state-${state}`}>{value + "分钟"}</div>;
+          return <div className={`state-${state}`}>{value + '分钟'}</div>;
         case (AttendanceState.P,
         AttendanceState.C,
         AttendanceState.S,
@@ -193,17 +193,20 @@ const Attendance = () => {
     });
 
     if (result) {
-      message.success("修改成功!");
+      message.success('修改成功!');
       await initData();
     } else {
-      message.success("修改失败,请稍后再试!");
+      message.success('修改失败,请稍后再试!');
     }
     setVisible(false);
   }
 
   function exportToImg() {
     htmlToImage.toPng(reportRef.current).then(function (dataUrl) {
-      download.default(dataUrl, `${moment().format("YYYY-MM-DD")}.png`);
+      download.default(
+        dataUrl,
+        `${moment(currentDate).format('YYYY-MM-DD')}.png`
+      );
     });
   }
 
@@ -221,14 +224,14 @@ const Attendance = () => {
 
   async function removeUser(userId: string) {
     confirm({
-      title: "确定删除改用户?",
-      okText: "确定",
-      cancelText: "取消",
+      title: '确定删除改用户?',
+      okText: '确定',
+      cancelText: '取消',
       async onOk() {
         const result = await deleteUser(userId);
         await initData();
         setUserDetailVisible(false);
-        message.success(result ? "删除成功!" : "删除失败!");
+        message.success(result ? '删除成功!' : '删除失败!');
       },
     });
   }
@@ -250,109 +253,126 @@ const Attendance = () => {
   async function updateUserDetail(value: any) {
     const result = await updateUser(value);
     console.log(result);
-    message.success(result ? "修改成功!" : "删除失败!");
+    message.success(result ? '修改成功!' : '删除失败!');
     setUserDetailVisible(false);
   }
 
   async function reloadAttendances(day: number) {
-    const date = moment().format(`YYYY-MM-${day.toString().padStart(2, "0")}`);
+    const date = moment(currentDate).format(
+      `YYYY-MM-${day.toString().padStart(2, '0')}`
+    );
     confirm({
       title: `确定更新${date}日志?`,
-      content: "这可能要花费1分钟左右的时间,请耐心等候!",
-      okText: "确定",
-      cancelText: "取消",
+      content: '这可能要花费1分钟左右的时间,请耐心等候!',
+      okText: '确定',
+      cancelText: '取消',
       async onOk() {
         const result = await updateAttendances({
           date: date,
           day: 1,
         });
         await initData();
-        message.success(result ? "更新成功!" : "更新失败!");
+        message.success(result ? '更新成功!' : '更新失败!');
       },
     });
   }
 
   async function reloadUserAttendances(name: string) {
-    const currentDate = moment();
-    if (currentDate.date() !== 1) {
-      currentDate.add(-1, "days");
+    const _currentDate = moment(currentDate);
+    if (_currentDate.date() !== 1) {
+      _currentDate.add(-1, 'days');
     }
     confirm({
       title: `确定更新本月${name}日志?`,
-      content: "这可能要花费1分钟左右的时间,请耐心等候!",
-      okText: "确定",
-      cancelText: "取消",
+      content: '这可能要花费1分钟左右的时间,请耐心等候!',
+      okText: '确定',
+      cancelText: '取消',
       async onOk() {
         const result = await updateAttendances({
           name: name,
-          date: currentDate.format(`YYYY-MM-DD`),
-          day: currentDate.date(),
+          date: _currentDate.format(`YYYY-MM-DD`),
+          day: _currentDate.date(),
         });
         await initData();
-        message.success(result ? "更新成功!" : "更新失败!");
+        message.success(result ? '更新成功!' : '更新失败!');
       },
     });
   }
 
+  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+    return current && current > moment().endOf('day');
+  };
+
   return (
     <>
       <BackHome />
-      <div className="attendance-page" ref={reportRef}>
-        <div className="header">
+      <div className='attendance-page' ref={reportRef}>
+        <div className='header'>
           <div
-            className="left"
+            className='left'
             onClick={() => {
               exportToImg();
             }}
           >
             员工考勤时间表
           </div>
-          <div className="right">
+          <div className='right'>
             全月迟到,早退时间累计10分钟以内,不予惩罚;累计10分钟(含)以上30分钟以内,罚款50元;累计30分钟(含)以上1小时以内,按半天事假处理;累计1小时以上3小时以内,按事假1天处理
-            <p className="tip">
+            <p className='tip'>
               HR不得迟于每工作日下班前,汇总上一工作日/加班日数据到群.逾期作为迟到处罚
             </p>
           </div>
         </div>
-        <div className="type">
-          <div className="left">
-            <div className="type-tip">考勤类型键</div>
-            <div className="state-block">
-              <span className="state state-3">V</span>休假
+        <div className='type'>
+          <div className='left'>
+            <div className='type-tip'>考勤类型键</div>
+            <div className='state-block'>
+              <span className='state state-3'>V</span>休假
             </div>
-            <div className="state-block">
-              <span className="state state-4">P</span>事假
+            <div className='state-block'>
+              <span className='state state-4'>P</span>事假
             </div>
-            <div className="state-block">
-              <span className="state state-5">S</span>病假
+            <div className='state-block'>
+              <span className='state state-5'>S</span>病假
             </div>
-            <div className="state-block">
-              <span className="state state-1">O</span>正常
+            <div className='state-block'>
+              <span className='state state-1'>O</span>正常
             </div>
-            <div className="state-block">
-              <span className="state state-8">分钟</span>迟到(分钟)
+            <div className='state-block'>
+              <span className='state state-8'>分钟</span>迟到(分钟)
             </div>
-            <div className="state-block">
-              <span className="state state-2">C</span>调休
+            <div className='state-block'>
+              <span className='state state-2'>C</span>调休
             </div>
-            <div className="state-block">
-              <span className="state state-6">X</span>未提交日志
+            <div className='state-block'>
+              <span className='state state-6'>X</span>未提交日志
             </div>
-            <div className="state-block">
-              <span className="state state-7">J</span>加班
+            <div className='state-block'>
+              <span className='state state-7'>J</span>加班
             </div>
           </div>
         </div>
-        <div className="table-header">
-          <div className="left">{currentMonth}</div>
-          <div className="right">考勤日期</div>
+        <div className='table-header'>
+          <div className='left' onClick={() => {}}>
+            <DatePicker
+              picker='month'
+              value={moment(currentDate)}
+              onChange={(date, dateString) => {
+                setCurrentDate(dateString);
+              }}
+              allowClear={false}
+              suffixIcon={null}
+              disabledDate={disabledDate}
+            />
+          </div>
+          <div className='right'>考勤日期</div>
         </div>
         <table>
           <thead>
             <tr>
               <th
-                className="first-th"
-                key={"key-name"}
+                className='first-th'
+                key={'key-name'}
                 onClick={() => {
                   setAddModelVisible(true);
                 }}
@@ -361,7 +381,7 @@ const Attendance = () => {
               </th>
               {dates.map((d) => {
                 return (
-                  <th key={"key-" + d.day}>
+                  <th key={'key-' + d.day}>
                     <p>{d.week}</p>
                     <p
                       onClick={() => {
@@ -378,7 +398,7 @@ const Attendance = () => {
           <tbody>
             {attendances?.map((ul) => {
               return (
-                <tr key={"key-tr-" + ul.id}>
+                <tr key={'key-tr-' + ul.id}>
                   <td
                     onClick={async () => {
                       await getUserDetail(ul.id);
@@ -389,7 +409,7 @@ const Attendance = () => {
                   {ul.attendances.map((l, i) => {
                     return (
                       <td
-                        key={"key-td-" + i + ul.id}
+                        key={'key-td-' + i + ul.id}
                         onClick={() => {
                           setModifyAttendance({
                             id: ul.id,
@@ -412,8 +432,8 @@ const Attendance = () => {
       </div>
       <Modal
         title={`${modifyAttendance?.name} - ${moment(
-          `${currentMonth}-${modifyAttendance?.index || 0 + 1}`
-        ).format("YYYY-MM-DD")}`}
+          `${currentDate}-${modifyAttendance?.index || 0 + 1}`
+        ).format('YYYY-MM-DD')}`}
         visible={visible}
         onOk={() => {
           save();
@@ -421,8 +441,8 @@ const Attendance = () => {
         onCancel={() => {
           setVisible(false);
         }}
-        okText="确认修改"
-        cancelText="取消"
+        okText='确认修改'
+        cancelText='取消'
       >
         <Row gutter={[48, 12]}>
           <Col span={12}>
@@ -453,11 +473,11 @@ const Attendance = () => {
             </Checkbox>
             <InputNumber
               disabled={!isCheckState(AttendanceState.C)}
-              size="small"
-              step="0.5"
-              min="0"
-              max="7.5"
-              addonAfter="小时"
+              size='small'
+              step='0.5'
+              min='0'
+              max='7.5'
+              addonAfter='小时'
               onChange={(value) => {
                 changeStateValue(AttendanceState.C, value);
               }}
@@ -474,11 +494,11 @@ const Attendance = () => {
             </Checkbox>
             <InputNumber
               disabled={!isCheckState(AttendanceState.P)}
-              size="small"
-              step="0.5"
-              min="0"
-              max="7.5"
-              addonAfter="小时"
+              size='small'
+              step='0.5'
+              min='0'
+              max='7.5'
+              addonAfter='小时'
               onChange={(value) => {
                 changeStateValue(AttendanceState.P, value);
               }}
@@ -495,11 +515,14 @@ const Attendance = () => {
             </Checkbox>
             <InputNumber
               disabled={!isCheckState(AttendanceState.L)}
-              size="small"
-              step="1"
-              min="0"
-              max="540"
-              addonAfter="分钟"
+              size='small'
+              step='1'
+              min='0'
+              max='540'
+              addonAfter='分钟'
+              onChange={(value) => {
+                changeStateValue(AttendanceState.L, value);
+              }}
               value={getStateValue(AttendanceState.L)}
             />
           </Col>
@@ -513,11 +536,11 @@ const Attendance = () => {
             </Checkbox>
             <InputNumber
               disabled={!isCheckState(AttendanceState.S)}
-              size="small"
-              step="0.5"
-              min="0"
-              max="7.5"
-              addonAfter="小时"
+              size='small'
+              step='0.5'
+              min='0'
+              max='7.5'
+              addonAfter='小时'
               onChange={(value) => {
                 changeStateValue(AttendanceState.S, value);
               }}
@@ -534,11 +557,11 @@ const Attendance = () => {
             </Checkbox>
             <InputNumber
               disabled={!isCheckState(AttendanceState.V)}
-              size="small"
-              step="0.5"
-              min="0"
-              max="7.5"
-              addonAfter="小时"
+              size='small'
+              step='0.5'
+              min='0'
+              max='7.5'
+              addonAfter='小时'
               onChange={(value) => {
                 changeStateValue(AttendanceState.V, value);
               }}
@@ -550,7 +573,7 @@ const Attendance = () => {
       <Modal
         closeIcon={false}
         visible={addModelVisible}
-        title="添加用户"
+        title='添加用户'
         onCancel={() => {
           setAddModelVisible(false);
         }}
@@ -558,26 +581,26 @@ const Attendance = () => {
       >
         <Form
           form={form}
-          name="add-form"
+          name='add-form'
           onFinish={(value) => {
             addUser(value);
           }}
-          initialValues={{ dept_name: "yc" }}
+          initialValues={{ dept_name: 'yc' }}
         >
           <Form.Item
-            name="name"
-            label="真实姓名"
-            rules={[{ required: true, message: "请输入正确的姓名!" }]}
+            name='name'
+            label='真实姓名'
+            rules={[{ required: true, message: '请输入正确的姓名!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name="dept_name"
-            label="所属部门"
+            name='dept_name'
+            label='所属部门'
             rules={[{ required: true }]}
           >
             <Select
-              placeholder="Select a option and change input text above"
+              placeholder='Select a option and change input text above'
               onChange={(value) => {
                 form.setFieldsValue({ dept_name: value });
               }}
@@ -589,8 +612,8 @@ const Attendance = () => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item style={{ textAlign: "right" }}>
-            <Button type="primary" htmlType="submit" loading={submiting}>
+          <Form.Item style={{ textAlign: 'right' }}>
+            <Button type='primary' htmlType='submit' loading={submiting}>
               添加
             </Button>
           </Form.Item>
@@ -599,7 +622,7 @@ const Attendance = () => {
       <Modal
         closeIcon={false}
         visible={userDetailVisible}
-        title="用户详情"
+        title='用户详情'
         onCancel={() => {
           setUserDetailVisible(false);
         }}
@@ -607,29 +630,29 @@ const Attendance = () => {
       >
         <Form
           form={detailForm}
-          name="detail-form"
+          name='detail-form'
           onFinish={async (value) => {
             await updateUserDetail(value);
           }}
           initialValues={{ ...userDetail }}
         >
-          <Form.Item hidden name="id" label="用户Id">
+          <Form.Item hidden name='id' label='用户Id'>
             <Input />
           </Form.Item>
           <Form.Item
-            name="name"
-            label="真实姓名"
-            rules={[{ required: true, message: "请输入正确的姓名!" }]}
+            name='name'
+            label='真实姓名'
+            rules={[{ required: true, message: '请输入正确的姓名!' }]}
           >
             <Input />
           </Form.Item>
-          <Form.Item name="english_name" label="* 英文名称">
+          <Form.Item name='english_name' label='* 英文名称'>
             <Input />
           </Form.Item>
           <Form.Item
-            name="dept_name"
-            label="所属部门"
-            rules={[{ required: true, message: "请选择所属部门!" }]}
+            name='dept_name'
+            label='所属部门'
+            rules={[{ required: true, message: '请选择所属部门!' }]}
           >
             <Select
               onChange={(value) => {
@@ -649,10 +672,10 @@ const Attendance = () => {
           </Form.Item>
           <Form.Item
             hidden={groups.length == 0}
-            name="groupid"
-            label="所属分组"
+            name='groupid'
+            label='所属分组'
             rules={[
-              { required: groups?.length > 0, message: "请选择部门分组!" },
+              { required: groups?.length > 0, message: '请选择部门分组!' },
             ]}
           >
             <Select
@@ -665,14 +688,14 @@ const Attendance = () => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name="phone" label="* 手机号码">
+          <Form.Item name='phone' label='* 手机号码'>
             <Input />
           </Form.Item>
-          <Row justify="end" gutter={[32, 16]}>
+          <Row justify='end' gutter={[32, 16]}>
             <Col span={4}>
               <Form.Item>
                 <Button
-                  type="primary"
+                  type='primary'
                   danger
                   loading={submiting}
                   onClick={async () => {
@@ -686,7 +709,7 @@ const Attendance = () => {
             <Col span={5}>
               <Form.Item>
                 <Button
-                  type="default"
+                  type='default'
                   loading={submiting}
                   onClick={async () => {
                     reloadUserAttendances(userDetail!.name);
@@ -698,7 +721,7 @@ const Attendance = () => {
             </Col>
             <Col span={4}>
               <Form.Item>
-                <Button type="primary" htmlType="submit" loading={submiting}>
+                <Button type='primary' htmlType='submit' loading={submiting}>
                   修改
                 </Button>
               </Form.Item>

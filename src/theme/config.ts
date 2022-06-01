@@ -9,13 +9,13 @@ export const light = [
   },
   {
     name: '--primaryText',
-    color: '#252422'
+    color: '#252422',
   },
   {
     name: '--primaryPlaceholder',
-    color: '#d0d0d0'
+    color: '#d0d0d0',
   },
-] 
+];
 
 export const dark = [
   {
@@ -28,10 +28,10 @@ export const dark = [
   },
   {
     name: '--primaryText',
-    color: '#fff'
+    color: '#fff',
   },
   {
     name: '--primaryPlaceholder',
-    color: '#fff'
+    color: '#fff',
   },
-] 
+];
