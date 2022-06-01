@@ -30,8 +30,8 @@ export async function updateTemplate(data: any) {
     return await http.put("/v1/timesheet/update/template", { body: { template: data } });
 }
 
-export async function getTimeSheetData() {
-    return await http.get<ISheetResult>("/v1/timesheet/get/yc");
+export async function getTimeSheetData(curDate: string) {
+    return await http.get<ISheetResult>(`/v1/timesheet/get/yc/${curDate}`);
 }
 
 
