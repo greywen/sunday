@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           scp_source: "./dist/"
-          scp_target: "/root/sundy/"
+          scp_target: "/root/sunday/"
           before_script: |
             mkdir sunday-backup -p
             current_time=$(date "+%Y%m%d%H%M") && cp -r sunday sunday-backup/$current_time
