@@ -25,5 +25,6 @@ jobs:
           before_script: |
             mkdir sunday-backup -p
             current_time=$(date "+%Y%m%d%H%M") && cp -r sunday sunday-backup/$current_time
+            rm -r sunday
           after_script: |
             nginx -s reload
