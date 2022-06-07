@@ -5,8 +5,6 @@ import { renderTheme, useTheme } from "@utils/utils";
 import { Col, Row } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import React, { useState } from "react";
-import { THEMETYPE } from "../../constants";
-import { dark, light } from "../../theme/config";
 import AttendanceCard from "./attendance.card";
 import styles from "./index.module.less";
 import NoticeCard from "./notice.card";

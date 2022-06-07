@@ -56,17 +56,20 @@
     .cardBody {
       display: flex;
       height: 300px;
+
       tbody {
         & tr:nth-child(1) {
           span {
             background-color: #f56a00;
           }
         }
+
         & tr:nth-child(2) {
           span {
             background-color: #85ce67;
           }
         }
+
         & tr:nth-child(3) {
           span {
             background-color: #1890ff;
@@ -114,15 +117,8 @@
   :global(.ant-carousel .slick-dots li button) {
     background: #999;
   }
-
-  :global(.ant-carousel .slick-dots-bottom) {
-    bottom: -50px;
-  }
 }
 
 .cardCarouselContent {
-  letter-spacing: 1.2px;
-  font-size: 16px;
-  overflow: auto;
   color: @primaryText;
 }

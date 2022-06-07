@@ -19,6 +19,7 @@ const settings = {
   autoplaySpeed: 10,
   cssEase: "linear",
   pauseOnHover: false,
+  lazyLoad: true,
   adaptiveHeight: true,
 };
 

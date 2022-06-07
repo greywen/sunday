@@ -1,3 +1,4 @@
+import { EllipsisOutlined } from "@ant-design/icons";
 import { getRankList } from "@apis/moyu";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { IRankList } from "@interfaces/moyu";
@@ -49,17 +50,8 @@ const RankCard = () => {
         <div className={styles.cardContent}>
           <div className={styles.cardHeader}>
             <Row justify="space-between">
-              <Col span={20}>摸鱼排行榜</Col>
-              <Col span={4}>
-                <span
-                  className={styles.seemoreText}
-                  onClick={() => {
-                    navigate("/moyu");
-                  }}
-                >
-                  查看更多
-                </span>
-              </Col>
+              <Col>摸鱼排行榜</Col>
+              <Col onClick={() => { navigate("/moyu") }}><EllipsisOutlined /></Col>
             </Row>
           </div>
           <Row className={styles.cardBody} style={{ overflow: "auto" }}>
@@ -69,6 +61,7 @@ const RankCard = () => {
               pagination={false}
               columns={columns}
               dataSource={rankList}
+              rowKey={'index'}
             />
           </Row>
         </div>
