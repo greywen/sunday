@@ -252,7 +252,6 @@ const Attendance = () => {
 
   async function updateUserDetail(value: any) {
     const result = await updateUser(value);
-    console.log(result);
     message.success(result ? '修改成功!' : '删除失败!');
     setUserDetailVisible(false);
   }

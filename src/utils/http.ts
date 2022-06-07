@@ -30,7 +30,7 @@ axios.interceptors.response.use(
       const url = await getAuthUrl();
       location.assign(url);
     } else {
-      console.log('fail', res);
+      console.log('failed', res);
     }
   },
   async (error) => {
@@ -56,7 +56,6 @@ const http = {
       config?.body,
       config
     );
-    console.log(result);
     return <T>result.data;
   },
   put: async (url: string, config?: IHttpConfig) => {

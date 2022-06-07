@@ -5,12 +5,14 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
 import './index.less';
 
-const Attendance = React.lazy(() => import('@pages/attendance'))
-const AttendanceReadonly = React.lazy(() => import('@pages/attendance/attendance-readonly'))
-const Dashboard = React.lazy(() => import('@pages/dashboard'))
-const MoyuRank = React.lazy(() => import('@pages/moyuRank'))
-const TimeSheet = React.lazy(() => import('@pages/timesheet'))
-const Inform = React.lazy(() => import('@pages/inform'))
+const Attendance = React.lazy(() => import('@pages/attendance'));
+const AttendanceReadonly = React.lazy(
+  () => import('@pages/attendance/attendance-readonly')
+);
+const Dashboard = React.lazy(() => import('@pages/dashboard'));
+const MoyuRank = React.lazy(() => import('@pages/moyuRank'));
+const TimeSheet = React.lazy(() => import('@pages/timesheet'));
+const Inform = React.lazy(() => import('@pages/inform'));
 const Jasads = React.lazy(() => import('@pages/jasads'));
 const JasadsDetails = React.lazy(() => import('@pages/jasads/details'));
 
@@ -48,16 +50,13 @@ const Layout: React.FC = () => {
                   path='/timesheet/all'
                   element={<TimeSheet />}
                 />
-                <Route
-                  key="inform"
-                  path="/inform"
-                  element={<Inform />}
-                />
+                <Route key='inform' path='/inform' element={<Inform />} />
                 <Route key='jasads' path='/jasads' element={<Jasads />} />
                 <Route
                   key='jasads-details'
                   path='/jasads/details/:id'
                   element={<JasadsDetails />}
+                />
               </Routes>
             </Suspense>
           </Content>

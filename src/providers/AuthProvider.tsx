@@ -25,7 +25,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const auth = {
     ...initialState,
-    doAuthRedirect: doAuthRedirect,
+    doAuthRedirect: redirectLoginPage,
     extractToken: extractToken,
     logout: logout,
   };
@@ -39,7 +39,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       if (code) {
         await extractToken();
       } else {
-        await doAuthRedirect();
+        await redirectLoginPage();
       }
     }
   }, []);
@@ -53,7 +53,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     window.location.assign(window.location.origin);
   }
 
-  async function doAuthRedirect() {
+  async function redirectLoginPage() {
     const url = await getAuthUrl();
     window.location.assign(url);
   }

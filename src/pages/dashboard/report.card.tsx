@@ -31,9 +31,6 @@ const ReportCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
                 }
               />
             )}
-            {/* <p>1. 今日还未提交TimeSheet</p>
-          <p>2. 显示今日日志</p>
-          <p>3. 显示提交进度</p> */}
           </Row>
         </div>
         <div className='card-footer'></div>
