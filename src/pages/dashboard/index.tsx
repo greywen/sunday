@@ -11,6 +11,7 @@ import NoticeCard from './notice.card';
 import RankCard from './rank.card';
 import ReportCard from './report.card';
 import UserCard from './user.card';
+
 const Dashboard = () => {
   const theme = useTheme();
   const [today, setToday] = useState<IUserToday>();
