@@ -1,6 +1,6 @@
 import { EllipsisOutlined } from '@ant-design/icons';
 import { useAccount } from '@utils/utils';
-import { Col, Row } from 'antd';
+import { Col, Dropdown, Menu, Row } from 'antd';
 import moment from 'moment';
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -31,18 +31,35 @@ const UserCard = () => {
     return moment().diff(moment(account.hiredDate), 'day');
   }
 
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: 'signout',
+          label: (
+            <a
+              target='_blank'
+              onClick={() => {
+                authContext.logout();
+              }}
+            >
+              登 出
+            </a>
+          ),
+        },
+      ]}
+    />
+  );
+
   return (
     <Col xxl={8} lg={12} md={24} sm={24} xs={24}>
       <div className={`${styles.card} ${styles.cardSm}`}>
         <div className={styles.cardContent}>
           <div className={styles.cardHeader}>
-            <Row
-              justify='end'
-              onClick={() => {
-                authContext.logout();
-              }}
-            >
-              <EllipsisOutlined />
+            <Row justify='end'>
+              <Dropdown overlay={menu} placement='bottom'>
+                <EllipsisOutlined />
+              </Dropdown>
             </Row>
           </div>
           <div className={styles.cardBody}>

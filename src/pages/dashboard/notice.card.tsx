@@ -10,10 +10,10 @@ import { EllipsisOutlined } from '@ant-design/icons';
 const NoticeCard = () => {
   const navigate = useNavigate();
 
-  const [data, setData] = useState<IInfrom[]>([])
+  const [data, setData] = useState<IInfrom[]>([]);
   useAsyncEffect(async () => {
     let result = await getCurInform();
-    setData(result)
+    setData(result);
   }, []);
 
   return (
@@ -21,19 +21,28 @@ const NoticeCard = () => {
       <div className={styles.card}>
         <div className={styles.cardContent}>
           <div className={styles.cardHeader}>
-            <Row justify="space-between">
+            <Row justify='space-between'>
               <Col>通知</Col>
-              <Col onClick={() => { navigate("/inform") }}><EllipsisOutlined /></Col>
+              <Col
+                onClick={() => {
+                  navigate('/inform');
+                }}
+              >
+                <EllipsisOutlined />
+              </Col>
             </Row>
           </div>
           <Row className={styles.cardCarousel}>
             <Col span={24}>
-              <Carousel autoplay dotPosition="bottom">
+              <Carousel autoplay dotPosition='bottom'>
                 {data.map((item) => {
                   return (
-                    <div key={item.id} className={styles.cardCarouselContent} dangerouslySetInnerHTML={{ __html: item.content }}>
-                    </div>
-                  )
+                    <div
+                      key={item.id}
+                      className={styles.cardCarouselContent}
+                      dangerouslySetInnerHTML={{ __html: item.content }}
+                    ></div>
+                  );
                 })}
               </Carousel>
             </Col>

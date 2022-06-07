@@ -19,19 +19,11 @@ const settings = {
   autoplaySpeed: 10,
   cssEase: 'linear',
   pauseOnHover: false,
-  lazyLoad: true,
   adaptiveHeight: true,
 };
 
 const MoyuRank = () => {
   const [records, setRecords] = useState<IMoYuRecord[]>([]);
-  // const [itemHieght, setItemHieght] = useState(0);
-  // setTimeout(() => {
-  //   const bodyItemEle = document.getElementsByClassName("bodyItem")[0];
-  //   if (bodyItemEle) {
-  //     setItemHieght(bodyItemEle?.clientHeight);
-  //   }
-  // }, 100);
 
   useAsyncEffect(async () => {
     const records = await getRecords();
@@ -62,30 +54,6 @@ const MoyuRank = () => {
           <Records records={records} />
           <Records records={records} />
         </Slider>
-
-        {/* {records.length !== 0 && (
-          itemHieght > 1040 ? (
-            <Slider {...settings}>
-              <Records records={records} />
-              <Records records={records} />
-            </Slider>
-          ) : <Records records={records} />
-        )} */}
-        {/* {records.length !== 0 && (
-          itemHieght > 1040 ?
-            <Carousel
-              autoplay
-              dotPosition={'left'}
-              arrows={false}
-              speed={180000}
-              dots={false}
-              autoplaySpeed={-100}
-            >
-              <Records records={records} />
-              <Records records={records} />
-            </Carousel> :
-            <Records records={records} />
-        )} */}
       </div>
     </div>
   );
