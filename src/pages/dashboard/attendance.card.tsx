@@ -1,10 +1,10 @@
-import { FrownOutlined, SmileOutlined } from "@ant-design/icons";
-import { IUserToday } from "@interfaces/user";
-import { Button, Col, Result, Row, Typography } from "antd";
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../providers/AuthProvider";
-import styles from "./index.module.less";
+import { FrownOutlined, SmileOutlined } from '@ant-design/icons';
+import { IUserToday } from '@interfaces/user';
+import { Button, Col, Result, Row, Typography } from 'antd';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../providers/AuthProvider';
+import styles from './index.module.less';
 const { Text } = Typography;
 
 const AttendanceCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
@@ -15,26 +15,26 @@ const AttendanceCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
       <div
         className={styles.card}
         onClick={() => {
-          const usernames = ["王中伟", "文旺", "周杰"];
+          const usernames = ['王中伟', '文旺', '周杰'];
           usernames.includes(authContext.userName)
-            ? navigate("/attendances")
-            : navigate("/attendance");
+            ? navigate('/attendances')
+            : navigate('/attendance');
         }}
       >
         <div className={styles.cardContent}>
           <div className={styles.cardHeader}>
-            <div className="row">
-              <div className="col-7">考勤</div>
-              <div className="col-5"></div>
+            <div className='row'>
+              <div className='col-7'>考勤</div>
+              <div className='col-5'></div>
             </div>
           </div>
-          <div className="row">
-            <Row justify="center" className={styles.cardBody}>
+          <div className='row'>
+            <Row justify='center' className={styles.cardBody}>
               {today && today?.attendance.tomorrowIsHoliday ? (
                 <Result
                   icon={<SmileOutlined />}
-                  title="Have a nice weekend!"
-                  extra={<Button type="primary">查看考勤</Button>}
+                  title='Have a nice weekend!'
+                  extra={<Button type='primary'>查看考勤</Button>}
                 />
               ) : (
                 <Result
@@ -71,13 +71,13 @@ const AttendanceCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
                         )}
                     </>
                   }
-                  extra={<Button type="primary">查看考勤</Button>}
+                  extra={<Button type='primary'>查看考勤</Button>}
                 />
               )}
             </Row>
           </div>
         </div>
-        <div className="card-footer"></div>
+        <div className='card-footer'></div>
       </div>
     </Col>
   );

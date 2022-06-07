@@ -7,18 +7,24 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: |
+          npm install
+          npm run build
+
+      - name: Upload
+        uses: kostya-ten/ssh-server-deploy@v4
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd /root/sunday
-            wget https://github.com/graywenn/sunday/archive/${{github.ref}}.tar.gz -O ${{github.ref_name}}.tar.gz
-            tar xzvf ${{github.ref_name}}.tar.gz --strip-components 1
-            cp ../configs/.env ./
-            npm i
-            npm run build
+          scp_source: "./dist/"
+          scp_target: "/root/sunday/"
+          before_script: |
+            mkdir /projects/sunday-backup -p
+            current_time=$(date "+%Y%m%d%H%M") && cp -r /root/sunday /projects/sunday-backup/$current_time
+            rm -r /root/sunday/*
+          after_script: |
             nginx -s reload

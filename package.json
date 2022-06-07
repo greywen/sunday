@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.17.5",
+    "@babel/core": "^7.18.2",
     "@babel/plugin-transform-runtime": "^7.18.2",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
@@ -27,7 +27,7 @@
     "@types/react-textarea-autosize": "^4.3.6",
     "@types/react-transition-group": "^4.4.4",
     "@types/socket.io-client": "^3.0.0",
-    "babel-loader": "^8.2.3",
+    "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.6.0",

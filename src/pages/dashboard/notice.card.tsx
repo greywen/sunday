@@ -1,11 +1,11 @@
-import { Carousel, Col, Row } from "antd";
-import React, { useState } from "react";
-import styles from "./index.module.less";
-import { useNavigate } from "react-router-dom";
-import useAsyncEffect from "@hooks/useAsyncEffect";
-import { getCurInform } from "@apis/inform";
-import { IInfrom } from "@interfaces/inform";
-import { EllipsisOutlined } from "@ant-design/icons";
+import { Carousel, Col, Row } from 'antd';
+import React, { useState } from 'react';
+import styles from './index.module.less';
+import { useNavigate } from 'react-router-dom';
+import useAsyncEffect from '@hooks/useAsyncEffect';
+import { getCurInform } from '@apis/inform';
+import { IInfrom } from '@interfaces/inform';
+import { EllipsisOutlined } from '@ant-design/icons';
 
 const NoticeCard = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const NoticeCard = () => {
             </Col>
           </Row>
         </div>
-        <div className="card-footer"></div>
+        <div className='card-footer'></div>
       </div>
     </Col>
   );

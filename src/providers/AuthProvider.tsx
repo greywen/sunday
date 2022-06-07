@@ -1,7 +1,7 @@
-import { signin, getAuthUrl, signout } from "@apis/auth";
-import useAsyncEffect from "@hooks/useAsyncEffect";
-import { useAccount } from "@utils/utils";
-import React, { createContext } from "react";
+import { signin, getAuthUrl, signout } from '@apis/auth';
+import useAsyncEffect from '@hooks/useAsyncEffect';
+import { useAccount } from '@utils/utils';
+import React, { createContext } from 'react';
 
 interface IAuthContext {
   isAuthenticated: boolean;
@@ -35,7 +35,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   useAsyncEffect(async () => {
     const expire = account.checkWhetherExpire();
     if (!expire) {
-      const code = new URLSearchParams(location.search).get("code");
+      const code = new URLSearchParams(location.search).get('code');
       if (code) {
         await extractToken();
       } else {
@@ -46,8 +46,8 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   async function extractToken() {
     const _urlParams = new URLSearchParams(location.search);
-    const session_state = _urlParams.get("session_state");
-    const code = _urlParams.get("code");
+    const session_state = _urlParams.get('session_state');
+    const code = _urlParams.get('code');
     const _account = await signin({ code, session_state });
     account.set(_account);
     window.location.assign(window.location.origin);
