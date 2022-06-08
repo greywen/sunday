@@ -15,10 +15,6 @@ export const light = [
     name: '--primaryPlaceholder',
     color: '#d0d0d0',
   },
-  {
-    name: '--primaryHeader',
-    color: '#fafafa',
-  },
 ];
 
 export const dark = [
@@ -37,9 +33,5 @@ export const dark = [
   {
     name: '--primaryPlaceholder',
     color: '#fff',
-  },
-  {
-    name: '--primaryHeader',
-    color: '#202940',
   },
 ];
