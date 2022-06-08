@@ -52,7 +52,7 @@ const Inform = () => {
     },
     {
       title: '操作',
-      key: '操作',
+      key: 'action',
       render: (res: IInfrom) => (
         <Space size='middle'>
           <a
