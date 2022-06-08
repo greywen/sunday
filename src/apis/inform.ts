@@ -6,17 +6,17 @@ export async function getInform() {
 }
 
 export async function getCurInform() {
-  return await http.get<IInfrom[]>("/v1/inform/getCur")
+  return await http.get<IInfrom[]>("/v1/inform/getCurrent")
 }
 
 export async function addInform(data: any) {
   return await http.post("/v1/inform/add", { body: data })
 }
 
-export async function delInform(data: any) {
-  return await http.post("/v1/inform/del", { body: data })
+export async function delInform(id: string) {
+  return await http.delete("/v1/inform/delete/" + id)
 }
 
 export async function modifyInform(data: any) {
-  return await http.post("/v1/inform/modify", { body: data })
+  return await http.put("/v1/inform/modify", { body: data })
 }

@@ -68,7 +68,7 @@ const Inform = () => {
             okText='Yes'
             cancelText='No'
             onConfirm={async () => {
-              const result = await delInform({ id: res.id });
+              const result = await delInform(res.id);
               if (result) {
                 message.success('删除成功');
               }
