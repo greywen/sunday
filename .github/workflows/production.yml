@@ -10,21 +10,56 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: |
-          npm install
-          npm run build
+          yarn install
+          yarn build
+          tar -czvf ${{ github.ref_name }}.tar.gz ./dist
 
-      - name: Upload
-        uses: kostya-ten/ssh-server-deploy@v4
+      # - name: Upload
+      #   uses: kostya-ten/ssh-server-deploy@v4
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     username: ${{ secrets.SSH_USERNAME }}
+      #     password: ${{ secrets.SSH_PASSWORD }}
+      #     port: ${{ secrets.SSH_PORT }}
+      #     scp_source: "./dist/"
+      #     scp_target: "/root/sunday/"
+      #     before_script: |
+      #       mkdir /projects/sunday-backup -p
+      #       current_time=$(date "+%Y%m%d%H%M") && cp -r /root/sunday /projects/sunday-backup/$current_time
+      #       rm -r /root/sunday/*
+      #     after_script: |
+      #       nginx -s reload
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ github.ref_name }}
+
+      - name: Upload Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ github.ref_name }}.tar.gz
+          asset_name: ${{ github.ref_name }}.tar.gz
+          asset_content_type: application/x-tar
+
+      # 部署到服务器
+      - name: Deploy Server
+        uses: appleboy/ssh-action@master # 使用ssh链接服务器
+        with:
+          host: ${{ secrets.SSH_HOST }} #配置的服务器地址
+          username: ${{ secrets.SSH_USERNAME }} #配置的服务器用户名
+          password: ${{ secrets.SSH_PASSWORD }} #配置的密码
           port: ${{ secrets.SSH_PORT }}
-          scp_source: "./dist/"
-          scp_target: "/root/sunday/"
-          before_script: |
-            mkdir /projects/sunday-backup -p
-            current_time=$(date "+%Y%m%d%H%M") && cp -r /root/sunday /projects/sunday-backup/$current_time
-            rm -r /root/sunday/*
-          after_script: |
+          script:
+            |
+            cd /projects/sunday
+            wget https://github.com/graywenn/sunday/releases/download/${{github.ref_name}}/${{github.ref_name}}.tar.gz -O ${{github.ref_name}}.tar.gz
+            tar -zxvf ${{github.ref_name}}.tar.gz --strip-components 1
             nginx -s reload
