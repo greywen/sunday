@@ -50,7 +50,7 @@ const Inform = () => {
       },
     },
     {
-      title: 'Action',
+      title: '操作',
       key: 'action',
       render: (res: IInfrom) => (
         <Space size='middle'>
@@ -67,7 +67,7 @@ const Inform = () => {
             okText='Yes'
             cancelText='No'
             onConfirm={async () => {
-              const result = await delInform({ id: res.id });
+              const result = await delInform(res.id);
               if (result) {
                 message.success('删除成功');
               }
