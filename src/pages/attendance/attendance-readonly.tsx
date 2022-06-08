@@ -32,7 +32,7 @@ const AttendanceReadonly = () => {
   }, []);
 
   async function initData() {
-    const data = await getAttendances(moment().format('YYYY-MM'));
+    const data = await getAttendances();
     setAttendances(data);
   }
 
