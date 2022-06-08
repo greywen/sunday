@@ -1,8 +1,19 @@
-.container {
-  padding: 80px;
+@import '../../theme/index.less';
 
-  .button {
-    margin-bottom: 10px;
-    display: block;
+.page {
+  padding: 32px;
+
+  .container {
+    min-height: 90vh;
+    width: 100%;
+    padding: 32px 16px;
+    background: @primaryBlock;
+    border-radius: 10px;
+    box-shadow: 0 0 1rem 0 rgba(136, 152, 170, 0.15);
+
+    .button {
+      margin-bottom: 10px;
+      display: block;
+    }
   }
 }

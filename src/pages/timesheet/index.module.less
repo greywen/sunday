@@ -2,6 +2,17 @@
 
 .timesheetPage {
   padding: 32px;
+
+  :global(.ant-picker) {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  
+  :global(.ant-picker-input > input) {
+    font-size: 21px;
+    font-weight: 600;
+  }
 }
 
 .timesheetCard {
@@ -21,15 +32,4 @@
   .timesheetPage {
     padding: 32px 12px 12px 12px;
   }
-}
-
-:global(.ant-picker) {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-:global(.ant-picker-input > input) {
-  font-size: 21px;
-  font-weight: 600;
 }
