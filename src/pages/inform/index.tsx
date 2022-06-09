@@ -5,6 +5,7 @@ import {
   message,
   Modal,
   Popconfirm,
+  Row,
   Space,
   Table,
 } from 'antd';
@@ -84,32 +85,38 @@ const Inform = () => {
   ];
 
   return (
-    <div className={styles.container}>
-      <BackHome />
-      <Button
-        className={styles.button}
-        onClick={() => {
-          setModalVisible(true);
-          setCurInform(undefined);
-        }}
-      >
-        添加
-      </Button>
-      <Table rowKey={'id'} columns={columns} dataSource={informs} />
-      <Modal
-        title={curInform ? '修改通知' : '添加通知'}
-        visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
-        destroyOnClose={true}
-        footer={null}
-        width={'80vw'}
-      >
-        <InformForm
-          onclose={() => setModalVisible(false)}
-          defaultValue={curInform}
-        />
-      </Modal>
-    </div>
+    <Row className={styles.page}>
+      <Row>
+        <h2>通知管理</h2>
+      </Row>
+      <div className={styles.container}>
+        <BackHome />
+        <Button
+          className={styles.button}
+          onClick={() => {
+            setModalVisible(true);
+            setCurInform(undefined);
+          }}
+          type="primary"
+        >
+          添加
+        </Button>
+        <Table rowKey={'id'} columns={columns} dataSource={informs} />
+        <Modal
+          title={curInform ? '修改通知' : '添加通知'}
+          visible={modalVisible}
+          onCancel={() => setModalVisible(false)}
+          destroyOnClose={true}
+          footer={null}
+          width={'80vw'}
+        >
+          <InformForm
+            onclose={() => setModalVisible(false)}
+            defaultValue={curInform}
+          />
+        </Modal>
+      </div>
+    </Row>
   );
 };
 
