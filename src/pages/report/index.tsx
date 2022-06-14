@@ -3,11 +3,20 @@ import { createPeport, getReportTemplateByName } from "@apis/report";
 import BackHome from "@components/backhome";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { IGetReportTemplateResult } from "@interfaces/report";
-import { Button, Form, Input, InputNumber, message, Modal, Row, Space } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Row,
+  Space,
+} from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import React, { useState } from "react";
 import styles from "./index.module.less";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Report = () => {
   const navigate = useNavigate();
@@ -21,20 +30,30 @@ const Report = () => {
   }, []);
 
   const onFinish = async (res: any) => {
-    const result= await createPeport(res);    
+    const result = await createPeport(res);
     if (result) {
-      message.success('发送成功');
-      navigate('/')
+      message.success("发送成功");
+      navigate("/");
     } else {
-      message.success('发送失败');
+      message.success("发送失败");
     }
   };
+
+  const title = (
+    <Row>
+      1. 此功能是为方便用户快捷提交钉钉日志
+      <br />
+      2. 提交完成后请在钉钉再次检查是否提交成功
+      <br />
+      3. 如造成任何财产损失概不负责
+    </Row>
+  );
 
   const confirm = () => {
     Modal.confirm({
       title: "温馨提示",
       icon: <ExclamationCircleOutlined />,
-      content: "未提交成功，概不负责！",
+      content: title,
       okText: "确认",
       cancelText: "取消",
       onOk: () => {
@@ -47,7 +66,7 @@ const Report = () => {
     <Row className={styles.page}>
       <BackHome />
       <Row>
-        <h2>TIMESHEET</h2>
+        <h2>钉钉-TIMESHEET</h2>
       </Row>
       <div className={styles.container}>
         <Form
@@ -87,7 +106,9 @@ const Report = () => {
             </div>
             <div>发送到群:&nbsp;&nbsp;百宝门</div>
             <Form.Item>
-              <Button type="primary" onClick={confirm}>提交</Button>
+              <Button type="primary" onClick={confirm}>
+                提交
+              </Button>
             </Form.Item>
           </Space>
         </Form>

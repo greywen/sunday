@@ -34,7 +34,7 @@ const ReportCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
                 style={isSubmitLog ? { textDecoration: "line-through" } : {}}
               >
                 <div className={styles.contentText}>
-                  {isSubmitLog ? "今日已成功提交日志!" : "今日还未提交日志!"}
+                  {isSubmitLog ? "今日已成功提交TIMESHEET!" : "今日还未提交TIMESHEET!"}
                 </div>
                 <div className={styles.dateText}>
                   {moment().format("YYYY-MM-DD")}
@@ -56,7 +56,7 @@ const ReportCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
           </div>
           <div className={styles.cardItem}>
             <Row
-              className={`${styles.content} ${styles.first}`}
+              className={`${styles.content} ${styles.second}`}
               justify="space-between"
               align="middle"
             >
@@ -86,21 +86,6 @@ const ReportCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
               </Col>
             </Row>
           </div>
-
-          {/* <Row justify='center' className={styles.cardBody}>
-            {today?.timesheet?.value ? (
-              <Result status='success' title='今日已成功提交日志!' />
-            ) : (
-              <Result
-                title='今日还未提交日志!'
-                extra={
-                  <Button type='primary' key='console'>
-                    现在就去
-                  </Button>
-                }
-              />
-            )}
-          </Row> */}
         </div>
       </div>
     </Col>
