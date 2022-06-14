@@ -56,6 +56,8 @@ const http = {
       config?.body,
       config
     );
+    console.log(result);
+    
     return <T>result.data;
   },
   put: async (url: string, config?: IHttpConfig) => {
@@ -63,7 +65,7 @@ const http = {
       `${config?.host || defaultHost}${url}`,
       config?.body,
       config
-    );
+    );    
     return result.data;
   },
   delete: async (url: string, config?: IHttpConfig) => {
