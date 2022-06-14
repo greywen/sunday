@@ -34,7 +34,7 @@ const ReportCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
                 style={isSubmitLog ? { textDecoration: "line-through" } : {}}
               >
                 <div className={styles.contentText}>
-                  {isSubmitLog ? "今日已成功提交日志!" : "今日还未提交日志!"}
+                  {isSubmitLog ? "今日已成功提交TIMESHEET!" : "今日还未提交TIMESHEET!"}
                 </div>
                 <div className={styles.dateText}>
                   {moment().format("YYYY-MM-DD")}
