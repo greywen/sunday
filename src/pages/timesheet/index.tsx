@@ -1,30 +1,30 @@
-import styles from './index.module.less';
-import React, { useEffect, useState } from 'react';
-import { Col, DatePicker, Row, Tooltip } from 'antd';
-import TextArea from '@components/textarea';
-import moment from 'moment';
-import { socket } from '@utils/socket';
-import useAsyncEffect from '@hooks/useAsyncEffect';
-import { getTimeSheetData, updateTemplate } from '@apis/user';
-import { ISheetTemplate, ITimeSheetData } from '@interfaces/timesheet';
-import { GroupType } from '../../constants';
-import { useLocation } from 'react-router-dom';
-import BackHome from '@components/backhome';
-import { RangePickerProps } from 'antd/lib/date-picker';
+import styles from "./index.module.less";
+import React, { useEffect, useState } from "react";
+import { Col, DatePicker, Row, Tooltip } from "antd";
+import TextArea from "@components/textarea";
+import moment from "moment";
+import { socket } from "@utils/socket";
+import useAsyncEffect from "@hooks/useAsyncEffect";
+import { getTimeSheetData, updateTemplate } from "@apis/user";
+import { ISheetTemplate, ITimeSheetData } from "@interfaces/timesheet";
+import { GroupType } from "../../constants";
+import { useLocation } from "react-router-dom";
+import BackHome from "@components/backhome";
+import { RangePickerProps } from "antd/lib/date-picker";
 
 let globalMembers: ITimeSheetData[] = [];
 let globalTemplate: ISheetTemplate = {};
-let groups = [GroupType['back-end'], GroupType['frond-end'], GroupType.test];
+let groups = [GroupType["back-end"], GroupType["frond-end"], GroupType.test];
 let enabledMembers = false;
 
-const TimeSheet = () => {
+const TimeSheet = () => {  
   const [template, setTemplate] = useState<ISheetTemplate>();
   const [members, setMembers] = useState<ITimeSheetData[]>();
   const [enabledTemplate, setEnabledTemplate] = useState<boolean>(false);
   const [summary, setSummary] = useState<string>();
   const location = useLocation();
-  const [showAll] = useState<boolean>(location.pathname.includes('all'));
-  const today = moment().format('YYYY-MM-DD');
+  const [showAll] = useState<boolean>(location.pathname.includes("all"));
+  const today = moment().format("YYYY-MM-DD");
 
   useAsyncEffect(async () => {
     const timeSheetData = await getTimeSheetData(today);
@@ -34,7 +34,7 @@ const TimeSheet = () => {
     setMembers(timeSheetData.data);
     calcSummary(timeSheetData.data);
 
-    socket.on('receiveMessage', (data: ITimeSheetData) => {
+    socket.on("receiveMessage", (data: ITimeSheetData) => {
       if (enabledMembers) return;
       const _members = globalMembers?.map((x) => {
         if (x.name === data.name) {
@@ -48,6 +48,9 @@ const TimeSheet = () => {
     });
 
     document.getElementsByTagName;
+    return () => {
+      enabledMembers = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -56,16 +59,16 @@ const TimeSheet = () => {
     }
   }, [template]);
 
-  function prepareTicketRegExp(start: string, end = '###') {
-    var reg = new RegExp(`(?=${start})[\\s\\S]*?((?=${end})|(?=$))`, 'g');
+  function prepareTicketRegExp(start: string, end = "###") {
+    var reg = new RegExp(`(?=${start})[\\s\\S]*?((?=${end})|(?=$))`, "g");
     return reg;
   }
-  function clearEmptyLine(searchValue: string, replaceValue = '') {
+  function clearEmptyLine(searchValue: string, replaceValue = "") {
     return searchValue.replaceAll(/^\s*\n/gm, replaceValue);
   }
 
   function clearTickets(value: string, reg: RegExp) {
-    const result = value.replaceAll(reg, '');
+    const result = value.replaceAll(reg, "");
     return clearEmptyLine(result);
   }
 
@@ -75,23 +78,23 @@ const TimeSheet = () => {
   }
 
   function calcSummary(datas: ITimeSheetData[]) {
-    let backend = '',
-      frontend = '',
-      test = '';
+    let backend = "",
+      frontend = "",
+      test = "";
 
     datas.forEach((x) => {
       if (!x.value) return;
       if (x.groupid === 1) {
-        backend += '\n' + x.value;
+        backend += "\n" + x.value;
       } else if (x.groupid === 2) {
-        frontend += '\n' + x.value;
+        frontend += "\n" + x.value;
       } else {
-        test += '\n' + x.value;
+        test += "\n" + x.value;
       }
     });
 
-    let backendTicketReg = prepareTicketRegExp('\\* HSENG-', '\n');
-    let frontendTicketReg = prepareTicketRegExp('\\* SAENG-', '\n');
+    let backendTicketReg = prepareTicketRegExp("\\* HSENG-", "\n");
+    let frontendTicketReg = prepareTicketRegExp("\\* SAENG-", "\n");
 
     let backendTickets = getTickets(backend, backendTicketReg);
     let backendOther = clearTickets(backend, backendTicketReg);
@@ -100,15 +103,15 @@ const TimeSheet = () => {
     let frontendOther = clearTickets(frontend, frontendTicketReg);
     const backendSummary = `${
       globalTemplate?.backend
-    }\nDimSum:\n${backendOther}\nSupport:\n${backendTickets?.join('\n') || ''}`;
+    }\nDimSum:\n${backendOther}\nSupport:\n${backendTickets?.join("\n") || ""}`;
     const frontendSummary = `${
       globalTemplate?.frontend
-    }\n${frontendOther}\nTickets:\n${frontendTickets?.join('\n') || ''}`;
+    }\n${frontendOther}\nTickets:\n${frontendTickets?.join("\n") || ""}`;
     const testSummary = `${globalTemplate?.test}\n${test}`;
 
     setSummary(
       `#${moment().format(
-        'YYYY-MM-DD'
+        "YYYY-MM-DD"
       )}\n\n${backendSummary}\n\n${frontendSummary}\n\n${testSummary}`
     );
   }
@@ -125,7 +128,7 @@ const TimeSheet = () => {
 
   async function sendMessage(userid: string) {
     socket.emit(
-      'sendMessage',
+      "sendMessage",
       members?.find((x) => x.userid === userid)
     );
   }
@@ -135,9 +138,9 @@ const TimeSheet = () => {
     calcSummary(members!);
   }
 
-  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+  const disabledDate: RangePickerProps["disabledDate"] = (current) => {
     return (
-      current > moment().endOf('day') || current < moment().add(-7, 'days')
+      current > moment().endOf("day") || current < moment().add(-7, "days")
     );
   };
 
@@ -181,7 +184,7 @@ const TimeSheet = () => {
               return (
                 <Col key={`key-type-${type}`} lg={8} md={24} xs={24}>
                   <Row>
-                    {type === GroupType['back-end'] && (
+                    {type === GroupType["back-end"] && (
                       <Col span={24}>
                         <TextArea
                           onChange={async (value) => {
@@ -196,7 +199,7 @@ const TimeSheet = () => {
                       </Col>
                     )}
 
-                    {type === GroupType['frond-end'] && (
+                    {type === GroupType["frond-end"] && (
                       <Col span={24}>
                         <TextArea
                           onChange={async (value) => {
@@ -211,7 +214,7 @@ const TimeSheet = () => {
                       </Col>
                     )}
 
-                    {type === GroupType['test'] && (
+                    {type === GroupType["test"] && (
                       <Col span={24}>
                         <TextArea
                           onChange={async (value) => {
@@ -233,8 +236,8 @@ const TimeSheet = () => {
                           return (
                             <Tooltip
                               key={`key-tooltip-${x.userid}`}
-                              trigger='focus'
-                              placement='topLeft'
+                              trigger="focus"
+                              placement="topLeft"
                               title={x.name}
                             >
                               <div>

@@ -1,4 +1,4 @@
-@import '../../theme/index.less';
+@import "../../theme/index.less";
 
 .dashboardPage {
   padding: 128px 128px 0 128px;
@@ -21,7 +21,7 @@
     height: 100%;
     display: flex;
     align-items: center;
-    font-family: 'SFUIDisplay', 'Helvetica Neue', sans-serif;
+    font-family: "SFUIDisplay", "Helvetica Neue", sans-serif;
     font-size: 32px;
     font-weight: bold;
   }
@@ -50,6 +50,40 @@
     .cardHeader {
       text-align: left;
       font-size: 1.8em;
+    }
+
+    .cardItem {
+      padding: 24px 4px;
+      border-bottom: 1px solid #e9ecef;
+
+      .content {
+        position: relative;
+        padding-left: 16px;
+        .contentText {
+          font-weight: 600;
+          font-size: 15px;
+        }
+        .dateText {
+          font-size: 15px;
+          font-weight: 400;
+        }
+        .btn {
+          font-size: 13px;
+        }
+      }
+
+      .content::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        content: "";
+        border-radius: 8px;
+      }
+      .first::before {
+        background: #2dce89;
+      }
     }
 
     .cardBody {
@@ -105,7 +139,7 @@
 }
 
 .cardCarousel {
-  padding: 12px;
+  padding: 12px 2px;
   height: 280px;
   overflow: hidden;
 
