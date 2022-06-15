@@ -71,7 +71,7 @@ const Report = () => {
       <div className={styles.container}>
         <Form
           form={form}
-          onFinish={(res) => {
+          onFinish={(res: any) => {
             onFinish(res);
           }}
           layout="vertical"
@@ -98,12 +98,14 @@ const Report = () => {
           </Form.Item>
 
           <Space direction="vertical" size={"large"}>
-            <div>
-              发送到人:&nbsp;&nbsp;
-              {reportTemplate?.default_receivers.map((receiver) => {
-                return receiver.user_name;
-              })}
-            </div>
+            {reportTemplate?.default_receivers && (
+              <div>
+                发送到人:&nbsp;&nbsp;
+                {reportTemplate?.default_receivers?.map((receiver) => {
+                  return receiver.user_name;
+                })}
+              </div>
+            )}
             <div>发送到群:&nbsp;&nbsp;百宝门</div>
             <Form.Item>
               <Button type="primary" onClick={confirm}>
