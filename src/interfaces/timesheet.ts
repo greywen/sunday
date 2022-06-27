@@ -4,6 +4,7 @@ export interface ISheetTemplate {
   frontend?: string;
   backend?: string;
   test?: string;
+  nodejs?: string;
 }
 
 export interface ISheetResult {
