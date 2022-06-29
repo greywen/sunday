@@ -82,6 +82,13 @@ const TimeSheet = () => {
     return result;
   }
 
+  function addLineFeedSymbol(value: string) {
+    if (value) {
+      return `\n${value}`;
+    }
+    return '';
+  }
+
   function calcSummary(datas: ITimeSheetData[]) {
     let backend = '',
       frontend = '',
@@ -115,15 +122,15 @@ const TimeSheet = () => {
 
     const backendSummary = `${
       globalTemplate?.backend
-    }\nDimSum:\n${backendOther}\nSupport:\n${backendTickets?.join('\n') || ''}`;
+    }\nDimSum:${addLineFeedSymbol(backendOther)}\nSupport:\n${backendTickets?.join('\n') || ''}`;
 
     const frontendSummary = `${
       globalTemplate?.frontend
-    }\n${frontendOther}\nTickets:\n${frontendTickets?.join('\n') || ''}`;
+    }${addLineFeedSymbol(frontendOther)}\nTickets:\n${frontendTickets?.join('\n') || ''}`;
 
     const nodejsSummary = `${
       globalTemplate?.nodejs
-    }\n${nodejsOther}\nTickets:\n${nodejsTickets?.join('\n') || ''}`;
+    }${addLineFeedSymbol(nodejsOther)}\nTickets:\n${nodejsTickets?.join('\n') || ''}`;
 
     const testSummary = `${globalTemplate?.test}\n${test}`;
 
