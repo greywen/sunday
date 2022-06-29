@@ -23,6 +23,7 @@ export enum GroupType {
   'back-end' = 1,
   'frond-end' = 2,
   'test' = 3,
+  'nodejs' = 4,
 }
 
 export type THEMETYPE = 'dark' | 'light';
