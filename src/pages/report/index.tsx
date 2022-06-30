@@ -25,7 +25,7 @@ const Report = () => {
     useState<IGetReportTemplateResult>();
 
   useAsyncEffect(async () => {
-    const result = await getReportTemplateByName("TIMESHEET");
+    const result = await getReportTemplateByName();
     setReportTemplate(result);
   }, []);
 
@@ -69,51 +69,54 @@ const Report = () => {
         <h2>钉钉-TIMESHEET</h2>
       </Row>
       <div className={styles.container}>
-        <Form
-          form={form}
-          onFinish={(res: any) => {
-            onFinish(res);
-          }}
-          layout="vertical"
-        >
-          <Form.Item label="任务简述" name="taskDescription">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="任务状态"
-            name="taskStatus"
-            rules={[{ required: true, message: "不能为空!" }]}
+        {reportTemplate && (
+          <Form
+            form={form}
+            initialValues={{ taskStatus: reportTemplate?.value }}
+            onFinish={(res: any) => {
+              onFinish(res);
+            }}
+            layout="vertical"
           >
-            <TextArea rows={4} placeholder='请侧重"完成"或"完成百分比"' />
-          </Form.Item>
-          <Form.Item
-            label="花费时间"
-            name="taketime"
-            rules={[{ required: true, message: "不能为空!" }]}
-          >
-            <InputNumber
-              placeholder="请输入数字（小时）"
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-
-          <Space direction="vertical" size={"large"}>
-            {reportTemplate?.default_receivers && (
-              <div>
-                发送到人:&nbsp;&nbsp;
-                {reportTemplate?.default_receivers?.map((receiver) => {
-                  return receiver.user_name;
-                })}
-              </div>
-            )}
-            <div>发送到群:&nbsp;&nbsp;百宝门</div>
-            <Form.Item>
-              <Button type="primary" onClick={confirm}>
-                提交
-              </Button>
+            <Form.Item label="任务简述" name="taskDescription">
+              <Input />
             </Form.Item>
-          </Space>
-        </Form>
+            <Form.Item
+              label="任务状态"
+              name="taskStatus"
+              rules={[{ required: true, message: "不能为空!" }]}
+            >
+              <TextArea rows={4} placeholder='请侧重"完成"或"完成百分比"' />
+            </Form.Item>
+            <Form.Item
+              label="花费时间"
+              name="taketime"
+              rules={[{ required: true, message: "不能为空!" }]}
+            >
+              <InputNumber
+                placeholder="请输入数字（小时）"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+
+            <Space direction="vertical" size={"large"}>
+              {reportTemplate?.default_receivers && (
+                <div>
+                  发送到人:&nbsp;&nbsp;
+                  {reportTemplate?.default_receivers?.map((receiver) => {
+                    return receiver.user_name;
+                  })}
+                </div>
+              )}
+              <div>发送到群:&nbsp;&nbsp;百宝门</div>
+              <Form.Item>
+                <Button type="primary" onClick={confirm}>
+                  提交
+                </Button>
+              </Form.Item>
+            </Space>
+          </Form>
+        )}
       </div>
     </Row>
   );

@@ -8,6 +8,7 @@ export interface IGetReportTemplateResult {
   name: string;
   user_name: string;
   userid: string;
+  value: string;
 }
 
 interface Field {
