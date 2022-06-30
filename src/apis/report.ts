@@ -6,8 +6,8 @@ export async function createPeport(data: any) {
   return await http.post("/v1/dingtalk/createPeport", { body: data });
 }
 
-export async function getReportTemplateByName(data: string) {
-  return await http.post<IGetReportTemplateResult>("/v1/dingtalk/getReportTemplateByName", { body: {name: data} });
+export async function getReportTemplateByName() {
+  return await http.get<IGetReportTemplateResult>("/v1/dingtalk/getReportTemplateByName");
 }
 
 export async function getReportFinished() {
