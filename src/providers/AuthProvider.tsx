@@ -14,7 +14,11 @@ interface IAuthContext {
 }
 
 export let AuthContext: React.Context<IAuthContext>;
-export const AuthProvider: React.FC = ({ children }) => {
+interface IAuthProvider {
+  children: React.ReactNode;
+}
+
+export const AuthProvider = ({ children }: IAuthProvider) => {
   const account = useAccount();
   const initialState = {
     isAuthenticated: account.checkWhetherExpire(),
