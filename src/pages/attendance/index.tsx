@@ -36,7 +36,7 @@ import {
   updateUser,
 } from '@apis/user';
 import { IDepartmentGroup, IDepartments, IUser } from '@interfaces/user';
-import BackHome from '@components/backhome';
+import BackHome from '../../business.components/backhome';
 const { Option } = Select;
 const { confirm } = Modal;
 import type { RangePickerProps } from 'antd/es/date-picker';

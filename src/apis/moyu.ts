@@ -1,7 +1,7 @@
 import { IMoYuRecord, IRankList } from '@interfaces/moyu';
 import http from '@utils/http';
 
-const host = 'https://moyuapi.codeplus.vip';
+const host = process.env.MOYU_API_URL;
 
 export async function getRankList() {
   return await http.get<IRankList[]>(

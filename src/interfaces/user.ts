@@ -32,7 +32,6 @@ export interface IAccountInfo {
     hiredDate: number;
 }
 
-
 export interface IUserToday {
     timesheet: {
         value: string;

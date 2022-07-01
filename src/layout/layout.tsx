@@ -13,8 +13,6 @@ const Dashboard = React.lazy(() => import('@pages/dashboard'));
 const MoyuRank = React.lazy(() => import('@pages/moyuRank'));
 const TimeSheet = React.lazy(() => import('@pages/timesheet'));
 const Inform = React.lazy(() => import('@pages/inform'));
-const Jasads = React.lazy(() => import('@pages/jasads'));
-const JasadsDetails = React.lazy(() => import('@pages/jasads/details'));
 const Report = React.lazy(() => import('@pages/report'));
 
 const Layout: React.FC = () => {
@@ -53,12 +51,6 @@ const Layout: React.FC = () => {
                     element={<TimeSheet />}
                   />
                   <Route key='inform' path='/inform' element={<Inform />} />
-                  <Route key='jasads' path='/jasads' element={<Jasads />} />
-                  <Route
-                    key='jasads-details'
-                    path='/jasads/details/:id'
-                    element={<JasadsDetails />}
-                  />
                   <Route key='report' path='/report' element={<Report />} />
                 </Routes>
               </Content>

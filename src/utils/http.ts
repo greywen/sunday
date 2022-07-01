@@ -18,6 +18,7 @@ axios.interceptors.request.use((req) => {
   };
   return req;
 });
+
 axios.interceptors.response.use(
   async (res) => {
     if (res.status === 200 || res.status === 201) {

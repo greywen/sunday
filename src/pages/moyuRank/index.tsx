@@ -1,13 +1,13 @@
 import styles from './index.module.less';
 import React, { useState } from 'react';
-import Rank from '@components/rank';
-import Records from '@components/records';
+import Rank from '../../business.components/rank';
+import Records from '../../business.components/records';
 import { Spin } from 'antd';
 import Slider from 'react-slick';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { getRecords } from '@apis/moyu';
 import { IMoYuRecord } from '@interfaces/moyu';
-import BackHome from '@components/backhome';
+import BackHome from '../../business.components/backhome';
 
 const settings = {
   vertical: true,

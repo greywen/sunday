@@ -1,7 +1,7 @@
 import styles from './index.module.less';
 import React, { useEffect, useState } from 'react';
 import { Col, DatePicker, Row, Tooltip } from 'antd';
-import TextArea from '@components/textarea';
+import TextArea from '../../components/textarea';
 import moment from 'moment';
 import { socket } from '@utils/socket';
 import useAsyncEffect from '@hooks/useAsyncEffect';
@@ -9,7 +9,7 @@ import { getTimeSheetData, updateTemplate } from '@apis/user';
 import { ISheetTemplate, ITimeSheetData } from '@interfaces/timesheet';
 import { GroupType } from '../../constants';
 import { useLocation } from 'react-router-dom';
-import BackHome from '@components/backhome';
+import BackHome from '../../business.components/backhome';
 import { RangePickerProps } from 'antd/lib/date-picker';
 
 let globalMembers: ITimeSheetData[] = [];

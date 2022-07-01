@@ -1,5 +1,3 @@
-import { IDingTalkBaseResult } from "./dingTalkBase";
-
 export interface IGetReportTemplateResult {
   default_received_convs: Defaultreceivedconv[];
   default_receivers: Defaultreceiver[];
@@ -26,6 +24,3 @@ interface Defaultreceivedconv {
   conversation_id: string;
   title: string;
 }
-
-export type IReportTemplateResult =
-  IDingTalkBaseResult<IGetReportTemplateResult>;

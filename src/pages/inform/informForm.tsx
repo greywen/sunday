@@ -1,5 +1,5 @@
 import { addInform, modifyInform } from '@apis/inform';
-import MyEditor from '@components/myEditor';
+import MyEditor from '../../business.components/myEditor';
 import { IInfrom } from '@interfaces/inform';
 import {
   Button,

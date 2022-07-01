@@ -1,4 +1,4 @@
-import BackHome from '@components/backhome';
+import BackHome from '../../business.components/backhome';
 import {
   Button,
   DatePicker,

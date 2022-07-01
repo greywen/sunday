@@ -54,7 +54,7 @@
         "./src/pages/*"
       ],
       "@components/*": [
-        "./src/components/*"
+        "./src/business.components/*"
       ],
       "@hooks/*": [
         "./src/hooks/*"
