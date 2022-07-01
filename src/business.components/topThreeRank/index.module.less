@@ -1,0 +1,208 @@
+@media screen and (min-width: 2000px) {
+  .container {
+    margin: 240px auto !important;
+    .firstImg {
+      position: absolute;
+      left: 46% !important;
+      top: 5%;
+      z-index: 2;
+    }
+
+    .secondImg {
+      position: absolute;
+      top: 25%;
+      left: 12% !important;
+      z-index: 2;
+    }
+
+    .thirdImg {
+      position: absolute;
+      top: 25%;
+      right: 12% !important;
+      z-index: 2;
+    }
+
+    .rankThreeBg {
+      height: 232px !important;
+
+      .rectangleBg {
+        top: 52px !important;
+      }
+
+      .leftPathBg {
+        top: 52px !important;
+      }
+
+      .rightPathBg {
+        top: 52px !important;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1920px) and (max-width: 1999px) {
+  .container {
+    margin: 240px auto !important;
+
+    .firstImg {
+      position: absolute;
+      left: 45% !important;
+      top: 5%;
+      z-index: 2;
+    }
+  }
+
+  .rankThreeBg {
+    height: 232px !important;
+
+    .rectangleBg {
+      top: 52px !important;
+    }
+
+    .leftPathBg {
+      top: 52px !important;
+    }
+
+    .rightPathBg {
+      top: 52px !important;
+    }
+  }
+}
+
+.container {
+  width: 93.1%;
+  height: 232px;
+  margin: 37% auto;
+  position: relative;
+
+  .rankThreeBg {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 215px;
+
+    .rectangleBg {
+      width: 100%;
+      height: 180px;
+      border-radius: 10px;
+      object-fit: cover;
+      position: absolute;
+      top: 35px;
+      // width: 100%;
+    }
+    .championBg {
+      width: 180px;
+      z-index: 2;
+    }
+    .leftPathBg {
+      position: absolute;
+      left: calc(50% - 119px);
+      top: 35px;
+      opacity: 0.6;
+    }
+    .rightPathBg {
+      position: absolute;
+      right: calc(50% - 119px);
+      top: 35px;
+      transform: rotateY(180deg);
+      opacity: 0.5;
+    }
+  }
+
+  .firstImg {
+    position: absolute;
+    left: 44%;
+    top: 5%;
+    z-index: 2;
+  }
+
+  .secondImg {
+    position: absolute;
+    top: 24%;
+    left: 10%;
+    z-index: 2;
+  }
+
+  .thirdImg {
+    position: absolute;
+    top: 24%;
+    right: 10%;
+    z-index: 2;
+  }
+
+  .rankThree {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 180px;
+    top: 52px;
+
+    & > :nth-child(2) {
+      position: relative;
+      bottom: 25px;
+      z-index: 2;
+
+      .avatar {
+        width: 100%;
+        height: 80px !important;
+        display: flex;
+        justify-content: center;
+        img {
+          width: 80px !important;
+          height: 80px !important;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .item {
+      width: 33.3%;
+      height: 100%;
+      padding-top: 25px;
+      color: #ffffff;
+      & > p {
+        margin: 0;
+      }
+      .avatar {
+        width: 100%;
+        height: 64px;
+        display: flex;
+        justify-content: center;
+        img {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          padding: 1px;
+          background-color: #fff;
+        }
+      }
+      .nickname {
+        width: 100%;
+        font-size: 18px;
+        font-family: PingFang SC;
+        font-weight: 500;
+        line-height: 25px;
+        margin: 16px 0 10px;
+        display: flex;
+        justify-content: center;
+        span {
+          width: 120px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          text-align: center;
+        }
+      }
+      .integral {
+        width: 100%;
+        font-size: 16px;
+        font-family: DIN-LIGHT;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: center;
+      }
+    }
+  }
+}

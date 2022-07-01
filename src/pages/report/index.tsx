@@ -1,6 +1,6 @@
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { createPeport, getReportTemplateByName } from "@apis/report";
-import BackHome from "@components/backhome";
+import BackHome from "../../business.components/backhome";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { IGetReportTemplateResult } from "@interfaces/report";
 import {

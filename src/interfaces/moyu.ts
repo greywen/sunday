@@ -8,8 +8,6 @@ export interface IRankList {
   wxUserId: number,
 }
 
-
-
 export interface IMoYuRecord {
   wxUserId: number;
   wxUserNickName: string;

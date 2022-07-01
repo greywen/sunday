@@ -1,5 +1,3 @@
-import { IUser } from './user';
-
 export interface ISheetTemplate {
   frontend?: string;
   backend?: string;

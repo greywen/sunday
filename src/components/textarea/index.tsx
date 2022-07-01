@@ -1,8 +1,8 @@
-import React from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import styles from "./index.module.less";
+import React from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
+import styles from './index.module.less';
 
-const TextArea: React.FC<{
+interface ITextArea {
   value?: string;
   disabled?: boolean;
   noBorder?: boolean;
@@ -12,14 +12,16 @@ const TextArea: React.FC<{
   rows?: number;
   onChange?: (value?: string) => void;
   onBlur?: () => void;
-}> = ({
+}
+
+const TextArea = ({
   disabled,
   value,
   placeholder,
   className,
   onChange,
   onBlur,
-}) => {
+}: ITextArea) => {
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     onChange && onChange(e.target.value);
   }
@@ -30,8 +32,8 @@ const TextArea: React.FC<{
       onChange={handleChange}
       onBlur={onBlur}
       placeholder={placeholder}
-      className={[styles.textarea, className].join(" ")}
-      value={value || ""}
+      className={[styles.textarea, className].join(' ')}
+      value={value || ''}
     />
   );
 };

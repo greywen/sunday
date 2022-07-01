@@ -1,5 +1,5 @@
 import { getAttendances } from '@apis/attendance';
-import BackHome from '@components/backhome';
+import BackHome from '../../business.components/backhome';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { IAttendances, IUserAttendances } from '@interfaces/attendance';
 import moment from 'moment';

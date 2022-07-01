@@ -9,14 +9,4 @@ const socket = io(`${process.env.API_URL}/timesheet`, {
 });
 
 socket.on('connect', function () {});
-
-// const jasadsSocket = io(`${process.env.JASADS_API_URL}/deploy`, {
-//   extraHeaders: {
-//     authorization: `Bearer ${account.token}`,
-//   },
-// });
-
-// jasadsSocket.on('connect', function () {});
-
-// export { socket, jasadsSocket };
 export { socket };
