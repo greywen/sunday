@@ -13,14 +13,13 @@ const Dashboard = React.lazy(() => import('@pages/dashboard'));
 const MoyuRank = React.lazy(() => import('@pages/moyuRank'));
 const TimeSheet = React.lazy(() => import('@pages/timesheet'));
 const Inform = React.lazy(() => import('@pages/inform'));
-const Report = React.lazy(() => import('@pages/report'));
 
 const Layout: React.FC = () => {
   const authContext = useContext(AuthContext);
   const theme = useTheme();
   renderTheme(theme.get() === 'light');
 
-  return (
+  return ( 
     <>
       {authContext.isAuthenticated ? (
         <Router>
@@ -51,7 +50,6 @@ const Layout: React.FC = () => {
                     element={<TimeSheet />}
                   />
                   <Route key='inform' path='/inform' element={<Inform />} />
-                  <Route key='report' path='/report' element={<Report />} />
                 </Routes>
               </Content>
             </Suspense>

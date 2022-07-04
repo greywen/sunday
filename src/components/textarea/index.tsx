@@ -18,6 +18,7 @@ const TextArea = ({
   disabled,
   value,
   placeholder,
+  noBorder = true,
   className,
   onChange,
   onBlur,
@@ -28,6 +29,7 @@ const TextArea = ({
 
   return (
     <TextareaAutosize
+      style={{ border: noBorder ? 'none' : '1px solid' }}
       disabled={disabled}
       onChange={handleChange}
       onBlur={onBlur}
