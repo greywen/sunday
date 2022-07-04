@@ -45,6 +45,8 @@ const TimeSheet = () => {
         if (x.name === data.name) {
           x.userid = data.userid;
           x.value = data.value;
+          x.createTime = data.createTime;
+          x.updateTime = data.updateTime;
         }
         return x;
       });
@@ -122,15 +124,17 @@ const TimeSheet = () => {
 
     const backendSummary = `${
       globalTemplate?.backend
-    }\nDimSum:${addLineFeedSymbol(backendOther)}\nSupport:\n${backendTickets?.join('\n') || ''}`;
+    }\nDimSum:${addLineFeedSymbol(backendOther)}\nSupport:\n${
+      backendTickets?.join('\n') || ''
+    }`;
 
-    const frontendSummary = `${
-      globalTemplate?.frontend
-    }${addLineFeedSymbol(frontendOther)}\nTickets:\n${frontendTickets?.join('\n') || ''}`;
+    const frontendSummary = `${globalTemplate?.frontend}${addLineFeedSymbol(
+      frontendOther
+    )}\nTickets:\n${frontendTickets?.join('\n') || ''}`;
 
-    const nodejsSummary = `${
-      globalTemplate?.nodejs
-    }${addLineFeedSymbol(nodejsOther)}\nTickets:\n${nodejsTickets?.join('\n') || ''}`;
+    const nodejsSummary = `${globalTemplate?.nodejs}${addLineFeedSymbol(
+      nodejsOther
+    )}\nTickets:\n${nodejsTickets?.join('\n') || ''}`;
 
     const testSummary = `${globalTemplate?.test}\n${test}`;
 
@@ -212,6 +216,7 @@ const TimeSheet = () => {
                     {type === GroupType['back-end'] && (
                       <Col span={24}>
                         <TextArea
+                          noBorder={true}
                           onChange={async (value) => {
                             setTemplate({ ...template, backend: value });
                           }}
@@ -227,6 +232,7 @@ const TimeSheet = () => {
                     {type === GroupType['frond-end'] && (
                       <Col span={24}>
                         <TextArea
+                          noBorder={true}
                           onChange={async (value) => {
                             setTemplate({ ...template, frontend: value });
                           }}
@@ -242,6 +248,7 @@ const TimeSheet = () => {
                     {type === GroupType['nodejs'] && (
                       <Col span={24}>
                         <TextArea
+                          noBorder={true}
                           onChange={async (value) => {
                             setTemplate({ ...template, nodejs: value });
                           }}
@@ -257,6 +264,7 @@ const TimeSheet = () => {
                     {type === GroupType['test'] && (
                       <Col span={24}>
                         <TextArea
+                          noBorder={true}
                           onChange={async (value) => {
                             setTemplate({ ...template, test: value });
                           }}
@@ -275,6 +283,7 @@ const TimeSheet = () => {
                         ?.map((x) => {
                           return (
                             <Tooltip
+                              style={{ maxWidth: '393px' }}
                               key={`key-tooltip-${x.userid}`}
                               trigger='focus'
                               placement='topLeft'
@@ -311,6 +320,14 @@ const TimeSheet = () => {
             }}
             value={summary}
           ></TextArea>
+          {members?.map((x) => (
+            <Col span={6}>
+              <div
+                className={x.createTime ? styles.online : styles.offline}
+              ></div>
+              {x.name} : {x.createTime} - {x.updateTime}
+            </Col>
+          ))}
         </Row>
       )}
     </div>

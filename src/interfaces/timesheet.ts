@@ -15,4 +15,6 @@ export interface ITimeSheetData {
   name: string;
   value?: string;
   groupid?: number;
+  createTime?: string;
+  updateTime?: string;
 }
