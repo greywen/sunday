@@ -1,4 +1,4 @@
-@import '../../theme/index.less';
+@import "../../theme/index.less";
 
 .dashboardPage {
   display: flex;
@@ -123,6 +123,17 @@
   font-weight: 700;
   padding: 24px 24px 12px 24px;
   --delay: 0s;
+
+  :global(.ant-picker) {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  :global(.ant-picker-input > input) {
+    font-size: 21px;
+    font-weight: 600;
+  }
 }
 
 .attend {
@@ -168,3 +179,14 @@
     transform: none;
   }
 }
+
+// :global(.ant-picker-calendar-date-value) {
+//   color: rgba(0, 0, 0, 0.85);
+// }
+
+// :global(.ant-picker-calendar-full
+//     .ant-picker-panel
+//     .ant-picker-cell-selected
+//     .ant-picker-calendar-date) {
+//   background: transparent !important;
+// }
