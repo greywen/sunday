@@ -9,7 +9,6 @@ import { getTimeSheetData, updateTemplate } from '@apis/user';
 import { ISheetTemplate, ITimeSheetData } from '@interfaces/timesheet';
 import { GroupType } from '../../constants';
 import { useLocation } from 'react-router-dom';
-import BackHome from '../../business.components/backhome';
 import { RangePickerProps } from 'antd/lib/date-picker';
 
 let globalMembers: ITimeSheetData[] = [];
@@ -28,7 +27,7 @@ const TimeSheet = () => {
   const [enabledTemplate, setEnabledTemplate] = useState<boolean>(false);
   const [summary, setSummary] = useState<string>();
   const location = useLocation();
-  const [showAll] = useState<boolean>(location.pathname.includes('all'));
+  const [showAll, setShowAll] = useState<boolean>(false);
   const today = moment().format('YYYY-MM-DD');
 
   useAsyncEffect(async () => {
@@ -185,9 +184,10 @@ const TimeSheet = () => {
 
   return (
     <div className={styles.timesheetPage}>
-      <Row>
-        <Col span={24} hidden={showAll}>
+      <Row className={styles.timesheetHeader} align='middle'>
+        <Col span={20}>
           <h2
+            hidden={showAll}
             onDoubleClick={() => {
               setEnabledTemplate(true);
             }}
@@ -203,6 +203,17 @@ const TimeSheet = () => {
               suffixIcon={null}
             />
           </h2>
+        </Col>
+        <Col span={4} className={styles.timesheetActions}>
+          {showAll ? (
+            <div className='link' onClick={() => setShowAll(false)}>
+              返回
+            </div>
+          ) : (
+            <div className='link' onClick={() => setShowAll(true)}>
+              查看全部
+            </div>
+          )}
         </Col>
       </Row>
       <Row hidden={showAll}>
@@ -313,20 +324,14 @@ const TimeSheet = () => {
       </Row>
       {showAll && (
         <Row>
-          <TextArea
-            onChange={(value) => {
-              setSummary(value);
-            }}
-            value={summary}
-          ></TextArea>
-          {members?.map((x) => (
-            <Col span={6}>
-              <div
-                className={x.createTime ? styles.online : styles.offline}
-              ></div>
-              {x.name} : {x.createTime} - {x.updateTime}
-            </Col>
-          ))}
+          <Col span={24}>
+            <TextArea
+              onChange={(value) => {
+                setSummary(value);
+              }}
+              value={summary}
+            />
+          </Col>
         </Row>
       )}
     </div>

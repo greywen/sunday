@@ -56,20 +56,9 @@ const Layout: React.FC = () => {
               <div className={styles.header}>
                 <div className={styles.menu}>
                   <div className={`${styles.menuLeft} ${styles.titleName}`}>
-                    {/* {sider ? (
-                      <MenuUnfoldOutlined
-                        className={styles.menuIcon}
-                        onClick={() => setSider(false)}
-                      />
-                    ) : (
-                      <MenuFoldOutlined
-                        className={styles.menuIcon}
-                        onClick={() => setSider(true)}
-                      />
-                    )} */}
                     猿媛乐园
                   </div>
-                  <div className={styles.menuRight}>
+                  <div className={styles.menuCenter}>
                     <ul className={styles.menuItems}>
                       {menus.map((x) => (
                         <Link
@@ -89,6 +78,7 @@ const Layout: React.FC = () => {
                       ))}
                     </ul>
                   </div>
+                  <div className={styles.menuRight}></div>
                 </div>
               </div>
               <div className={styles.mainContainer}>
@@ -96,13 +86,13 @@ const Layout: React.FC = () => {
                   <Routes>
                     <Route key='dashboard' path='/' element={<Dashboard />} />
                     <Route
-                      key='attendances'
-                      path='/attendances'
+                      key='attendance'
+                      path='/attendance'
                       element={<Attendance />}
                     />
                     <Route
-                      key='attendance'
-                      path='/attendance'
+                      key='attendances'
+                      path='/attendances'
                       element={<AttendanceReadonly />}
                     ></Route>
                     <Route key='moyu' path='/moyu' element={<MoyuRank />} />

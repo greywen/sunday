@@ -48,7 +48,7 @@
     font-size: 22px;
     margin-top: 6px;
   }
-  &Right {
+  &Center {
     .menuItems {
       display: flex;
       text-decoration: none;
@@ -62,19 +62,20 @@
       font-weight: 600;
       text-align: center;
       line-height: 30px;
+      color: @linkColor;
     }
   }
   &Active {
     background-color: @linkActiveBg;
     border-radius: 5px;
-    color: #fff;
+    color: @linkActiveColor;
   }
 }
 
 .mainContainer {
-  display: flex;
-  flex-grow: 1;
-  overflow: hidden;
+  // display: flex;
+  // flex-grow: 1;
+  // overflow: hidden;
   background-color: @mainContainerBg;
 }
 

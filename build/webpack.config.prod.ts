@@ -59,10 +59,10 @@ const config: WebpackConfiguration = {
             loader: 'less-loader',
             options: {
               lessOptions: {
-                // modifyVars: {
-                //     "primary-color": "#093d64",
-                //     "link-color": "#0c548a",
-                // },
+                modifyVars: {
+                  'primary-color': '#17285e',
+                  'link-color': '#17285e',
+                },
                 javascriptEnabled: true,
               },
             },
