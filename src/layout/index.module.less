@@ -1,0 +1,113 @@
+@import '../theme/index.less';
+
+.container {
+  background-color: @themeBgColor;
+  display: flex;
+  // max-width: 1920px;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.mainArea {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.header {
+  height: 70px;
+  width: 100%;
+  border-bottom: 1px solid @borderColor;
+  background-color: @linkActiveColor;
+}
+
+.titleName {
+  font-size: 15px;
+  color: @titleColor;
+  font-weight: 700;
+  text-align: center;
+  height: 70px;
+  letter-spacing: 0.7px;
+  line-height: 70px;
+  position: sticky;
+  top: 0;
+  text-transform: uppercase;
+  // width: 360px;
+  margin-left: 12px;
+}
+
+.menu {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  &Left {
+    padding-left: 24px;
+  }
+  &Icon {
+    font-size: 22px;
+    margin-top: 6px;
+  }
+  &Right {
+    .menuItems {
+      display: flex;
+      text-decoration: none;
+      list-style-type: none;
+      margin: 0;
+    }
+    .menuItem {
+      min-width: 120px;
+      height: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 30px;
+    }
+  }
+  &Active {
+    background-color: @linkActiveBg;
+    border-radius: 5px;
+    color: #fff;
+  }
+}
+
+.mainContainer {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  background-color: @mainContainerBg;
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+    margin-left: -360px;
+  }
+}
+
+.slideOutLeft {
+  animation-name: slideOutLeft;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+    width: 360px;
+  }
+}
+
+.slideInLeft {
+  animation-name: slideInLeft;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}

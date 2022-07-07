@@ -185,7 +185,6 @@ const TimeSheet = () => {
 
   return (
     <div className={styles.timesheetPage}>
-      <BackHome />
       <Row>
         <Col span={24} hidden={showAll}>
           <h2

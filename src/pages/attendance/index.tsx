@@ -304,7 +304,6 @@ const Attendance = () => {
 
   return (
     <>
-      <BackHome />
       <div className='attendance-page' ref={reportRef}>
         <div className='header'>
           <div
