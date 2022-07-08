@@ -14,7 +14,7 @@ interface IHttpConfig extends AxiosRequestConfig {
 axios.interceptors.request.use((req) => {
   req.headers = {
     ...req.headers,
-    Authorization: `Bearer ${account.token}`,
+    Authorization: `Bearer ${account.access_token}`,
   };
   return req;
 });

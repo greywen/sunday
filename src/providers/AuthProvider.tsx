@@ -5,9 +5,6 @@ import React, { createContext } from 'react';
 
 interface IAuthContext {
   isAuthenticated: boolean;
-  userName: string;
-  userId: string;
-  roles: any[];
   doAuthRedirect: () => Promise<void>;
   extractToken: () => Promise<void>;
   logout: () => Promise<void>;
@@ -21,10 +18,7 @@ interface IAuthProvider {
 export const AuthProvider = ({ children }: IAuthProvider) => {
   const account = useAccount();
   const initialState = {
-    isAuthenticated: account.checkWhetherExpire(),
-    userName: account?.username,
-    userId: account?.id,
-    roles: account?.roles,
+    isAuthenticated: account.checkWhetherExpire()
   };
 
   const auth = {
