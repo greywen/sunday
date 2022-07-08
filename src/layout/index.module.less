@@ -1,4 +1,4 @@
-@import '../theme/index.less';
+@import "../theme/index.less";
 
 .container {
   background-color: @themeBgColor;
@@ -22,27 +22,27 @@
   background-color: @linkActiveColor;
 }
 
-.titleName {
-  font-size: 15px;
-  color: @titleColor;
-  font-weight: 700;
-  text-align: center;
-  height: 70px;
-  letter-spacing: 0.7px;
-  line-height: 70px;
-  position: sticky;
-  top: 0;
-  text-transform: uppercase;
-  // width: 360px;
-  margin-left: 12px;
-}
-
 .menu {
   height: 70px;
   display: flex;
   align-items: center;
+  padding: 0 24px;
   &Left {
-    padding-left: 24px;
+    font-size: 15px;
+    color: @titleColor;
+    font-weight: 700;
+    text-align: center;
+    height: 70px;
+    letter-spacing: 0.7px;
+    line-height: 70px;
+    position: sticky;
+    top: 0;
+    text-transform: uppercase;
+    // width: 360px;
+    margin-left: 12px;
+  }
+  &Right {
+    margin-left: auto;
   }
   &Icon {
     font-size: 22px;

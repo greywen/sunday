@@ -128,6 +128,7 @@
     background: transparent;
     border: none;
     box-shadow: none;
+    max-width: 100px;
   }
 
   :global(.ant-picker-input > input) {
@@ -162,6 +163,42 @@
 
 .calendar {
   --delay: 0.3s;
+
+  .item {
+    padding: 8px;
+  }
+
+  .state-1 {
+    background-color: #92d050;
+  }
+
+  .state-2 {
+    background-color: #ffe084;
+  }
+
+  .state-3 {
+    background-color: #de7465;
+  }
+
+  .state-4 {
+    background-color: #f4cdac;
+  }
+
+  .state-5 {
+    background-color: #c4d09d;
+  }
+
+  .state-6 {
+    background-color: #fff;
+  }
+
+  .state-7 {
+    background-color: #00b0f0;
+  }
+
+  .state-8 {
+    background-color: #b9c2df;
+  }
 }
 
 .anim {
@@ -180,13 +217,20 @@
   }
 }
 
-// :global(.ant-picker-calendar-date-value) {
-//   color: rgba(0, 0, 0, 0.85);
-// }
+:global(.ant-picker-cell-selected .ant-picker-calendar-date) {
+  background: transparent !important;
+}
 
-// :global(.ant-picker-calendar-full
-//     .ant-picker-panel
-//     .ant-picker-cell-selected
-//     .ant-picker-calendar-date) {
-//   background: transparent !important;
-// }
+:global(.ant-picker-cell-selected:hover) {
+  background: #f5f5f5 !important;
+}
+
+:global(.ant-picker-calendar-full .ant-picker-panel .ant-picker-body th) {
+  padding: 16px 12px 16px 0;
+}
+
+:global(.ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-calendar-date-content) {
+      height:  150px;
+}

@@ -1,21 +1,21 @@
-import styles from './index.module.less';
-import React, { useEffect, useState } from 'react';
-import { Col, DatePicker, Row, Tooltip } from 'antd';
-import TextArea from '../../components/textarea';
-import moment from 'moment';
-import { socket } from '@utils/socket';
-import useAsyncEffect from '@hooks/useAsyncEffect';
-import { getTimeSheetData, updateTemplate } from '@apis/user';
-import { ISheetTemplate, ITimeSheetData } from '@interfaces/timesheet';
-import { GroupType } from '../../constants';
-import { useLocation } from 'react-router-dom';
-import { RangePickerProps } from 'antd/lib/date-picker';
+import styles from "./index.module.less";
+import React, { useEffect, useState } from "react";
+import { Col, DatePicker, Row, Tooltip } from "antd";
+import TextArea from "../../components/textarea";
+import moment from "moment";
+import { socket } from "@utils/socket";
+import useAsyncEffect from "@hooks/useAsyncEffect";
+import { getTimeSheetData, updateTemplate } from "@apis/user";
+import { ISheetTemplate, ITimeSheetData } from "@interfaces/timesheet";
+import { GroupType } from "../../constants";
+import { useLocation } from "react-router-dom";
+import { RangePickerProps } from "antd/lib/date-picker";
 
 let globalMembers: ITimeSheetData[] = [];
 let globalTemplate: ISheetTemplate = {};
 let groups = [
-  GroupType['back-end'],
-  GroupType['frond-end'],
+  GroupType["back-end"],
+  GroupType["frond-end"],
   GroupType.nodejs,
   GroupType.test,
 ];
@@ -28,7 +28,7 @@ const TimeSheet = () => {
   const [summary, setSummary] = useState<string>();
   const location = useLocation();
   const [showAll, setShowAll] = useState<boolean>(false);
-  const today = moment().format('YYYY-MM-DD');
+  const today = moment().format("YYYY-MM-DD");
 
   useAsyncEffect(async () => {
     const timeSheetData = await getTimeSheetData(today);
@@ -38,7 +38,7 @@ const TimeSheet = () => {
     setMembers(timeSheetData.data);
     calcSummary(timeSheetData.data);
 
-    socket.on('receiveMessage', (data: ITimeSheetData) => {
+    socket.on("receiveMessage", (data: ITimeSheetData) => {
       if (enabledMembers) return;
       const _members = globalMembers?.map((x) => {
         if (x.name === data.name) {
@@ -65,16 +65,16 @@ const TimeSheet = () => {
     }
   }, [template]);
 
-  function prepareTicketRegExp(start: string, end = '###') {
-    var reg = new RegExp(`(?=${start})[\\s\\S]*?((?=${end})|(?=$))`, 'g');
+  function prepareTicketRegExp(start: string, end = "###") {
+    var reg = new RegExp(`(?=${start})[\\s\\S]*?((?=${end})|(?=$))`, "g");
     return reg;
   }
-  function clearEmptyLine(searchValue: string, replaceValue = '') {
+  function clearEmptyLine(searchValue: string, replaceValue = "") {
     return searchValue.replaceAll(/^\s*\n/gm, replaceValue);
   }
 
   function clearTickets(value: string, reg: RegExp) {
-    const result = value.replaceAll(reg, '');
+    const result = value.replaceAll(reg, "");
     return clearEmptyLine(result);
   }
 
@@ -87,30 +87,30 @@ const TimeSheet = () => {
     if (value) {
       return `\n${value}`;
     }
-    return '';
+    return "";
   }
 
   function calcSummary(datas: ITimeSheetData[]) {
-    let backend = '',
-      frontend = '',
-      test = '',
-      nodejs = '';
+    let backend = "",
+      frontend = "",
+      test = "",
+      nodejs = "";
 
     datas.forEach((x) => {
       if (!x.value) return;
       if (x.groupid === 1) {
-        backend += '\n' + x.value;
+        backend += "\n" + x.value;
       } else if (x.groupid === 2) {
-        frontend += '\n' + x.value;
+        frontend += "\n" + x.value;
       } else if (x.groupid === 3) {
-        test += '\n' + x.value;
+        test += "\n" + x.value;
       } else {
-        nodejs += '\n' + x.value;
+        nodejs += "\n" + x.value;
       }
     });
 
-    let backendTicketReg = prepareTicketRegExp('\\* HSENG-', '\n');
-    let frontendTicketReg = prepareTicketRegExp('\\* SAENG-', '\n');
+    let backendTicketReg = prepareTicketRegExp("\\* HSENG-", "\n");
+    let frontendTicketReg = prepareTicketRegExp("\\* SAENG-", "\n");
 
     let backendTickets = getTickets(backend, backendTicketReg);
     let backendOther = clearTickets(backend, backendTicketReg);
@@ -124,22 +124,22 @@ const TimeSheet = () => {
     const backendSummary = `${
       globalTemplate?.backend
     }\nDimSum:${addLineFeedSymbol(backendOther)}\nSupport:\n${
-      backendTickets?.join('\n') || ''
+      backendTickets?.join("\n") || ""
     }`;
 
     const frontendSummary = `${globalTemplate?.frontend}${addLineFeedSymbol(
       frontendOther
-    )}\nTickets:\n${frontendTickets?.join('\n') || ''}`;
+    )}\nTickets:\n${frontendTickets?.join("\n") || ""}`;
 
     const nodejsSummary = `${globalTemplate?.nodejs}${addLineFeedSymbol(
       nodejsOther
-    )}\nTickets:\n${nodejsTickets?.join('\n') || ''}`;
+    )}\nTickets:\n${nodejsTickets?.join("\n") || ""}`;
 
     const testSummary = `${globalTemplate?.test}\n${test}`;
 
     setSummary(
       `#${moment().format(
-        'YYYY-MM-DD'
+        "YYYY-MM-DD"
       )}\n\n${backendSummary}\n\n${frontendSummary}\n\n${nodejsSummary}\n\n${testSummary}`
     );
   }
@@ -156,7 +156,7 @@ const TimeSheet = () => {
 
   async function sendMessage(userid: string) {
     socket.emit(
-      'sendMessage',
+      "sendMessage",
       members?.find((x) => x.userid === userid)
     );
   }
@@ -166,9 +166,9 @@ const TimeSheet = () => {
     calcSummary(members!);
   }
 
-  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+  const disabledDate: RangePickerProps["disabledDate"] = (current) => {
     return (
-      current > moment().endOf('day') || current < moment().add(-7, 'days')
+      current > moment().endOf("day") || current < moment().add(-7, "days")
     );
   };
 
@@ -184,7 +184,7 @@ const TimeSheet = () => {
 
   return (
     <div className={styles.timesheetPage}>
-      <Row className={styles.timesheetHeader} align='middle'>
+      <Row className={styles.timesheetHeader} align="middle">
         <Col span={20}>
           <h2
             hidden={showAll}
@@ -194,6 +194,7 @@ const TimeSheet = () => {
           >
             Time Sheet -
             <DatePicker
+              inputReadOnly
               disabledDate={disabledDate}
               defaultValue={moment()}
               allowClear={false}
@@ -206,11 +207,11 @@ const TimeSheet = () => {
         </Col>
         <Col span={4} className={styles.timesheetActions}>
           {showAll ? (
-            <div className='link' onClick={() => setShowAll(false)}>
+            <div className="link" onClick={() => setShowAll(false)}>
               返回
             </div>
           ) : (
-            <div className='link' onClick={() => setShowAll(true)}>
+            <div className="link" onClick={() => setShowAll(true)}>
               查看全部
             </div>
           )}
@@ -223,7 +224,7 @@ const TimeSheet = () => {
               return (
                 <Col key={`key-type-${type}`} lg={6} md={24} xs={24}>
                   <Row>
-                    {type === GroupType['back-end'] && (
+                    {type === GroupType["back-end"] && (
                       <Col span={24}>
                         <TextArea
                           noBorder={true}
@@ -239,7 +240,7 @@ const TimeSheet = () => {
                       </Col>
                     )}
 
-                    {type === GroupType['frond-end'] && (
+                    {type === GroupType["frond-end"] && (
                       <Col span={24}>
                         <TextArea
                           noBorder={true}
@@ -255,7 +256,7 @@ const TimeSheet = () => {
                       </Col>
                     )}
 
-                    {type === GroupType['nodejs'] && (
+                    {type === GroupType["nodejs"] && (
                       <Col span={24}>
                         <TextArea
                           noBorder={true}
@@ -271,7 +272,7 @@ const TimeSheet = () => {
                       </Col>
                     )}
 
-                    {type === GroupType['test'] && (
+                    {type === GroupType["test"] && (
                       <Col span={24}>
                         <TextArea
                           noBorder={true}
@@ -293,10 +294,10 @@ const TimeSheet = () => {
                         ?.map((x) => {
                           return (
                             <Tooltip
-                              style={{ maxWidth: '393px' }}
+                              style={{ maxWidth: "393px" }}
                               key={`key-tooltip-${x.userid}`}
-                              trigger='focus'
-                              placement='topLeft'
+                              trigger="focus"
+                              placement="topLeft"
                               title={x.name}
                             >
                               <div>

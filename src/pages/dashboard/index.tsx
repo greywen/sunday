@@ -1,6 +1,6 @@
-import { getUserToday } from "@apis/user";
+import { getUserAttendance, getUserToday } from "@apis/user";
 import useAsyncEffect from "@hooks/useAsyncEffect";
-import { IUserToday } from "@interfaces/user";
+import { IUserAttendance, IUserToday } from "@interfaces/user";
 import { renderTheme, useTheme } from "@utils/utils";
 import { Calendar, Col, DatePicker, Row } from "antd";
 import { Content } from "antd/lib/layout/layout";
@@ -12,10 +12,16 @@ import RankCard from "./rank.card";
 import ReportCard from "./report.card";
 import UserCard from "./user.card";
 import { CountUp } from "use-count-up";
-import moment from "moment";
+import moment, { Moment } from "moment";
 
 const Dashboard = () => {
-  const [currentDate, setCurrentDate] = useState("2022-02");
+  const [currentDate, setCurrentDate] = useState(moment().format("YYYY-MM"));
+  const [userAttendances, setUserAttendances] = useState({});
+
+  useAsyncEffect(async () => {
+    const result = await getUserAttendance(currentDate);
+    setUserAttendances(result);
+  }, []);
 
   return (
     <div className={styles.dashboardPage}>
@@ -76,6 +82,7 @@ const Dashboard = () => {
           <span>考勤</span>
           {/* <span>2022-07</span> */}
           <DatePicker
+            inputReadOnly
             picker="month"
             defaultValue={moment(currentDate)}
             allowClear={false}
@@ -116,7 +123,37 @@ const Dashboard = () => {
             headerRender={() => {
               return null;
             }}
-            // dateCellRender={dateCellRender}
+            dateCellRender={(value: Moment) => {
+              const date = value.format("YYYY-MM-DD");
+              return (
+                <div>
+                  {userAttendances[date]?.map((item, index) => {
+                    if (item.state === 9) {
+                      return (
+                        <div key={index}>
+                          <div className={styles.item}>
+                            {item.value.onDutyTime}
+                          </div>
+                          <div className={styles.item}>
+                            {item.value.offDutyTime}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div
+                        key={index}
+                        className={`${styles[`state-${item.state}`]} ${
+                          styles.item
+                        }`}
+                      >
+                        {item.value}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }}
             // monthCellRender={monthCellRender}
           />
         </div>

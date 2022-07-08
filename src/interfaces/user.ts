@@ -1,3 +1,5 @@
+import { AttendanceState } from "../constants";
+
 export interface IUser {
   id: string;
   unionid: string;
@@ -43,4 +45,14 @@ export interface IUserToday {
     notCommitReportCount: number;
     tomorrowIsHoliday: boolean;
   };
+}
+
+export interface IUserAttendance {
+  state: number;
+  value: string | number | IClockTime;
+}
+
+export interface IClockTime {
+  onDutyTime: string;
+  offDutyTime: string;
 }
