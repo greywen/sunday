@@ -57,16 +57,16 @@ const AttendanceCalendar = () => {
           item.state === AttendanceState.S ||
           item.state === AttendanceState.V
         ) {
-          item.value = '请假 ' + item.value + ' 小时';
           statistics.leaveCount += 1;
+          item.value = '请假 ' + item.value + ' 小时';
         } else if (item.state === AttendanceState.J) {
           item.value = '加班 ' + item.value;
         } else if (item.state === AttendanceState.L) {
-          item.value = '迟到 ' + item.value + ' 分钟';
           statistics.lateMinute += parseFloat(item.value);
+          item.value = '迟到 ' + item.value + ' 分钟';
         } else if (item.state === AttendanceState.X) {
-          item.value = '未提交日志';
           statistics.notCommitReportCount += 1;
+          item.value = '未提交日志';
         }
         return item;
       });
