@@ -48,39 +48,6 @@ export async function getUserToday() {
   return await http.get<IUserToday>('/v1/user/today');
 }
 
-export async function getUserAttendance(
-  curMonth: string
-): Promise<Record<string, IUserAttendance[]>> {
-  const data = await http.get<IUserAttendance[][]>(
-    `/v1/user/attendance/${curMonth}`
-  );
-  const dataMap = {} as Record<string, IUserAttendance[]>;
-  data.map((x, i) => {
-    const dataKey = moment(curMonth)
-      .startOf('month')
-      .add(i, 'days')
-      .format('YYYY-MM-DD');
-    x.sort((a, b) => {
-      return b.state - a.state;
-    });
-    const states = x.map((item) => {
-      if (
-        item.state === AttendanceState.C ||
-        item.state === AttendanceState.P ||
-        item.state === AttendanceState.S ||
-        item.state === AttendanceState.V
-      ) {
-        item.value = '请假 ' + item.value + ' 小时';
-      } else if (item.state === AttendanceState.J) {
-        item.value = '加班 ' + item.value;
-      } else if (item.state === AttendanceState.L) {
-        item.value = '迟到 ' + item.value + ' 分钟';
-      } else if (item.state === AttendanceState.X) {
-        item.value = '未提交日志';
-      }
-      return item;
-    });
-    dataMap[dataKey] = states;
-  });
-  return dataMap;
+export async function getUserAttendance(curMonth: string) {
+  return await http.get<IUserAttendance[][]>(`/v1/user/attendance/${curMonth}`);
 }

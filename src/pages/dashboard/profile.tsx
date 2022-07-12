@@ -1,3 +1,4 @@
+import Avatar from '@components/avatar';
 import { useAccount } from '@utils/utils';
 import moment from 'moment';
 import React from 'react';
@@ -13,16 +14,21 @@ const Profile = () => {
     <div className={`${styles.userProfileArea}`}>
       <div className={styles.sideWrapper}>
         <div className={styles.userProfile}>
-          <img
-            src='https://img2.baidu.com/it/u=2514427884,2026247799&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500'
-            className={styles.userPhoto}
-          />
+          {account.avatar ? (
+            <img src={account.avatar} className={styles.userPhoto} />
+          ) : (
+            <Avatar text={account.username.slice(-2)} />
+          )}
           <div className={styles.userName}>{account.username}</div>
           <div className={styles.userTitle}>{account.title}</div>
-          {/* <div className={styles.userAge}>{calcHiredDay()}天</div> */}
-          <div className={styles.userMail}>
-            {account.phone || account.email}
+          <div className={styles.userAge}>
+            {account.hiredDate
+              ? `在岗拼搏 ${calcHiredDay()} 天了`
+              : '度过愉快的一天！'}
           </div>
+          {/* <div className={styles.userMail}>
+            {account.phone || account.email}
+          </div> */}
         </div>
       </div>
       <div className={styles.sideWrapper}>
