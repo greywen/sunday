@@ -70,6 +70,9 @@ const Profile = () => {
           />
         </div>
       </div>
+      <div className={styles.copyrightTips}>
+        {`© ${new Date().getFullYear()} 猿媛乐园. All Rights Reserved.`}
+      </div>
     </div>
   );
 };

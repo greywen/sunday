@@ -1,4 +1,4 @@
-@import '../../theme/index.less';
+@import "../../theme/index.less";
 
 .dashboardPage {
   display: flex;
@@ -12,7 +12,12 @@
   flex-shrink: 0;
   overflow: auto;
   background-color: #fff;
-  height: 100vh;
+  height: calc(100vh - 70px);
+  .copyrightTips {
+    margin-top: auto;
+    text-align: end;
+    padding: 12px;
+  }
 }
 
 .sideWrapper {
@@ -120,6 +125,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  height: calc(100vh - 70px);
+  overflow: auto;
 }
 
 .dashboardHeader {
@@ -170,6 +177,12 @@
 
 .calendar {
   --delay: 0.3s;
+
+  .hint {
+    text-align: right;
+    color: #00000073;
+    padding: 8px;
+  }
 
   .item {
     padding: 2px;
@@ -247,4 +260,10 @@
     .ant-picker-panel
     .ant-picker-calendar-date-content) {
   height: 150px;
+}
+
+:global(.ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-calendar-date-today) {
+  border-color: rgba(0, 0, 0, 0.06) !important;
 }

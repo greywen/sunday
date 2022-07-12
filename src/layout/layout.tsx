@@ -82,7 +82,9 @@ const Layout: React.FC = () => {
                     </ul>
                   </div>
                   <div className={styles.menuRight}>
-                    <Button>
+                    <Button onClick={()=> {
+                      authContext.logout();
+                    }}>
                       <LogoutOutlined />
                     </Button>
                   </div>

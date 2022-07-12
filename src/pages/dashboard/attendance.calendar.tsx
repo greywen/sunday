@@ -88,6 +88,9 @@ const AttendanceCalendar = () => {
           onChange={(date: any, dateString: string) => {
             setCurrentDate(dateString);
           }}
+          disabledDate={(current)=> {
+            return current > moment().endOf("month") 
+          }}
           suffixIcon={null}
         />
       </div>
@@ -148,6 +151,7 @@ const AttendanceCalendar = () => {
           }}
           // monthCellRender={monthCellRender}
         />
+        <div className={styles.hint}>* 48内数据差异属于正常</div>
       </div>
     </>
   );
