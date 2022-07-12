@@ -1,4 +1,4 @@
-import { AttendanceState } from "../constants";
+import { AttendanceState } from '../constants';
 
 export interface IUser {
   id: string;
@@ -48,8 +48,8 @@ export interface IUserToday {
 }
 
 export interface IUserAttendance {
-  state: number;
-  value: string | number | IClockTime;
+  state: AttendanceState;
+  value: string | number | IClockTime | any;
 }
 
 export interface IClockTime {

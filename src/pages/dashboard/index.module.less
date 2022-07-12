@@ -1,4 +1,4 @@
-@import "../../theme/index.less";
+@import '../../theme/index.less';
 
 .dashboardPage {
   display: flex;
@@ -31,8 +31,15 @@
 }
 
 .userName {
+  font-size: 16px;
   font-weight: 600;
   margin: 15px 0 8px;
+}
+
+.userTitle {
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: 600;
 }
 
 .userAge {
@@ -165,11 +172,14 @@
   --delay: 0.3s;
 
   .item {
-    padding: 8px;
+    padding: 2px;
+    border-radius: 4px;
+    margin-bottom: 2px;
   }
 
   .state-1 {
     background-color: #92d050;
+    display: none;
   }
 
   .state-2 {
@@ -189,7 +199,7 @@
   }
 
   .state-6 {
-    background-color: #fff;
+    background-color: #ffccc7;
   }
 
   .state-7 {
@@ -198,6 +208,10 @@
 
   .state-8 {
     background-color: #b9c2df;
+  }
+
+  .state-9 {
+    background-color: #dddddd;
   }
 }
 
@@ -232,5 +246,5 @@
 :global(.ant-picker-calendar-full
     .ant-picker-panel
     .ant-picker-calendar-date-content) {
-      height:  150px;
+  height: 150px;
 }

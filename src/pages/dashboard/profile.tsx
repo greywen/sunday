@@ -1,0 +1,71 @@
+import { useAccount } from '@utils/utils';
+import moment from 'moment';
+import React from 'react';
+import styles from './index.module.less';
+
+const Profile = () => {
+  const account = useAccount();
+  function calcHiredDay() {
+    return moment().diff(moment(account.hiredDate), 'day');
+  }
+
+  return (
+    <div className={`${styles.userProfileArea}`}>
+      <div className={styles.sideWrapper}>
+        <div className={styles.userProfile}>
+          <img
+            src='https://img2.baidu.com/it/u=2514427884,2026247799&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500'
+            className={styles.userPhoto}
+          />
+          <div className={styles.userName}>{account.username}</div>
+          <div className={styles.userTitle}>{account.title}</div>
+          {/* <div className={styles.userAge}>{calcHiredDay()}天</div> */}
+          <div className={styles.userMail}>
+            {account.phone || account.email}
+          </div>
+        </div>
+      </div>
+      <div className={styles.sideWrapper}>
+        <div className={styles.sideTitle}>本月摸鱼</div>
+        <div className={styles.progressStatus}>
+          <span>第一名</span>
+          <span>12/34</span>
+        </div>
+        <div className={styles.progress}>
+          <div className={styles.progressBar}></div>
+        </div>
+      </div>
+      <div className={styles.sideWrapper}>
+        <div className={styles.sideTitle}>团队成员</div>
+        <div className={styles.teamMember}>
+          <img
+            src='https://images.unsplash.com/flagged/photo-1574282893982-ff1675ba4900?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80'
+            className={styles.members}
+          />
+          <img
+            src='https://images.unsplash.com/flagged/photo-1574282893982-ff1675ba4900?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80'
+            className={styles.members}
+          />
+          <img
+            src='https://assets.codepen.io/3364143/Screen+Shot+2020-08-01+at+12.24.16.png'
+            className={styles.members}
+          />
+          <img
+            src='https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60'
+            className={styles.members}
+          />
+          <img
+            src='https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=998&q=80'
+            className={styles.members}
+          />
+          <img
+            src='https://images.unsplash.com/photo-1541647376583-8934aaf3448a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80'
+            className={styles.members}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
