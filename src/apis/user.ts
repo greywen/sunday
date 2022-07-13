@@ -4,6 +4,7 @@ import {
   IDepartments,
   IUser,
   IUserAttendance,
+  IUserMember,
   IUserToday,
 } from '@interfaces/user';
 import http from '@utils/http';
@@ -50,4 +51,8 @@ export async function getUserToday() {
 
 export async function getUserAttendance(curMonth: string) {
   return await http.get<IUserAttendance[][]>(`/v1/user/attendance/${curMonth}`);
+}
+
+export async function getMembers() {
+  return await http.get<IUserMember[]>(`/v1/user/members`);
 }

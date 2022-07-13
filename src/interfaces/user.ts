@@ -56,3 +56,8 @@ export interface IClockTime {
   onDutyTime: string;
   offDutyTime: string;
 }
+
+export interface IUserMember {
+  username: string;
+  avatar: string;
+}
