@@ -88,13 +88,13 @@ const AttendanceCalendar = () => {
           onChange={(date: any, dateString: string) => {
             setCurrentDate(dateString);
           }}
-          disabledDate={(current)=> {
-            return current > moment().endOf("month") 
+          disabledDate={(current) => {
+            return current > moment().endOf('month');
           }}
           suffixIcon={null}
         />
       </div>
-      <div className={`${styles.attendStatus} ${styles.anim}`}>
+      <div className={styles.attendStatus}>
         <div className={styles.attendStat}>
           <div className={styles.attendNumber}>
             <CountUp isCounting end={attendanceStatistics.lateMinute} />
@@ -131,7 +131,7 @@ const AttendanceCalendar = () => {
           dateCellRender={(value: Moment) => {
             const date = value.format('YYYY-MM-DD');
             return (
-              <div>
+              <div className={styles.items}>
                 {userAttendances &&
                   userAttendances[date] &&
                   userAttendances[date].map((item, index) => {
@@ -140,7 +140,7 @@ const AttendanceCalendar = () => {
                         key={index}
                         className={`${styles[`state-${item.state}`]} ${
                           styles.item
-                        }`}
+                        } ${styles.anim}`}
                       >
                         {item.value}
                       </div>
@@ -151,7 +151,7 @@ const AttendanceCalendar = () => {
           }}
           // monthCellRender={monthCellRender}
         />
-        <div className={styles.hint}>* 48内数据差异属于正常</div>
+        <div className={styles.hint}>* 48小时内数据差异属于正常</div>
       </div>
     </>
   );

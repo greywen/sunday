@@ -14,8 +14,9 @@
   background-color: #fff;
   height: calc(100vh - 70px);
   .copyrightTips {
+    position: relative;
     margin-top: auto;
-    text-align: end;
+    text-align: center;
     padding: 12px;
   }
 }
@@ -65,6 +66,12 @@
   align-items: center;
 }
 
+.nickName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .progressStatus {
   color: @mainColor;
   font-size: 10px;
@@ -74,19 +81,19 @@
   padding: 0px 2px;
 }
 
-.progress {
+.isProgress {
   margin-top: 8px;
   margin-bottom: 12px;
   border-radius: 4px;
   background-color: #e7e7ef;
   height: 8px;
+  overflow: hidden;
 
   &Bar {
-    background-color: var(--button-color);
     border-radius: 4px;
     width: 35%;
     height: 100%;
-    animation: progressAnimation 6s;
+    animation: progressAnimation 3s;
     transition: 0.3s linear both;
     transition-property: width, background-color;
   }
@@ -94,11 +101,11 @@
 
 @keyframes progressAnimation {
   0% {
-    width: 5%;
+    width: 0%;
     background-color: #a2b6f5;
   }
   100% {
-    width: 35%;
+    width: var(width);
   }
 }
 
@@ -110,10 +117,11 @@
 }
 
 .teamMember {
-  width: 360px;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  & > * {
+    margin: 4px;
+  }
 }
 
 .members {
@@ -184,9 +192,18 @@
     text-align: right;
     color: #00000073;
     padding: 8px;
+    font-size: 12px;
+  }
+
+  .animation-loop(@n, @i: 1) when (@i =< @n) {
+    &:nth-child(@{i}) {
+      animation-delay: (100ms + (@i * 300));
+    }
+    .animation-loop(@n, (@i + 1));
   }
 
   .item {
+    .animation-loop(4);
     padding: 2px;
     border-radius: 4px;
     margin-bottom: 2px;
