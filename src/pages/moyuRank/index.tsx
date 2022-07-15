@@ -39,7 +39,6 @@ const MoyuRank = () => {
 
   return (
     <div className={styles.container}>
-      <BackHome />
       <div className={styles.left}>
         <Rank />
       </div>

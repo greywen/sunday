@@ -33,6 +33,7 @@ export interface IAccountInfo {
   avatar: string;
   title: string;
   hiredDate: number;
+  resources: string;
 }
 
 export interface IUserToday {

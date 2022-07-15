@@ -79,7 +79,6 @@ const AttendanceCalendar = () => {
     <>
       <div className={styles.dashboardHeader}>
         <span>考勤</span>
-        {/* <span>2022-07</span> */}
         <DatePicker
           inputReadOnly
           picker='month'
@@ -89,7 +88,10 @@ const AttendanceCalendar = () => {
             setCurrentDate(dateString);
           }}
           disabledDate={(current) => {
-            return current > moment().endOf('month');
+            return (
+              current > moment().endOf('month') ||
+              current < moment().add(-1, 'months').startOf('month')
+            );
           }}
           suffixIcon={null}
         />
@@ -118,6 +120,7 @@ const AttendanceCalendar = () => {
         </div>
       </div>
       <div className={`${styles.calendar} ${styles.anim}`}>
+        <div className={styles.hint}>* 48小时内数据差异属于正常</div>
         <Calendar
           value={moment(currentDate)}
           disabledDate={(current) => {
@@ -137,7 +140,7 @@ const AttendanceCalendar = () => {
                   userAttendances[date].map((item, index) => {
                     return (
                       <div
-                        key={index}
+                        key={'attendance-' + index}
                         className={`${styles[`state-${item.state}`]} ${
                           styles.item
                         } ${styles.anim}`}
@@ -149,9 +152,7 @@ const AttendanceCalendar = () => {
               </div>
             );
           }}
-          // monthCellRender={monthCellRender}
         />
-        <div className={styles.hint}>* 48小时内数据差异属于正常</div>
       </div>
     </>
   );

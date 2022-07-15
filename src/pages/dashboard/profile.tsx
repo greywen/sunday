@@ -41,7 +41,11 @@ const Profile = () => {
   }
 
   useAsyncEffect(async () => {
-    const data = await getMembers();
+    setRankList(await prepareRankTopFive());
+    setMembers(await getMembers());
+  }, []);
+
+  async function prepareRankTopFive() {
     const rankList = await getRankList();
     const _rankList = rankList
       .sort((a, b) => (a.integral > b.integral ? 0 : 1))
@@ -49,14 +53,12 @@ const Profile = () => {
         x.index = index + 1;
         return x;
       });
-
-    setMembers(data);
-    setRankList(_rankList.slice(0, 5));
-  }, []);
+    return _rankList.slice(0, 5);
+  }
 
   return (
     <div className={`${styles.userProfileArea}`}>
-      <div className={styles.sideWrapper}>
+      <div key='profile-wrapper' className={styles.sideWrapper}>
         <div className={styles.userProfile}>
           {account.avatar ? (
             <img src={account.avatar} className={styles.userPhoto} />
@@ -75,12 +77,12 @@ const Profile = () => {
           </div> */}
         </div>
       </div>
-      <div className={styles.sideWrapper}>
-        <div className={styles.sideTitle}>本月摸鱼</div>
-        {rankList.length > 0 &&
-          rankList.map((x, index) => (
+      {rankList.length > 0 && (
+        <div key='rank-wrapper' className={styles.sideWrapper}>
+          <div className={styles.sideTitle}>本月摸鱼</div>
+          {rankList.map((x, index) => (
             <>
-              <div key={x.wxUserId} className={styles.progressStatus}>
+              <div key={'rank-' + x.index} className={styles.progressStatus}>
                 <span className={styles.nickName}>{x.nickName}</span>
                 <span>
                   {x.integral}/{rankList[0].integral}
@@ -97,32 +99,39 @@ const Profile = () => {
               </div>
             </>
           ))}
-      </div>
-      <div className={styles.sideWrapper}>
-        <div className={styles.sideTitle}>团队成员</div>
-        <div className={styles.teamMember}>
-          {members.length > 0 &&
-            members
+          <div className={styles.showMore} onClick={() => window.open('/moyu')}>
+            查看更多
+          </div>
+        </div>
+      )}
+      {members.length > 0 && (
+        <div key='member-wrapper' className={styles.sideWrapper}>
+          <div className={styles.sideTitle}>团队成员</div>
+          <div className={styles.teamMember}>
+            {members
               .filter((x) => x.username != account.username)
-              .map((x) => {
+              .map((x, index) => {
                 return x.avatar ? (
                   <img
+                    key={'avatar-' + index}
                     title={x.username}
                     src={x.avatar}
                     className={styles.members}
                   />
                 ) : (
                   <Avatar
+                    key={'avatar-' + index}
                     title={x.username}
                     size='small'
                     text={x.username.slice(-2)}
                   />
                 );
               })}
+          </div>
         </div>
-      </div>
+      )}
       <div className={styles.copyrightTips}>
-        {`© ${new Date().getFullYear()} 猿媛乐园. All Rights Reserved.`}
+        {`© ${new Date().getFullYear()} 猿媛乐园. Version beta 1.0.1`}
       </div>
     </div>
   );
