@@ -14,12 +14,12 @@ const AttendanceCard: React.FC<{ today?: IUserToday }> = ({ today }) => {
     <Col xxl={8} lg={12} md={24} sm={24} xs={24}>
       <div
         className={styles.card}
-        onClick={() => {
-          const usernames = ['王中伟', '文旺', '周杰'];
-          usernames.includes(authContext.userName)
-            ? navigate('/attendances')
-            : navigate('/attendance');
-        }}
+        // onClick={() => {
+        //   const usernames = ['王中伟', '文旺', '周杰'];
+        //   usernames.includes(authContext.userName)
+        //     ? navigate('/attendances')
+        //     : navigate('/attendance');
+        // }}
       >
         <div className={styles.cardContent}>
           <div className={styles.cardHeader}>

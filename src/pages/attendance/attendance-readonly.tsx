@@ -90,7 +90,6 @@ const AttendanceReadonly = () => {
 
   return (
     <>
-      <BackHome />
       <div className='attendance-page' ref={reportRef}>
         <div className='header'>
           <div className='left'>员工考勤时间表</div>

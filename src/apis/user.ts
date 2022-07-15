@@ -1,6 +1,15 @@
-import { ISheetResult, ISheetTemplate } from '@interfaces/timesheet';
-import { IDepartments, IUser, IUserToday } from '@interfaces/user';
+import { ISheetResult } from '@interfaces/timesheet';
+import {
+  IClockTime,
+  IDepartments,
+  IUser,
+  IUserAttendance,
+  IUserMember,
+  IUserToday,
+} from '@interfaces/user';
 import http from '@utils/http';
+import moment from 'moment';
+import { AttendanceState } from '../constants';
 
 export async function createUser(data: any) {
   return await http.post('/v1/dingtalk/user', { body: data });
@@ -38,4 +47,12 @@ export async function getTimeSheetData(curDate: string) {
 
 export async function getUserToday() {
   return await http.get<IUserToday>('/v1/user/today');
+}
+
+export async function getUserAttendance(curMonth: string) {
+  return await http.get<IUserAttendance[][]>(`/v1/user/attendance/${curMonth}`);
+}
+
+export async function getMembers() {
+  return await http.get<IUserMember[]>(`/v1/user/members`);
 }

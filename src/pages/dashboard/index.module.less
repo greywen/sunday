@@ -1,160 +1,298 @@
-@import "../../theme/index.less";
+@import '../../theme/index.less';
 
 .dashboardPage {
-  padding: 128px 128px 0 128px;
+  display: flex;
 }
 
-@media screen and (min-width: 360px) and (max-width: 1180px) {
-  .dashboardPage {
-    padding: 0 2px 0 2px;
+.userProfileArea {
+  width: 360px;
+  border-right: 1px solid @borderColor;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: auto;
+  background-color: #fff;
+  height: calc(100vh - 70px);
+  .copyrightTips {
+    position: relative;
+    margin-top: auto;
+    text-align: center;
+    padding: 12px;
   }
 }
 
-.userCard {
-  width: 100%;
-  height: 100%;
+.sideWrapper {
+  padding: 25px 40px;
+  border-bottom: 1px solid @borderColor;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.userPhoto {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 15px 0 8px;
+}
+
+.userTitle {
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.userAge {
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.userMail {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.userProfile {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
+.nickName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.progressStatus {
+  color: @mainColor;
+  font-size: 10px;
+  font-weight: 600;
   display: flex;
   justify-content: space-between;
-  margin: 0 auto;
-
-  .helloText {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    font-family: "SFUIDisplay", "Helvetica Neue", sans-serif;
-    font-size: 32px;
-    font-weight: bold;
-  }
-
-  .tiemText {
-    display: flex;
-    align-items: flex-end;
-    height: 100%;
-    font-weight: bold;
-    padding-bottom: 4px;
-  }
+  padding: 0px 2px;
 }
 
-.card {
-  margin: 12px;
-  border-radius: 10px;
-  box-shadow: 0 0 1rem 0 rgba(136, 152, 170, 0.15);
-  background: @primaryBlock;
-  position: relative;
-  height: 360px;
-
-  .cardContent {
-    padding: 16px 32px 16px 32px;
-    position: relative;
-
-    .cardHeader {
-      text-align: left;
-      font-size: 1.8em;
-    }
-
-    .cardItem {
-      padding: 24px 4px;
-      border-bottom: 1px solid #e9ecef;
-
-      .content {
-        position: relative;
-        padding-left: 16px;
-        .contentText {
-          font-weight: 600;
-          font-size: 15px;
-        }
-        .dateText {
-          font-size: 15px;
-          font-weight: 400;
-        }
-        .btn {
-          font-size: 13px;
-        }
-      }
-
-      .content::before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 3px;
-        height: 100%;
-        content: "";
-        border-radius: 8px;
-      }
-      .first::before {
-        background: #1890ff;
-      }
-      .second::before {
-        background: #f56a00;
-      }
-    }
-
-    .cardBody {
-      display: flex;
-      height: 300px;
-
-      tbody {
-        & tr:nth-child(1) {
-          span {
-            background-color: #f56a00;
-          }
-        }
-
-        & tr:nth-child(2) {
-          span {
-            background-color: #85ce67;
-          }
-        }
-
-        & tr:nth-child(3) {
-          span {
-            background-color: #1890ff;
-          }
-        }
-      }
-    }
-  }
-}
-
-.cardSm {
-  margin-top: 12px;
-  height: 174px;
-
-  .cardBody {
-    display: flex;
-    height: auto !important;
-  }
-}
-
-.seemoreText {
-  font-size: 14px;
-  margin-top: 8;
-  font-weight: bold;
-  color: #1890ff;
-}
-
-.rank {
-  display: block;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  text-align: center;
-}
-
-.cardCarousel {
-  padding: 12px 2px;
-  height: 280px;
+.isProgress {
+  margin-top: 8px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  background-color: #e7e7ef;
+  height: 8px;
   overflow: hidden;
 
-  :global(.ant-carousel .slick-dots li.slick-active button) {
-    background: #1890ff;
-  }
-
-  :global(.ant-carousel .slick-dots li button) {
-    background: #999;
+  &Bar {
+    border-radius: 4px;
+    width: 35%;
+    height: 100%;
+    animation: progressAnimation 3s;
+    transition: 0.3s linear both;
+    transition-property: width, background-color;
   }
 }
 
-.cardCarouselContent {
-  color: @primaryText;
+@keyframes progressAnimation {
+  0% {
+    width: 0%;
+    background-color: #a2b6f5;
+  }
+  100% {
+    width: var(width);
+  }
+}
+
+.sideTitle {
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+.showMore {
+  text-align: center;
+  font-size: 12px;
+  padding-top: 2px;
+  color: @linkColor;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.teamMember {
+  display: flex;
+  flex-wrap: wrap;
+  & > * {
+    margin: 4px;
+  }
+}
+
+.members {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: calc(100vh - 70px);
+  overflow: auto;
+}
+
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 700;
+  padding: 24px 24px 12px 24px;
+  --delay: 0s;
+
+  :global(.ant-picker) {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    max-width: 100px;
+  }
+
+  :global(.ant-picker-input > input) {
+    font-size: 21px;
+    font-weight: 600;
+  }
+}
+
+.attend {
+  display: flex;
+
+  &Status {
+    --delay: 0s;
+    padding: 0 24px 24px 24px;
+    display: flex;
+    align-items: center;
+  }
+  &Stat {
+    width: 120px;
+  }
+  &Number {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  &Condition {
+    font-size: 12px;
+    color: @mainColor;
+    font-weight: 700;
+  }
+}
+
+.calendar {
+  --delay: 0.3s;
+
+  .hint {
+    text-align: right;
+    color: #00000073;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .animation-loop(@n, @i: 1) when (@i =< @n) {
+    &:nth-child(@{i}) {
+      animation-delay: (100ms + (@i * 300));
+    }
+    .animation-loop(@n, (@i + 1));
+  }
+
+  .item {
+    .animation-loop(4);
+    padding: 2px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+  }
+
+  .state-1 {
+    background-color: #92d050;
+    display: none;
+  }
+
+  .state-2 {
+    background-color: #ffe084;
+  }
+
+  .state-3 {
+    background-color: #de7465;
+  }
+
+  .state-4 {
+    background-color: #f4cdac;
+  }
+
+  .state-5 {
+    background-color: #c4d09d;
+  }
+
+  .state-6 {
+    background-color: #ffccc7;
+  }
+
+  .state-7 {
+    background-color: #00b0f0;
+  }
+
+  .state-8 {
+    background-color: #b9c2df;
+  }
+
+  .state-9 {
+    background-color: #dddddd;
+  }
+}
+
+.anim {
+  animation: bottom 0.8s var(--delay) both;
+}
+
+@keyframes bottom {
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+:global(.ant-picker-cell-selected .ant-picker-calendar-date) {
+  background: transparent !important;
+}
+
+:global(.ant-picker-cell-selected:hover) {
+  background: #f5f5f5 !important;
+}
+
+:global(.ant-picker-calendar-full .ant-picker-panel .ant-picker-body th) {
+  padding: 16px 12px 16px 0;
+}
+
+:global(.ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-calendar-date-content) {
+  height: 150px;
+}
+
+:global(.ant-picker-calendar-full
+    .ant-picker-panel
+    .ant-picker-calendar-date-today) {
+  border-color: rgba(0, 0, 0, 0.06) !important;
 }

@@ -13,7 +13,7 @@ export const useAccount = () => {
   function checkWhetherExpire(): boolean {
     const info = get();
     return (
-      info && (info.expires + info.refreshExpires) * 1000 > new Date().getTime()
+      info && info.expires_at * 1000 > new Date().getTime()
     );
   }
   function remove() {

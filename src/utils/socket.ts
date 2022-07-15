@@ -4,7 +4,7 @@ const account = useAccount();
 
 const socket = io(`${process.env.API_URL}/timesheet`, {
   extraHeaders: {
-    authorization: `Bearer ${account.token}`,
+    authorization: `Bearer ${account.access_token}`,
   },
 });
 

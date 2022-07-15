@@ -1,8 +1,8 @@
 @import '../theme/index.less';
 
 body {
-  background: @primary !important;
-  transition: background 2s linear 0s;
+  background: @bodyBgColor !important;
+  // transition: background 2s linear 0s;
   color: @primaryText !important;
 }
 
@@ -84,4 +84,13 @@ body {
 .ant-pagination-item-active a {
   color: @primaryText !important;
   background: @primaryBlock !important;
+}
+
+.link {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.link:hover {
+  cursor: pointer;
 }

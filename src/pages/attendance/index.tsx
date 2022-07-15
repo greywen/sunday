@@ -112,7 +112,10 @@ const Attendance = () => {
       } else if (stateX) {
         return <div className={`state-${stateX.state}`}>X</div>;
       } else if (stateP) {
-        const value = attendanceList.map((x) => getStateKey(x.state)).join('/');
+        const value = attendanceList
+          .filter((x) => x.state != AttendanceState.A)
+          .map((x) => getStateKey(x.state))
+          .join('/');
         return <div className={`state-${stateP.state}`}>{value}</div>;
       }
       return (
@@ -304,7 +307,6 @@ const Attendance = () => {
 
   return (
     <>
-      <BackHome />
       <div className='attendance-page' ref={reportRef}>
         <div className='header'>
           <div
