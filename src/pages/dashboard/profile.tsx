@@ -131,7 +131,7 @@ const Profile = () => {
         </div>
       )}
       <div className={styles.copyrightTips}>
-        {`© ${new Date().getFullYear()} 猿媛乐园. Version beta 1.0.1`}
+        {`© ${new Date().getFullYear()} 猿媛乐园. Version beta 1.0.0`}
       </div>
     </div>
   );
