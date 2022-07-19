@@ -44,7 +44,7 @@ const Layout: React.FC = () => {
   useEffect(() => {
     setMenus(
       menuList.filter((x) => {
-        return account.resources.split(',').includes(x.key);
+        return account.resources.includes(x.key);
       })
     );
     const currentMenu = menuList.find((x) => x.path === location.pathname);
