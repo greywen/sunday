@@ -96,7 +96,9 @@ const AttendancePage = () => {
 
   function calcStateBlock(attendanceList: IAttendances[]) {
     if (attendanceList.length == 0) return ' ';
-
+    attendanceList = attendanceList.filter(
+      (x) => x.state !== AttendanceState.A
+    );
     // 迟到
     let statel = attendanceList.find((x) => x.state === AttendanceState.L);
     // 未提交日志
@@ -188,11 +190,13 @@ const AttendancePage = () => {
     if (!modifyAttendance) {
       return;
     }
-
+    const _attendances = modifyAttendance!.attendances.filter(
+      (x) => x.state !== AttendanceState.Anomalous
+    );
     const result = await updateCustomAttendances({
       index: modifyAttendance!.index,
       userId: modifyAttendance!.id,
-      datas: modifyAttendance!.attendances,
+      datas: _attendances,
     });
 
     if (result) {
@@ -432,9 +436,9 @@ const AttendancePage = () => {
         </table>
       </div>
       <Modal
-        title={`${modifyAttendance?.name} - ${moment(
-          `${currentDate}-${modifyAttendance?.index || 0 + 1}`
-        ).format('YYYY-MM-DD')}`}
+        title={`${modifyAttendance?.name} - ${moment(currentDate).format(
+          'YYYY-MM'
+        )}-${(modifyAttendance?.index || 0) + 1}`}
         visible={visible}
         onOk={() => {
           save();
