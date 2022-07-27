@@ -1,4 +1,3 @@
-import BackHome from '../../business.components/backhome';
 import {
   Button,
   DatePicker,
@@ -11,18 +10,18 @@ import {
 } from 'antd';
 import styles from './index.module.less';
 import React, { useState } from 'react';
-import InformForm from './informForm';
+import NoticeForm from './noticeForm.component';
 import useAsyncEffect from '@hooks/useAsyncEffect';
-import { delInform, getInform } from '@apis/inform';
-import { IInfrom } from '@interfaces/inform';
+import { delInform, getInform } from '@apis/notice';
+import { INotice } from '@interfaces/notice';
 
 const { RangePicker } = DatePicker;
 
-const Inform = () => {
+const NoticePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [informs, setInforms] = useState<IInfrom[]>([]);
+  const [informs, setInforms] = useState<INotice[]>([]);
 
-  const [curInform, setCurInform] = useState<IInfrom | undefined>(undefined);
+  const [curInform, setCurInform] = useState<INotice | undefined>(undefined);
 
   useAsyncEffect(async () => {
     if (!modalVisible) {
@@ -53,7 +52,7 @@ const Inform = () => {
     {
       title: '操作',
       key: 'action',
-      render: (res: IInfrom) => (
+      render: (res: INotice) => (
         <Space size='middle'>
           <a
             onClick={() => {
@@ -90,7 +89,6 @@ const Inform = () => {
         <h2>通知管理</h2>
       </Row>
       <div className={styles.container}>
-        <BackHome />
         <Button
           className={styles.button}
           onClick={() => {
@@ -110,7 +108,7 @@ const Inform = () => {
           footer={null}
           width={'80vw'}
         >
-          <InformForm
+          <NoticeForm
             onclose={() => setModalVisible(false)}
             defaultValue={curInform}
           />
@@ -120,4 +118,4 @@ const Inform = () => {
   );
 };
 
-export default Inform;
+export default NoticePage;

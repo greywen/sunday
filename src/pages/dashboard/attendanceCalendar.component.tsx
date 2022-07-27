@@ -58,7 +58,7 @@ const AttendanceCalendar = () => {
           item.state === AttendanceState.V
         ) {
           statistics.leaveCount += 1;
-          item.value = '请假 ' + item.value + ' 小时';
+          item.value = item.value ? `请假 ${item.value} 小时` : '请假';
         } else if (item.state === AttendanceState.J) {
           item.value = '加班 ' + item.value;
         } else if (item.state === AttendanceState.L) {

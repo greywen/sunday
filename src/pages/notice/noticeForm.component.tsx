@@ -1,6 +1,6 @@
-import { addInform, modifyInform } from '@apis/inform';
+import { addInform, modifyInform } from '@apis/notice';
 import MyEditor from '../../business.components/myEditor';
-import { IInfrom } from '@interfaces/inform';
+import { INotice } from '@interfaces/notice';
 import {
   Button,
   Col,
@@ -19,10 +19,10 @@ const { RangePicker } = DatePicker;
 
 interface IProps {
   onclose: () => void;
-  defaultValue?: IInfrom;
+  defaultValue?: INotice;
 }
 
-const InformForm = (props: IProps) => {
+const NoticeForm = (props: IProps) => {
   const { onclose, defaultValue } = props;
   const [html, setHtml] = useState(defaultValue?.content);
 
@@ -96,4 +96,4 @@ const InformForm = (props: IProps) => {
     </Form>
   );
 };
-export default InformForm;
+export default NoticeForm;

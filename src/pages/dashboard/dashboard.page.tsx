@@ -1,9 +1,9 @@
 import React from 'react';
-import AttendanceCalendar from './attendance.calendar';
+import AttendanceCalendar from './attendanceCalendar.component';
 import styles from './index.module.less';
-import Profile from './profile';
+import Profile from './profile.component';
 
-const Dashboard = () => {
+const DashboardPage = () => {
   return (
     <div className={styles.dashboardPage}>
       <Profile />
@@ -13,4 +13,4 @@ const Dashboard = () => {
     </div>
   );
 };
-export default Dashboard;
+export default DashboardPage;

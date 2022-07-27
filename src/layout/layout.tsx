@@ -7,10 +7,12 @@ import { AuthContext } from '../providers/AuthProvider';
 import './index.less';
 import styles from './index.module.less';
 
-const Attendance = React.lazy(() => import('@pages/attendance'));
-const Dashboard = React.lazy(() => import('@pages/dashboard'));
-const MoyuRank = React.lazy(() => import('@pages/moyuRank'));
-const TimeSheet = React.lazy(() => import('@pages/timesheet'));
+const Attendance = React.lazy(
+  () => import('@pages/attendance/attendance.page')
+);
+const Dashboard = React.lazy(() => import('@pages/dashboard/dashboard.page'));
+const MoyuRank = React.lazy(() => import('@pages/moyuRank/moyuRank.page'));
+const TimeSheet = React.lazy(() => import('@pages/timesheet/timesheet.page'));
 
 interface IMenu {
   key: string;
@@ -91,7 +93,7 @@ const Layout: React.FC = () => {
               </div>
             </div>
             <div className={styles.mainContainer}>
-              <Suspense fallback={<h3>Loading...</h3>}>
+              <Suspense fallback={<h4>正在拼命加载中...</h4>}>
                 <Routes>
                   {menus.map((x) => (
                     <Route
@@ -112,7 +114,7 @@ const Layout: React.FC = () => {
           </div>
         </div>
       ) : (
-        <h4>Loading...</h4>
+        <h4>正在拼命加载中...</h4>
       )}
     </Router>
   );
