@@ -7,7 +7,6 @@ import Slider from 'react-slick';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { getRecords } from '@apis/moyu';
 import { IMoYuRecord } from '@interfaces/moyu';
-import BackHome from '../../business.components/backhome';
 
 const settings = {
   vertical: true,
@@ -22,7 +21,7 @@ const settings = {
   adaptiveHeight: true,
 };
 
-const MoyuRank = () => {
+const MoyuRankPage = () => {
   const [records, setRecords] = useState<IMoYuRecord[]>([]);
 
   useAsyncEffect(async () => {
@@ -58,4 +57,4 @@ const MoyuRank = () => {
   );
 };
 
-export default MoyuRank;
+export default MoyuRankPage;

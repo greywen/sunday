@@ -36,18 +36,6 @@ export interface IAccountInfo {
   resources: string;
 }
 
-export interface IUserToday {
-  timesheet: {
-    value: string;
-    name: string;
-  };
-  attendance: {
-    late: number;
-    notCommitReportCount: number;
-    tomorrowIsHoliday: boolean;
-  };
-}
-
 export interface IUserAttendance {
   state: AttendanceState;
   value: string | number | IClockTime | any;

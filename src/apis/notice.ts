@@ -1,12 +1,12 @@
-import { IInfrom } from "@interfaces/inform";
+import { INotice } from "@interfaces/notice";
 import http from "@utils/http";
 
 export async function getInform() {
-  return await http.get<IInfrom[]>("/v1/inform/getAll")
+  return await http.get<INotice[]>("/v1/inform/getAll")
 }
 
 export async function getCurInform() {
-  return await http.get<IInfrom[]>("/v1/inform/getCurrent")
+  return await http.get<INotice[]>("/v1/inform/getCurrent")
 }
 
 export async function addInform(data: any) {

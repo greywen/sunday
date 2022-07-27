@@ -21,7 +21,7 @@ let groups = [
 ];
 let enabledMembers = false;
 
-const TimeSheet = () => {
+const TimeSheetPage = () => {
   const [template, setTemplate] = useState<ISheetTemplate>();
   const [members, setMembers] = useState<ITimeSheetData[]>();
   const [enabledTemplate, setEnabledTemplate] = useState<boolean>(false);
@@ -339,4 +339,4 @@ const TimeSheet = () => {
   );
 };
 
-export default TimeSheet;
+export default TimeSheetPage;

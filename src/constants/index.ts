@@ -19,6 +19,7 @@ export enum AttendanceState {
   'J' = 7,
   'L' = 8,
   'A' = 9,
+  'Anomalous' = 10,
 }
 
 export enum GroupType {

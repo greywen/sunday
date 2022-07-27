@@ -36,12 +36,11 @@ import {
   updateUser,
 } from '@apis/user';
 import { IDepartmentGroup, IDepartments, IUser } from '@interfaces/user';
-import BackHome from '../../business.components/backhome';
 const { Option } = Select;
 const { confirm } = Modal;
 import type { RangePickerProps } from 'antd/es/date-picker';
 
-const Attendance = () => {
+const AttendancePage = () => {
   const [attendances, setAttendances] = useState<IUserAttendances[]>();
   const [departments, setDepartments] = useState<IDepartments[]>();
   const [groups, setGroups] = useState<IDepartmentGroup[]>([]);
@@ -97,46 +96,47 @@ const Attendance = () => {
 
   function calcStateBlock(attendanceList: IAttendances[]) {
     if (attendanceList.length == 0) return ' ';
-    if (attendanceList.length > 1) {
-      // 迟到
-      let statel = attendanceList.find((x) => x.state === AttendanceState.L);
-      // 未提交日志
-      let stateX = attendanceList.find((x) => x.state === AttendanceState.X);
-      // 请假
-      let stateP = attendanceList.find((x) => leaveType.includes(x.state));
 
-      if (statel) {
-        return (
-          <div className={`state-${statel.state}`}>{statel.value + '分钟'}</div>
-        );
-      } else if (stateX) {
-        return <div className={`state-${stateX.state}`}>X</div>;
-      } else if (stateP) {
-        const value = attendanceList
-          .filter((x) => x.state != AttendanceState.A)
-          .map((x) => getStateKey(x.state))
-          .join('/');
-        return <div className={`state-${stateP.state}`}>{value}</div>;
-      }
+    // 迟到
+    let statel = attendanceList.find((x) => x.state === AttendanceState.L);
+    // 未提交日志
+    let stateX = attendanceList.find((x) => x.state === AttendanceState.X);
+    // 请假
+    let stateP = attendanceList.find((x) => leaveType.includes(x.state));
+    // 异常
+    let stateA = attendanceList.find(
+      (x) => x.state === AttendanceState.Anomalous
+    );
+
+    if (statel) {
       return (
-        <div className={`state-${attendanceList[0].state}`}>
-          {getStateKey(attendanceList[0].state)}
+        <div className={`state-${statel.state}`}>{statel.value + '分钟'}</div>
+      );
+    } else if (stateA) {
+      return (
+        <div
+          title={
+            '* 考勤异常,可能存在实际请假但未提交或者未通过请假申请（需要人工审核）'
+          }
+          className={`state-10`}
+        >
+          !
         </div>
       );
-    } else {
-      let { state, value } = attendanceList[0];
-      switch (state) {
-        case AttendanceState.L:
-          return <div className={`state-${state}`}>{value + '分钟'}</div>;
-        case (AttendanceState.P,
-        AttendanceState.C,
-        AttendanceState.S,
-        AttendanceState.V):
-          return <div className={`state-${state}`}>{getStateKey(state)}</div>;
-        default:
-          return <div className={`state-${state}`}>{getStateKey(state)}</div>;
-      }
+    } else if (stateX) {
+      return <div className={`state-${stateX.state}`}>X</div>;
+    } else if (stateP) {
+      const value = attendanceList
+        .filter((x) => x.state != AttendanceState.A)
+        .map((x) => getStateKey(x.state))
+        .join('/');
+      return <div className={`state-${stateP.state}`}>{value}</div>;
     }
+    return (
+      <div className={`state-${attendanceList[0].state}`}>
+        {getStateKey(attendanceList[0].state)}
+      </div>
+    );
   }
 
   function changeState(state: AttendanceState) {
@@ -734,4 +734,4 @@ const Attendance = () => {
   );
 };
 
-export default Attendance;
+export default AttendancePage;
