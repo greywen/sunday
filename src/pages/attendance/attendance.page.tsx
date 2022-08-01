@@ -197,6 +197,7 @@ const AttendancePage = () => {
       index: modifyAttendance!.index,
       userId: modifyAttendance!.id,
       datas: _attendances,
+      date: currentDate
     });
 
     if (result) {
