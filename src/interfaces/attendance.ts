@@ -23,4 +23,5 @@ export interface IUpdateAttendance {
   userId: string;
   index: number;
   datas: IAttendances[];
+  date: string;
 }
