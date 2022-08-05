@@ -1,6 +1,6 @@
 import { getAuthUrl } from '@apis/auth';
 import axios, { AxiosRequestConfig } from 'axios';
-import { ACCOUNT_INFO } from '../constants';
+import { ACCOUNT_INFO } from '../constants/constants';
 import { useAccount } from './utils';
 
 const defaultHost = process.env.API_URL;

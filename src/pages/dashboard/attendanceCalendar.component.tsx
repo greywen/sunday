@@ -5,7 +5,7 @@ import { Calendar, DatePicker } from 'antd';
 import moment, { Moment } from 'moment';
 import React, { useState } from 'react';
 import { CountUp } from 'use-count-up';
-import { AttendanceState } from '../../constants';
+import { AttendanceState } from '../../constants/constants';
 import styles from './index.module.less';
 
 interface IAttendanceStatistics {

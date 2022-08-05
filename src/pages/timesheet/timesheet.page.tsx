@@ -7,7 +7,7 @@ import { socket } from "@utils/socket";
 import useAsyncEffect from "@hooks/useAsyncEffect";
 import { getTimeSheetData, updateTemplate } from "@apis/user";
 import { ISheetTemplate, ITimeSheetData } from "@interfaces/timesheet";
-import { GroupType } from "../../constants";
+import { GroupType } from "../../constants/constants";
 import { useLocation } from "react-router-dom";
 import { RangePickerProps } from "antd/lib/date-picker";
 

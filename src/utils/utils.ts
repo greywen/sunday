@@ -1,5 +1,5 @@
 import { IAccountInfo } from '@interfaces/user';
-import { ACCOUNT_INFO, THEME, THEMETYPE } from '../constants';
+import { ACCOUNT_INFO, THEME, THEMETYPE } from '../constants/constants';
 import { dark, light } from '../theme/config';
 
 export const useAccount = () => {

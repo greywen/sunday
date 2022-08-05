@@ -24,7 +24,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React, { useRef, useState } from 'react';
-import { AttendanceState } from '../../constants';
+import { AttendanceState } from '../../constants/constants';
 import './index.less';
 import * as htmlToImage from 'html-to-image';
 import * as download from 'downloadjs';
