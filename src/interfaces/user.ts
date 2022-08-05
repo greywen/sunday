@@ -1,4 +1,4 @@
-import { AttendanceState } from '../constants';
+import { AttendanceState } from '../constants/constants';
 
 export interface IUser {
   id: string;

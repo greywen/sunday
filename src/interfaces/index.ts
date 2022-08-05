@@ -3,3 +3,4 @@ export * from './moyu';
 export * from './user';
 export * from './timesheet';
 export * from './notice';
+export * from './code';

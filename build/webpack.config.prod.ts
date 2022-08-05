@@ -4,6 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { WebpackConfiguration } from './webpack.config';
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 const config: WebpackConfiguration = {
@@ -27,6 +28,7 @@ const config: WebpackConfiguration = {
       '@interfaces': path.resolve(__dirname, '../src/interfaces'),
       '@common': path.resolve(__dirname, '../src/common'),
       '@assets': path.resolve(__dirname, '../src/assets'),
+      '@constants': path.resolve(__dirname, '../src/constants'),
     },
   },
   module: {
@@ -83,6 +85,7 @@ const config: WebpackConfiguration = {
     ],
   },
   plugins: [
+    new MonacoWebpackPlugin(['csharp', 'typescript', 'javascript']),
     new Dotenv({
       path: path.resolve(process.cwd(), '.env.production'),
     }),

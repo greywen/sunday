@@ -13,6 +13,10 @@ const Attendance = React.lazy(
 const Dashboard = React.lazy(() => import('@pages/dashboard/dashboard.page'));
 const MoyuRank = React.lazy(() => import('@pages/moyuRank/moyuRank.page'));
 const TimeSheet = React.lazy(() => import('@pages/timesheet/timesheet.page'));
+const Code = React.lazy(() => import('@pages/codes/code.page'));
+const CodeOnlinePage = React.lazy(
+  () => import('@pages/codes/code.online.page')
+);
 
 interface IMenu {
   key: string;
@@ -34,6 +38,18 @@ let menuList: IMenu[] = [
     name: '考勤管理',
     path: '/attendance',
     element: <Attendance />,
+  },
+  {
+    key: '4',
+    name: '题库',
+    path: '/code',
+    element: <Code />,
+  },
+  {
+    key: '5',
+    name: '在线编码(BETA)',
+    path: '/code-online',
+    element: <CodeOnlinePage />,
   },
 ];
 
