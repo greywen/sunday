@@ -47,7 +47,7 @@ let menuList: IMenu[] = [
   },
   {
     key: '5',
-    name: '在线编码(BETA)',
+    name: '代码编辑器(BETA)',
     path: '/code-online',
     element: <CodeOnlinePage />,
   },

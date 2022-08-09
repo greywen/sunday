@@ -9,6 +9,7 @@ import styles from './index.module.less';
 const { Option } = Select;
 
 const CodeOnlinePage = () => {
+  let _editor = null as any;
   const [code, setCode] = useState<string>();
   const [currentLanguage, setCurrentLanguage] =
     useState<ICodeLanguage | null>();
@@ -19,9 +20,14 @@ const CodeOnlinePage = () => {
   useAsyncEffect(async () => {
     const languageData = await getLanguages();
     const firstLanguage = languageData[0];
+    
     setCurrentLanguage(firstLanguage);
     setLanguages(languageData);
     setCode(firstLanguage.initialCode);
+
+    window.onresize = () => {
+      _editor?.layout();
+    };
   }, []);
 
   function onChange(newValue: string) {
@@ -30,6 +36,7 @@ const CodeOnlinePage = () => {
 
   function editorDidMount(editor: any, monaco: any) {
     console.log(editor.getModel().getLineCount());
+    _editor = editor;
     editor.focus();
   }
 
