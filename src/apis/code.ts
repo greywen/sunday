@@ -1,11 +1,11 @@
-import { ICodeLanguage, IQuestion } from '@interfaces/code';
+import { ICodeLanguage, IQuestion, IRunCaseResult } from '@interfaces/code';
 import http from '@utils/http';
 
 export async function runCode(data: any): Promise<any> {
   return await http.post('/v1/code/run', { body: data });
 }
 
-export async function runCodeByCase(data: any): Promise<any> {
+export async function runCodeByCase(data: any): Promise<IRunCaseResult[]> {
   return await http.post('/v1/code/run/case', { body: data });
 }
 

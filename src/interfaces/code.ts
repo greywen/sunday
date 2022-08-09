@@ -11,3 +11,12 @@ export interface IQuestion {
   desribe: string;
   code: string;
 }
+
+export interface IRunCaseResult {
+  comments: string;
+  input: string;
+  output: string;
+  codeOutput?: string;
+  elapsedTime?: string;
+  logs?: string;
+}

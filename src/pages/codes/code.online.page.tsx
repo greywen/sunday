@@ -20,7 +20,7 @@ const CodeOnlinePage = () => {
   useAsyncEffect(async () => {
     const languageData = await getLanguages();
     const firstLanguage = languageData[0];
-    
+
     setCurrentLanguage(firstLanguage);
     setLanguages(languageData);
     setCode(firstLanguage.initialCode);
@@ -35,7 +35,6 @@ const CodeOnlinePage = () => {
   }
 
   function editorDidMount(editor: any, monaco: any) {
-    console.log(editor.getModel().getLineCount());
     _editor = editor;
     editor.focus();
   }

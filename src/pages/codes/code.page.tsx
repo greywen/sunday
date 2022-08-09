@@ -1,4 +1,4 @@
-import { getLanguages, getQuestion, runCode } from '@apis/code';
+import { getLanguages, getQuestion, runCode, runCodeByCase } from '@apis/code';
 import MyEditor from '../../business.components/myEditor';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { ICodeLanguage, IQuestion } from '@interfaces/code';
@@ -10,12 +10,14 @@ import styles from './index.module.less';
 const { Option } = Select;
 
 const CodePage = () => {
+  let _editor = null as any;
   const [code, setCode] = useState<string>();
   const [currentLanguage, setCurrentLanguage] =
     useState<ICodeLanguage | null>();
   const [languages, setLnguages] = useState<ICodeLanguage[]>([]);
   const [codeResult, setCodeResult] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingAll, setLoadingAll] = useState<boolean>(false);
   const [question, setQuestion] = useState<IQuestion>();
   useAsyncEffect(async () => {
     const languageData = await getLanguages();
@@ -27,6 +29,9 @@ const CodePage = () => {
     );
     setQuestion(questionData);
     setCode(questionData.code);
+    window.onresize = () => {
+      _editor?.layout();
+    };
   }, []);
 
   function onChange(newValue: string) {
@@ -34,19 +39,46 @@ const CodePage = () => {
   }
 
   function editorDidMount(editor: any, monaco: any) {
-    console.log(editor.getModel().getLineCount());
+    _editor = editor;
     editor.focus();
   }
 
   async function run() {
     setLoading(true);
-    const result = await runCode({
+    const data = await runCodeByCase({
       languageId: currentLanguage!.id,
-      code
+      questionId: 'c648d4bd-7ec6-4452-8344-7eec0db93670',
+      code,
+      once: true,
     }).finally(() => {
       setLoading(false);
     });
-    setCodeResult(result[0].data || result.message);
+    setCodeResult(data[0].logs);
+  }
+
+  async function runAllCase() {
+    setLoadingAll(true);
+    const data = await runCodeByCase({
+      languageId: currentLanguage!.id,
+      questionId: 'c648d4bd-7ec6-4452-8344-7eec0db93670',
+      code,
+    }).finally(() => {
+      setLoadingAll(false);
+    });
+
+    let result = '';
+    data.forEach((x, index) => {
+      const isPass =
+        JSON.stringify(x.output.replaceAll(' ', '')) ==
+        JSON.stringify(x.codeOutput?.replaceAll(' ', ''));
+      console.log(isPass, x.codeOutput, x.output);
+      result += `测试${index + 1}：${x.comments}\n输入：${x.input}\n输出：${
+        x.output
+      }\n实际输出：${x.codeOutput}\n运行时长：${x.elapsedTime}\n${
+        isPass ? '通过' : '未通过'
+      }\n\n`;
+    });
+    setCodeResult(result);
   }
 
   return (
@@ -54,7 +86,7 @@ const CodePage = () => {
       {currentLanguage && question && (
         <div className={styles.codePage}>
           <Row>
-            <Col span={14}>
+            <Col span={10} className={styles.questionContent}>
               <Row>
                 <Col span={24}>
                   <h2>{question.name}</h2>
@@ -65,7 +97,7 @@ const CodePage = () => {
                 ></Col>
               </Row>
             </Col>
-            <Col span={10}>
+            <Col span={14}>
               <Row className={styles.codeHeader}>
                 <Col>
                   <Select
@@ -102,7 +134,12 @@ const CodePage = () => {
 
               <Row className={styles.codeAtcions}>
                 <Col>
-                  <Button onClick={run} loading={loading}>
+                  <Button onClick={runAllCase} loading={loadingAll}>
+                    {loadingAll ? '执行中，请稍后...' : '执行所有测试用例'}
+                  </Button>
+                </Col>
+                <Col>
+                  <Button onClick={run} loading={loading} disabled={loadingAll}>
                     {loading ? '正在执行' : '执行'}
                   </Button>
                 </Col>
