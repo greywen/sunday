@@ -1,38 +1,57 @@
-import { getLanguages, getQuestion, runCode, runCodeByCase } from '@apis/code';
-import MyEditor from '../../business.components/myEditor';
+import { getLanguages, runCodeByCase } from '@apis/language';
+import { getLastQuestionAnswer, getQuestion } from '@apis/questionBank';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { ICodeLanguage, IQuestion } from '@interfaces/code';
 import { Button, Col, Row, Select } from 'antd';
 import React, { useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
+import { useParams } from 'react-router-dom';
 import styles from './index.module.less';
 
 const { Option } = Select;
 
-const CodePage = () => {
+const QuestionDetailPage = () => {
   let _editor = null as any;
   const [code, setCode] = useState<string>();
   const [currentLanguage, setCurrentLanguage] =
     useState<ICodeLanguage | null>();
-  const [languages, setLnguages] = useState<ICodeLanguage[]>([]);
+  const [languages, setLanguages] = useState<ICodeLanguage[]>([]);
   const [codeResult, setCodeResult] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingAll, setLoadingAll] = useState<boolean>(false);
   const [question, setQuestion] = useState<IQuestion>();
+  let { questionId } = useParams();
+
   useAsyncEffect(async () => {
     const languageData = await getLanguages();
-    setCurrentLanguage(languageData[0]);
-    setLnguages(languageData);
+    const firstLanguage = languageData[0];
+    setCurrentLanguage(firstLanguage);
+    setLanguages(languageData);
 
-    const questionData = await getQuestion(
-      'c648d4bd-7ec6-4452-8344-7eec0db93670'
-    );
+    const questionData = await getQuestion(questionId!);
+
     setQuestion(questionData);
-    setCode(questionData.code);
+    await setCurrentLanguageEntry(questionData, firstLanguage.id);
     window.onresize = () => {
       _editor?.layout();
     };
   }, []);
+
+  async function setCurrentLanguageEntry(
+    question: IQuestion,
+    languageId: number
+  ) {
+    const entry = question?.entrys.find((x) => x.languageId === languageId);
+    setCode(entry?.code);
+    await setLastQuestionAnswer(question.id, languageId);
+  }
+
+  async function setLastQuestionAnswer(questionId: string, languageId: number) {
+    const lastCommitCode = await getLastQuestionAnswer(questionId, languageId);
+    if (lastCommitCode) {
+      setCode(lastCommitCode);
+    }
+  }
 
   function onChange(newValue: string) {
     setCode(newValue);
@@ -47,8 +66,8 @@ const CodePage = () => {
     setLoading(true);
     const data = await runCodeByCase({
       languageId: currentLanguage!.id,
-      questionId: 'c648d4bd-7ec6-4452-8344-7eec0db93670',
-      code,
+      questionId: question?.id,
+      code: code,
       once: true,
     }).finally(() => {
       setLoading(false);
@@ -60,31 +79,34 @@ const CodePage = () => {
     setLoadingAll(true);
     const data = await runCodeByCase({
       languageId: currentLanguage!.id,
-      questionId: 'c648d4bd-7ec6-4452-8344-7eec0db93670',
-      code,
+      questionId: question?.id,
+      code: code,
     }).finally(() => {
       setLoadingAll(false);
     });
 
     let result = '';
+    let logs = '';
     data.forEach((x, index) => {
       const isPass =
-        JSON.stringify(x.output.replaceAll(' ', '')) ==
-        JSON.stringify(x.codeOutput?.replaceAll(' ', ''));
-      console.log(isPass, x.codeOutput, x.output);
+        JSON.stringify(`${x.output}`.replaceAll(' ', '')) ==
+        JSON.stringify(`${x.codeOutput}`.replaceAll(' ', ''));
+
       result += `测试${index + 1}：${x.comments}\n输入：${x.input}\n输出：${
         x.output
       }\n实际输出：${x.codeOutput}\n运行时长：${x.elapsedTime}\n${
         isPass ? '通过' : '未通过'
       }\n\n`;
+      logs = `${x.logs}`;
     });
+    result += logs;
     setCodeResult(result);
   }
 
   return (
     <>
       {currentLanguage && question && (
-        <div className={styles.codePage}>
+        <div className={styles.questionDetailPage}>
           <Row>
             <Col span={10} className={styles.questionContent}>
               <Row>
@@ -98,15 +120,15 @@ const CodePage = () => {
               </Row>
             </Col>
             <Col span={14}>
-              <Row className={styles.codeHeader}>
+              <Row className={styles.questionHeader}>
                 <Col>
                   <Select
                     style={{ width: 200 }}
                     defaultValue={currentLanguage.name}
-                    onChange={(value) => {
-                      setCurrentLanguage(
-                        languages.find((x) => x.name === value)!
-                      );
+                    onChange={(name) => {
+                      const _language = languages.find((x) => x.name === name)!;
+                      setCurrentLanguage(_language);
+                      setCurrentLanguageEntry(question, _language.id);
                     }}
                   >
                     {languages.length > 0 &&
@@ -132,7 +154,7 @@ const CodePage = () => {
                 editorDidMount={editorDidMount}
               />
 
-              <Row className={styles.codeAtcions}>
+              <Row className={styles.questionAtcions}>
                 <Col>
                   <Button onClick={runAllCase} loading={loadingAll}>
                     {loadingAll ? '执行中，请稍后...' : '执行所有测试用例'}
@@ -159,4 +181,4 @@ const CodePage = () => {
     </>
   );
 };
-export default CodePage;
+export default QuestionDetailPage;

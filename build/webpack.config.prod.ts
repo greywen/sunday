@@ -85,7 +85,7 @@ const config: WebpackConfiguration = {
     ],
   },
   plugins: [
-    new MonacoWebpackPlugin(['csharp', 'typescript', 'javascript']),
+    new MonacoWebpackPlugin(['csharp', 'typescript', 'javascript', 'json']),
     new Dotenv({
       path: path.resolve(process.cwd(), '.env.production'),
     }),

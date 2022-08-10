@@ -9,7 +9,8 @@ export interface IQuestion {
   id: string;
   name: string;
   desribe: string;
-  code: string;
+  level: number;
+  entrys: IEntryCode[];
 }
 
 export interface IRunCaseResult {
@@ -19,4 +20,10 @@ export interface IRunCaseResult {
   codeOutput?: string;
   elapsedTime?: string;
   logs?: string;
+}
+
+export interface IEntryCode {
+  languageId: number;
+  function: string; // 入口方法
+  code: string;
 }

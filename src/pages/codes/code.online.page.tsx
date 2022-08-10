@@ -1,4 +1,4 @@
-import { getLanguages, runCode } from '@apis/code';
+import { getLanguages, runCode } from '@apis/language';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { ICodeLanguage } from '@interfaces/code';
 import { Button, Col, Row, Select } from 'antd';
