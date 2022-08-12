@@ -2,7 +2,13 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { useAccount } from '@utils/utils';
 import { Button } from 'antd';
 import React, { Suspense, useContext, useEffect, useState } from 'react';
-import { Link, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Routes,
+  BrowserRouter as Router,
+  Navigate,
+} from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
 import './index.less';
 import styles from './index.module.less';
@@ -13,42 +19,61 @@ const Attendance = React.lazy(
 const Dashboard = React.lazy(() => import('@pages/dashboard/dashboard.page'));
 const MoyuRank = React.lazy(() => import('@pages/moyuRank/moyuRank.page'));
 const TimeSheet = React.lazy(() => import('@pages/timesheet/timesheet.page'));
-const Code = React.lazy(() => import('@pages/codes/code.page'));
+const QuestionDetail = React.lazy(
+  () => import('@pages/question/questionDetail.page')
+);
+const QuestionList = React.lazy(
+  () => import('@pages/question/questionList.page')
+);
+const QuestionCreate = React.lazy(
+  () => import('@pages/question/questionCreate.page')
+);
 const CodeOnlinePage = React.lazy(
-  () => import('@pages/codes/code.online.page')
+  () => import('@pages/codeOnline/code.online.page')
 );
 
 interface IMenu {
+  permission: string;
   key: string;
   name: string;
   path: string;
   element: React.ReactNode;
 }
-const dashboardMenuKey = '1';
+const dashboardMenuKey = 'dashboard';
 let menuList: IMenu[] = [
-  { key: dashboardMenuKey, name: '首页', path: '/', element: <Dashboard /> },
   {
-    key: '2',
+    permission: '1',
+    key: dashboardMenuKey,
+    name: '首页',
+    path: '/dashboard',
+    element: <Dashboard />,
+  },
+  {
+    permission: '2',
+    key: 'timesheet',
     name: 'Timesheet',
     path: '/timesheet',
     element: <TimeSheet />,
   },
   {
-    key: '3',
+    permission: '3',
+    key: 'attendance',
     name: '考勤管理',
     path: '/attendance',
     element: <Attendance />,
   },
   {
-    key: '4',
+    permission: '4',
+    key: 'question',
     name: '题库',
-    path: '/code',
-    element: <Code />,
+    path: '/question',
+    element: <QuestionList />,
   },
   {
-    key: '5',
-    name: '代码编辑器(BETA)',
-    path: '/code-online',
+    permission: '5',
+    key: 'code-online',
+    name: '代码编辑器',
+    path: '/code',
     element: <CodeOnlinePage />,
   },
 ];
@@ -62,10 +87,12 @@ const Layout: React.FC = () => {
   useEffect(() => {
     setMenus(
       menuList.filter((x) => {
-        return account.resources.includes(x.key);
+        return account.resources.includes(x.permission);
       })
     );
-    const currentMenu = menuList.find((x) => x.path === location.pathname);
+    const currentMenu = menuList.find((x) => {
+      return location.pathname.includes(x.path);
+    });
     setActiveMenuId(currentMenu ? currentMenu.key : dashboardMenuKey);
   }, []);
 
@@ -119,11 +146,26 @@ const Layout: React.FC = () => {
                     />
                   ))}
                   <Route key='moyu' path='/moyu' element={<MoyuRank />} />
-                  {/* <Route
+                  <Route
+                    key='question'
+                    path='/question/:questionId'
+                    element={<QuestionDetail />}
+                  />
+                  <Route
+                    key='question'
+                    path='/question/operation'
+                    element={<QuestionCreate />}
+                  />
+                  <Route
+                    key='question'
+                    path='/question/operation/:questionId'
+                    element={<QuestionCreate />}
+                  />
+                  <Route
                     key='notfound'
-                    path='*'
-                    element={<Navigate to='/' />}
-                  /> */}
+                    path='/'
+                    element={<Navigate to='/dashboard' />}
+                  />
                 </Routes>
               </Suspense>
             </div>

@@ -34,3 +34,5 @@ export const ACCOUNT_INFO = 'ACCOUNT_INFO';
 export const THEME = 'THEME';
 
 export const Languages = ['typescript', 'csharp'];
+
+export const QuestionLevels = ['简单', '中等', '困难'];

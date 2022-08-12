@@ -1,4 +1,4 @@
-import { getLanguages, runCode } from '@apis/code';
+import { getLanguages, runCode } from '@apis/language';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { ICodeLanguage } from '@interfaces/code';
 import { Button, Col, Row, Select } from 'antd';
@@ -8,8 +8,15 @@ import styles from './index.module.less';
 
 const { Option } = Select;
 
+const JSONLanguage = {
+  id: 999,
+  name: 'json',
+  initialCode: `{}`,
+};
+
+let _editor = null as any;
+
 const CodeOnlinePage = () => {
-  let _editor = null as any;
   const [code, setCode] = useState<string>();
   const [currentLanguage, setCurrentLanguage] =
     useState<ICodeLanguage | null>();
@@ -19,11 +26,10 @@ const CodeOnlinePage = () => {
 
   useAsyncEffect(async () => {
     const languageData = await getLanguages();
-    const firstLanguage = languageData[0];
 
-    setCurrentLanguage(firstLanguage);
-    setLanguages(languageData);
-    setCode(firstLanguage.initialCode);
+    setCurrentLanguage(JSONLanguage);
+    setLanguages([{ ...JSONLanguage }, ...languageData]);
+    setCode(JSONLanguage.initialCode);
 
     window.onresize = () => {
       _editor?.layout();
@@ -32,6 +38,8 @@ const CodeOnlinePage = () => {
 
   function onChange(newValue: string) {
     setCode(newValue);
+    // 自动格式化代码
+    // _editor.getAction('editor.action.formatDocument').run();
   }
 
   function editorDidMount(editor: any, monaco: any) {
@@ -68,7 +76,7 @@ const CodeOnlinePage = () => {
                 {languages.length > 0 &&
                   languages.map((x) => (
                     <Option key={x.name} value={x.name}>
-                      {x.name} - {x.version}
+                      {x.name} {x.version && `- ${x.version}`}
                     </Option>
                   ))}
               </Select>
@@ -88,7 +96,10 @@ const CodeOnlinePage = () => {
             editorDidMount={editorDidMount}
           />
 
-          <Row className={styles.codeAtcions}>
+          <Row
+            className={styles.codeAtcions}
+            hidden={currentLanguage.name === 'json'}
+          >
             <Col>
               <Button onClick={run} loading={loading}>
                 {loading ? '正在执行' : '执行'}
@@ -96,7 +107,10 @@ const CodeOnlinePage = () => {
             </Col>
           </Row>
 
-          <Row className={styles.codeOutput}>
+          <Row
+            className={styles.codeOutput}
+            hidden={currentLanguage.name === 'json'}
+          >
             <Col
               dangerouslySetInnerHTML={{
                 __html: codeResult?.replace(/[\n]/g, '<br />'),

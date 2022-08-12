@@ -3,4 +3,5 @@ export * from './user';
 export * from './moyu';
 export * from './auth';
 export * from './notice';
-export * from './code';
+export * from './language';
+export * from './questionBank';
