@@ -1,17 +1,20 @@
 @import '../../theme/index.less';
 
 .questionDetailPage {
-  padding: 64px 32px 32px 32px;
+  padding: 32px 32px 32px 32px;
   height: 100vh;
 }
 
 .questionContent {
-  padding: 12px;
+  padding-right: 12px;
   border-radius: 4px;
 }
 
 .questionHeader {
   padding-bottom: 12px;
+  height: 40px;
+  line-height: 40px;
+  width: 100%;
 }
 
 .questionAtcions {
@@ -45,7 +48,6 @@
   border-bottom: 1px solid #ccc;
 }
 
-
 .questionLevel-0 {
   color: #92d050;
 }
@@ -56,4 +58,21 @@
 
 .questionLevel-2 {
   color: #de7465;
+}
+
+.questionCard {
+  background-color: @themeBgColor;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px;
+}
+
+.passed {
+  color: #92d050;
+  font-weight: bold;
+}
+
+.notPass {
+  color: #de7465;
+  font-weight: bold;
 }

@@ -5,16 +5,16 @@ import { IDomEditor, IEditorConfig } from '@wangeditor/editor';
 
 interface IProps {
   html: string;
-  onchange: (res: string) => void;
+  placeholder?: string;
+  onChange: (res: string) => void;
 }
 
 function MyEditor(props: IProps) {
-  const { html, onchange } = props;
+  const { html, placeholder, onChange } = props;
   const [editor, setEditor] = useState<IDomEditor | null>(null); // 存储 editor 实例
 
-  const toolbarConfig = {};
   const editorConfig: Partial<IEditorConfig> = {
-    placeholder: '请输入内容...',
+    placeholder: placeholder || '请输入内容...',
   };
 
   // 及时销毁 editor ，重要！
@@ -31,7 +31,7 @@ function MyEditor(props: IProps) {
       <div style={{ border: '1px solid #ccc', zIndex: 100 }}>
         <Toolbar
           editor={editor}
-          defaultConfig={toolbarConfig}
+          defaultConfig={{ }}
           mode='default'
           style={{ borderBottom: '1px solid #ccc' }}
         />
@@ -40,7 +40,7 @@ function MyEditor(props: IProps) {
           value={html}
           onCreated={setEditor}
           onChange={(editor) => {
-            onchange(editor.getHtml());
+            onChange(editor.getHtml());
           }}
           mode='default'
           style={{ height: '500px', overflowY: 'hidden' }}

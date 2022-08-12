@@ -84,7 +84,7 @@ const NoticeForm = (props: IProps) => {
       </Form.Item>
       <MyEditor
         html={html || ''}
-        onchange={(res) => {
+        onChange={(res) => {
           setHtml(res);
         }}
       />

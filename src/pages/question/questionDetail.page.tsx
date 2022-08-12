@@ -2,16 +2,16 @@ import { getLanguages, runCodeByCase } from '@apis/language';
 import { getLastQuestionAnswer, getQuestion } from '@apis/questionBank';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { ICodeLanguage, IQuestion } from '@interfaces/code';
-import { Button, Col, Row, Select } from 'antd';
+import { Button, Col, message, Row, Select } from 'antd';
 import React, { useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
 import { useParams } from 'react-router-dom';
 import styles from './index.module.less';
 
 const { Option } = Select;
+let _editor = null as any;
 
 const QuestionDetailPage = () => {
-  let _editor = null as any;
   const [code, setCode] = useState<string>();
   const [currentLanguage, setCurrentLanguage] =
     useState<ICodeLanguage | null>();
@@ -21,15 +21,18 @@ const QuestionDetailPage = () => {
   const [loadingAll, setLoadingAll] = useState<boolean>(false);
   const [question, setQuestion] = useState<IQuestion>();
   let { questionId } = useParams();
-
+  
   useAsyncEffect(async () => {
     const languageData = await getLanguages();
     const firstLanguage = languageData[0];
     setCurrentLanguage(firstLanguage);
-    setLanguages(languageData);
 
     const questionData = await getQuestion(questionId!);
+    const supputLanguages = questionData.entryCodes.map((x) => {
+      if (x.code && x.function) return x.languageId;
+    });
 
+    setLanguages(languageData.filter((x) => supputLanguages.includes(x.id)));
     setQuestion(questionData);
     await setCurrentLanguageEntry(questionData, firstLanguage.id);
     window.onresize = () => {
@@ -41,7 +44,7 @@ const QuestionDetailPage = () => {
     question: IQuestion,
     languageId: number
   ) {
-    const entry = question?.entrys.find((x) => x.languageId === languageId);
+    const entry = question?.entryCodes.find((x) => x.languageId === languageId);
     setCode(entry?.code);
     await setLastQuestionAnswer(question.id, languageId);
   }
@@ -62,6 +65,14 @@ const QuestionDetailPage = () => {
     editor.focus();
   }
 
+  function checkQuestion(data: any) {
+    if (data['isSuccess'] === false) {
+      message.error(data['message']);
+      return true;
+    }
+    return false;
+  }
+
   async function run() {
     setLoading(true);
     const data = await runCodeByCase({
@@ -72,6 +83,9 @@ const QuestionDetailPage = () => {
     }).finally(() => {
       setLoading(false);
     });
+    if (checkQuestion(data)) {
+      return;
+    }
     setCodeResult(data[0].logs);
   }
 
@@ -84,6 +98,10 @@ const QuestionDetailPage = () => {
     }).finally(() => {
       setLoadingAll(false);
     });
+
+    if (checkQuestion(data)) {
+      return;
+    }
 
     let result = '';
     let logs = '';
@@ -107,15 +125,15 @@ const QuestionDetailPage = () => {
     <>
       {currentLanguage && question && (
         <div className={styles.questionDetailPage}>
-          <Row>
-            <Col span={10} className={styles.questionContent}>
+          <Row className={styles.questionContent}>
+            <Col span={10}>
               <Row>
                 <Col span={24}>
                   <h2>{question.name}</h2>
                 </Col>
                 <Col
                   span={24}
-                  dangerouslySetInnerHTML={{ __html: question!.desribe }}
+                  dangerouslySetInnerHTML={{ __html: question!.describe }}
                 ></Col>
               </Row>
             </Col>
@@ -149,6 +167,7 @@ const QuestionDetailPage = () => {
                   selectOnLineNumbers: true,
                   colorDecorators: true,
                   selectionHighlight: true,
+                  minimap: { enabled: false },
                 }}
                 onChange={onChange}
                 editorDidMount={editorDidMount}

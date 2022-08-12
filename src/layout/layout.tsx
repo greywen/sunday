@@ -25,8 +25,11 @@ const QuestionDetail = React.lazy(
 const QuestionList = React.lazy(
   () => import('@pages/question/questionList.page')
 );
+const QuestionCreate = React.lazy(
+  () => import('@pages/question/questionCreate.page')
+);
 const CodeOnlinePage = React.lazy(
-  () => import('@pages/codes/code.online.page')
+  () => import('@pages/codeOnline/code.online.page')
 );
 
 interface IMenu {
@@ -69,7 +72,7 @@ let menuList: IMenu[] = [
   {
     permission: '5',
     key: 'code-online',
-    name: '代码编辑器(BETA)',
+    name: '代码编辑器',
     path: '/code',
     element: <CodeOnlinePage />,
   },
@@ -149,8 +152,18 @@ const Layout: React.FC = () => {
                     element={<QuestionDetail />}
                   />
                   <Route
+                    key='question'
+                    path='/question/operation'
+                    element={<QuestionCreate />}
+                  />
+                  <Route
+                    key='question'
+                    path='/question/operation/:questionId'
+                    element={<QuestionCreate />}
+                  />
+                  <Route
                     key='notfound'
-                    path='*'
+                    path='/'
                     element={<Navigate to='/dashboard' />}
                   />
                 </Routes>
