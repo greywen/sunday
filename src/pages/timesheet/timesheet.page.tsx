@@ -16,7 +16,6 @@ let globalTemplate: ISheetTemplate = {};
 let groups = [
   GroupType['back-end'],
   GroupType['frond-end'],
-  GroupType.nodejs,
   GroupType.test,
 ];
 let enabledMembers = false;
@@ -118,9 +117,6 @@ const TimeSheetPage = () => {
     let frontendTickets = getTickets(frontend, frontendTicketReg);
     let frontendOther = clearTickets(frontend, frontendTicketReg);
 
-    let nodejsTickets = getTickets(nodejs, frontendTicketReg);
-    let nodejsOther = clearTickets(nodejs, frontendTicketReg);
-
     const backendSummary = `${globalTemplate?.backend}${addLineFeedSymbol(
       backendOther
     )}\nTickets:\n${backendTickets?.join('\n') || ''}`;
@@ -129,16 +125,12 @@ const TimeSheetPage = () => {
       frontendOther
     )}\nTickets:\n${frontendTickets?.join('\n') || ''}`;
 
-    const nodejsSummary = `${globalTemplate?.nodejs}${addLineFeedSymbol(
-      nodejsOther
-    )}\nTickets:\n${nodejsTickets?.join('\n') || ''}`;
-
     const testSummary = `${globalTemplate?.test}\n${test}`;
 
     setSummary(
       `#${moment().format(
         'YYYY-MM-DD'
-      )}\n\n${backendSummary}\n\n${frontendSummary}\n\n${nodejsSummary}\n\n${testSummary}`
+      )}\n\n${backendSummary}\n\n${frontendSummary}\n\n${testSummary}`
     );
   }
 
@@ -220,7 +212,7 @@ const TimeSheetPage = () => {
           <Row>
             {groups.map((type) => {
               return (
-                <Col key={`key-type-${type}`} lg={6} md={24} xs={24}>
+                <Col key={`key-type-${type}`} lg={8} md={24} xs={24}>
                   <Row>
                     {type === GroupType['back-end'] && (
                       <Col span={24}>
@@ -250,22 +242,6 @@ const TimeSheetPage = () => {
                           }}
                           disabled={!enabledTemplate}
                           value={template?.frontend}
-                        ></TextArea>
-                      </Col>
-                    )}
-
-                    {type === GroupType['nodejs'] && (
-                      <Col span={24}>
-                        <TextArea
-                          noBorder={true}
-                          onChange={async (value) => {
-                            setTemplate({ ...template, nodejs: value });
-                          }}
-                          onBlur={async () => {
-                            await updateTimeSheetTemplate();
-                          }}
-                          disabled={!enabledTemplate}
-                          value={template?.nodejs}
                         ></TextArea>
                       </Col>
                     )}
