@@ -100,7 +100,7 @@ const AttendancePage = () => {
       (x) => x.state !== AttendanceState.A
     );
     // 迟到
-    let statel = attendanceList.find((x) => x.state === AttendanceState.L);
+    let stateL = attendanceList.find((x) => x.state === AttendanceState.L);
     // 未提交日志
     let stateX = attendanceList.find((x) => x.state === AttendanceState.X);
     // 请假
@@ -109,10 +109,15 @@ const AttendancePage = () => {
     let stateA = attendanceList.find(
       (x) => x.state === AttendanceState.Anomalous
     );
+    // 加班
+    const stateJ = attendanceList.find((x) => x.state === AttendanceState.J);
+    // 正常
 
-    if (statel) {
+    const stateO = attendanceList.find((x) => x.state === AttendanceState.O);
+
+    if (stateL) {
       return (
-        <div className={`state-${statel.state}`}>{statel.value + '分钟'}</div>
+        <div className={`state-${stateL.state}`}>{stateL.value + '分钟'}</div>
       );
     } else if (stateA) {
       return (
@@ -133,12 +138,20 @@ const AttendancePage = () => {
         .map((x) => getStateKey(x.state))
         .join('/');
       return <div className={`state-${stateP.state}`}>{value}</div>;
+    } else if (stateJ) {
+      const value = attendanceList
+        .filter((x) => x.state != AttendanceState.A)
+        .map((x) => getStateKey(x.state))
+        .join('/');
+      return <div className={`state-${stateJ.state}`}>{value}</div>;
+    } else if (stateO) {
+      return (
+        <div className={`state-${stateO.state}`}>
+          {getStateKey(stateO.state)}
+        </div>
+      );
     }
-    return (
-      <div className={`state-${attendanceList[0].state}`}>
-        {getStateKey(attendanceList[0].state)}
-      </div>
-    );
+    return <div></div>;
   }
 
   function changeState(state: AttendanceState) {
@@ -197,7 +210,7 @@ const AttendancePage = () => {
       index: modifyAttendance!.index,
       userId: modifyAttendance!.id,
       datas: _attendances,
-      date: currentDate
+      date: currentDate,
     });
 
     if (result) {
@@ -573,6 +586,15 @@ const AttendancePage = () => {
               }}
               value={getStateValue(AttendanceState.V)}
             />
+          </Col>
+          <Col span={12}>
+            <Checkbox
+              value={AttendanceState.J}
+              checked={isCheckState(AttendanceState.J)}
+              onChange={() => changeState(AttendanceState.J)}
+            >
+              加班(J)
+            </Checkbox>
           </Col>
         </Row>
       </Modal>
